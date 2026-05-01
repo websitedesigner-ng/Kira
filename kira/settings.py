@@ -28,6 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+GA4_MEASUREMENT_ID = 'G-XXXXXXXXXX'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.core'
+    'apps.store',
+    'apps.orders'
 ]
 
 MIDDLEWARE = [
@@ -62,7 +65,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'apps.core.context_processors.global_context'
+                'apps.store.context_processors.global_context',
+                'apps.store.context_processors.analytics'
             ],
         },
     },

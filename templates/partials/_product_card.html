@@ -1,0 +1,26 @@
+{% load static %}
+<div class="product-card">
+  <a href="{{ product.get_absolute_url }}">
+    <div class="product-img-wrap">
+      {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+      {% else %}
+        <div class="product-img-placeholder"></div>
+      {% endif %}
+
+      {% if product.badge %}
+        <div class="product-badge {% if product.badge == 'New' or product.badge == 'SS 2025' %}gold{% endif %}">
+          {{ product.badge }}
+        </div>
+      {% endif %}
+
+      <div class="product-actions">
+        <button>View Product</button>
+      </div>
+    </div>
+
+    <div class="product-collection">{{ product.collection }}</div>
+    <div class="product-name">{{ product.name }}</div>
+    <div class="product-price">€ {{ product.price|floatformat:0 }}</div>
+  </a>
+</div>

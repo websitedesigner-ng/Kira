@@ -1,0 +1,255 @@
+/* ════════════════════════════════════════
+   PRODUCTS.CSS
+   Product Grid · Product Card · Swiper
+   Dark Section Variant
+   ════════════════════════════════════════ */
+
+/* ─── PRODUCT GRID ─── */
+.products {
+    padding: 80px 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+/* ─── PRODUCT CARD ─── */
+.product-card { cursor: pointer; }
+
+.product-card a { text-decoration: none; }
+
+.product-img-wrap {
+    position: relative;
+    overflow: hidden;
+    background: var(--kira-cream);
+    aspect-ratio: 3/4;
+    margin-bottom: 14px;
+}
+
+.product-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.product-card:hover .product-img-wrap img { transform: scale(1.05); }
+
+.product-img-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--kira-beige);
+}
+
+.product-actions {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.85);
+    padding: 14px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.product-card:hover .product-actions {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.product-actions button {
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: var(--kira-white);
+    font-family: 'Jost', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.product-actions button:hover {
+    background: var(--kira-gold);
+    border-color: var(--kira-gold);
+    color: var(--kira-black);
+}
+
+.product-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: var(--kira-black);
+    color: var(--kira-white);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+}
+
+.product-badge.gold {
+    background: var(--kira-gold);
+    color: var(--kira-black);
+}
+
+.product-collection {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-bottom: 6px;
+}
+
+.product-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.product-price {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    letter-spacing: 0.04em;
+}
+
+/* ─── DARK SECTION VARIANT (Most Popular) ─── */
+.products-section-dark {
+    background: var(--kira-black);
+    padding: 80px 40px;
+}
+
+.products-section-dark .section-eyebrow { color: var(--kira-gold); }
+.products-section-dark .section-title   { color: var(--kira-white); }
+.products-section-dark .section-title em { color: var(--kira-gold); }
+
+.products-section-dark .product-collection { color: rgba(255,255,255,0.35); }
+.products-section-dark .product-name       { color: var(--kira-white); }
+.products-section-dark .product-price      { color: rgba(255,255,255,0.5); }
+.products-section-dark .product-img-wrap   { background: #111; }
+
+.products-section-dark .btn-outline {
+    color: var(--kira-white);
+    border-color: rgba(255,255,255,0.3);
+}
+
+.products-section-dark .btn-outline:hover {
+    background: var(--kira-gold);
+    border-color: var(--kira-gold);
+    color: var(--kira-black);
+}
+
+.products-section-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* ─── HORIZONTAL SCROLL SECTION (New Arrivals Swiper) ─── */
+.products-scroll-section {
+    padding: 80px 0;
+    overflow: hidden;
+}
+
+.products-scroll-section .section-header {
+    padding: 0 40px;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+.products-scroll-section .section-header-text { text-align: left; }
+.products-scroll-section .section-eyebrow     { justify-content: flex-start; }
+.products-scroll-section .section-eyebrow::after { display: none; }
+
+.new-arrivals-swiper {
+    width: 100%;
+    padding: 0 40px 24px !important;
+    overflow: visible;
+    box-sizing: border-box;
+}
+
+.new-arrivals-swiper .swiper-wrapper { align-items: stretch; }
+
+.new-arrivals-swiper .swiper-slide {
+    width: 280px;
+    flex-shrink: 0;
+    height: auto;
+}
+
+.new-arrivals-swiper .swiper-slide .product-card { width: 100%; }
+
+/* ─── SCROLL NAV BUTTONS ─── */
+.scroll-nav {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.scroll-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border-medium);
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s, background 0.2s;
+    color: var(--text-primary);
+}
+
+.scroll-btn:hover {
+    border-color: var(--kira-gold);
+    color: var(--kira-gold);
+}
+
+.scroll-btn svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.5;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1280px) {
+    .products-grid { gap: 20px; }
+}
+
+@media (max-width: 1100px) {
+    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+}
+
+@media (max-width: 860px) {
+    .products        { padding: 60px 24px; }
+    .products-grid   { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .products-section-dark   { padding: 48px 24px; }
+    .products-scroll-section { padding: 48px 0; }
+    .products-scroll-section .section-header { padding: 0 24px; }
+}
+
+@media (max-width: 600px) {
+    .products        { padding: 48px 16px; }
+    .products-grid   { gap: 12px; }
+    .products-section-dark   { padding: 48px 16px; }
+    .products-scroll-section { padding: 48px 0; }
+    .products-scroll-section .section-header { padding: 0 16px; }
+    .new-arrivals-swiper { padding: 0 16px 20px !important; }
+    .new-arrivals-swiper .swiper-slide { width: 220px; }
+}
+
+@media (max-width: 420px) {
+    .products      { padding: 40px 14px; }
+}

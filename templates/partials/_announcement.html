@@ -1,0 +1,8 @@
+{% if announcement %}
+<div class="announcement-bar">
+  {{ announcement.message }}
+  {% if announcement.link_url and announcement.link_text %}
+    <a href="{{ announcement.link_url }}">{{ announcement.link_text }}</a>
+  {% endif %}
+</div>
+{% endif %}

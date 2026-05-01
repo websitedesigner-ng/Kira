@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{% block title %}KIRA — Maison de Luxe{% endblock %}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+        />
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/header.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/footer.css' %}" />
+        {% block extra_css %}{% endblock %}
+    </head>
+    <body>
+        {% include "partials/_announcement.html" %} 
+        {% include "partials/_header.html" %} 
+        {% block content %}{% endblock %} 
+        {% include "partials/_footer.html" %}
+
+        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+        <script>
+            // ─── MOBILE SIDEBAR ───
+            const hamburgerBtn = document.getElementById("hamburgerBtn");
+            const mobileSidebar = document.getElementById("mobileSidebar");
+            const sidebarOverlay = document.getElementById("sidebarOverlay");
+            const sidebarClose = document.getElementById("sidebarClose");
+
+            function openSidebar() {
+                mobileSidebar.classList.add("open");
+                sidebarOverlay.classList.add("visible");
+                hamburgerBtn.setAttribute("aria-expanded", "true");
+                hamburgerBtn.classList.add("active");
+                document.body.style.overflow = "hidden";
+            }
+
+            function closeSidebar() {
+                mobileSidebar.classList.remove("open");
+                sidebarOverlay.classList.remove("visible");
+                hamburgerBtn.setAttribute("aria-expanded", "false");
+                hamburgerBtn.classList.remove("active");
+                document.body.style.overflow = "";
+            }
+
+            hamburgerBtn.addEventListener("click", openSidebar);
+            sidebarClose.addEventListener("click", closeSidebar);
+            sidebarOverlay.addEventListener("click", closeSidebar);
+            document.addEventListener("keydown", e => {
+                if (e.key === "Escape") closeSidebar();
+            });
+
+            // ─── SIDEBAR ACCORDION ───
+            document.querySelectorAll(".sidebar-nav-toggle").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const targetId = btn.getAttribute("data-target");
+                    const sub = document.getElementById(targetId);
+                    const isOpen = sub.classList.contains("open");
+                    document
+                        .querySelectorAll(".sidebar-sub.open")
+                        .forEach(s => s.classList.remove("open"));
+                    document
+                        .querySelectorAll(".sidebar-nav-toggle.expanded")
+                        .forEach(b => b.classList.remove("expanded"));
+                    if (!isOpen) {
+                        sub.classList.add("open");
+                        btn.classList.add("expanded");
+                    }
+                });
+            });
+
+            // ─── SCROLL REVEAL ───
+            const revealObserver = new IntersectionObserver(
+                entries => {
+                    entries.forEach(el => {
+                        if (el.isIntersecting) {
+                            el.target.style.opacity = "1";
+                            el.target.style.transform = "translateY(0)";
+                        }
+                    });
+                },
+                { threshold: 0.08 }
+            );
+
+            function attachRevealObserver() {
+                document
+                    .querySelectorAll(
+                        ".section-header, .product-card, .look-card, .service-icon"
+                    )
+                    .forEach(el => {
+                        if (!el.dataset.revealed) {
+                            el.style.opacity = "0";
+                            el.style.transform = "translateY(24px)";
+                            el.style.transition =
+                                "opacity 0.8s ease, transform 0.8s ease";
+                            el.dataset.revealed = "1";
+                            revealObserver.observe(el);
+                        }
+                    });
+            }
+            attachRevealObserver();
+
+            // ─── CATEGORY TABS ───
+            document.querySelectorAll(".cat-tab").forEach(tab => {
+                tab.addEventListener("click", e => {
+                    e.preventDefault();
+                    document
+                        .querySelectorAll(".cat-tab")
+                        .forEach(t => t.classList.remove("active"));
+                    tab.classList.add("active");
+                });
+            });
+        </script>
+
+        {% block extra_js %}{% endblock %}
+    </body>
+</html>

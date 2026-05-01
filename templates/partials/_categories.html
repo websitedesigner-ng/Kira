@@ -1,0 +1,11 @@
+{% if categories %}
+<div class="category-strip">
+  <div class="category-strip-inner">
+    {% for category in categories %}
+      <a class="cat-tab {% if forloop.first %}active{% endif %}" href="{{ category.get_absolute_url }}">
+        {{ category.name }}
+      </a>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}

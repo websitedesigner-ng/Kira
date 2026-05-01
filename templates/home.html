@@ -1,0 +1,320 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}KIRA — Maison de Luxe{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/products.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  {% include "partials/_categories.html" %}
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-split">
+      <div class="hero-model">
+        <div class="hero-model-art">
+          <div class="hero-figure">
+            <div class="hero-gown-detail"></div>
+          </div>
+        </div>
+        <div style="position:absolute;top:24px;left:24px;font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:0.2em;color:rgba(200,169,106,0.5);text-transform:uppercase;font-weight:300;">SS 2025</div>
+        <div style="position:absolute;bottom:24px;right:24px;font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:0.2em;color:rgba(200,169,106,0.5);text-transform:uppercase;font-weight:300;">Look 01</div>
+      </div>
+
+      <div class="hero-product-side">
+        <div class="hero-eyebrow fade-up">The Spring Collection 2025</div>
+        <h1 class="hero-title fade-up delay-1">
+          L'Art du <em>Raffinement</em>
+        </h1>
+        <p class="hero-subtitle fade-up delay-2">
+          Rooted in the traditions of haute maroquinerie, Kira's new season explores the poetry of restraint, where every stitch is an act of devotion.
+        </p>
+        <div class="hero-actions fade-up delay-3">
+          <a href="#" class="btn-primary">Discover the Collection</a>
+          <a href="#" class="btn-outline">View Lookbook</a>
+        </div>
+        <div class="hero-divider-row">
+          <div class="hero-divider-line"></div>
+          <span class="hero-divider-word">Kira</span>
+          <div class="hero-divider-line"></div>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <div class="hero-stat-num">1892</div>
+            <div class="hero-stat-label">Est. Paris</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">42</div>
+            <div class="hero-stat-label">Maisons</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">100%</div>
+            <div class="hero-stat-label">Handcrafted</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLLECTIONS -->
+  <section class="collections-section">
+    <div class="section-header">
+      <div class="section-eyebrow">Nouvelles Collections</div>
+      <h2 class="section-title">The World of <em>Kira</em></h2>
+    </div>
+    <div class="collections-grid">
+      <a href="#" class="collection-card large">
+        <div class="card-img card-atelier"></div>
+        <div class="collection-card-body">
+          <div class="collection-eyebrow">New Collection</div>
+          <div class="collection-name">Atelier<br>Signature</div>
+        </div>
+      </a>
+      <a href="#" class="collection-card">
+        <div class="card-img card-voyage"></div>
+        <div class="collection-card-body">
+          <div class="collection-eyebrow">Travel</div>
+          <div class="collection-name">Voyage<br>Collection</div>
+        </div>
+      </a>
+      <a href="#" class="collection-card">
+        <div class="card-img card-bijoux"></div>
+        <div class="collection-card-body">
+          <div class="collection-eyebrow">Fine Jewellery</div>
+          <div class="collection-name">Bijoux<br>d'Élite</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- MONOGRAM BAND -->
+  <div class="monogram-band">
+    <div class="monogram-pattern-bg"></div>
+    <div class="monogram-band-inner">
+      <div class="monogram-logo">K</div>
+      <div class="monogram-tagline">Maison de Luxe · Paris · Est. 1892</div>
+      <p class="monogram-desc">
+        "Craftsmanship is not merely a technique, it is a language spoken between the hands of the artisan and the soul of the object."
+      </p>
+      <a href="#" class="btn-gold">Discover Our Savoir-Faire</a>
+    </div>
+  </div>
+
+  <!-- ICONS OF THE MAISON -->
+  <section class="products">
+    <div class="section-header">
+      <div class="section-eyebrow">Sélection</div>
+      <h2 class="section-title">Icons of <em>the Maison</em></h2>
+    </div>
+    <div class="products-grid">
+      {% for product in featured_products %}
+        {% include "partials/_product_card.html" with product=product %}
+      {% endfor %}
+    </div>
+    <div style="text-align:center;margin-top:48px;">
+      <a href="{% url 'store:product_list' %}" class="btn-outline">View All Products</a>
+    </div>
+  </section>
+
+  <!-- NEW ARRIVALS -->
+  <section class="products-scroll-section">
+    <div class="section-header">
+      <div class="section-header-text">
+        <div class="section-eyebrow">Just Arrived</div>
+        <h2 class="section-title">New <em>Arrivals</em></h2>
+      </div>
+      <div class="scroll-nav">
+        <button class="scroll-btn swiper-btn-prev" id="newArrPrev" aria-label="Previous">
+          <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="scroll-btn swiper-btn-next" id="newArrNext" aria-label="Next">
+          <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="swiper new-arrivals-swiper">
+      <div class="swiper-wrapper">
+        {% for product in new_arrivals %}
+          <div class="swiper-slide">
+            {% include "partials/_product_card.html" with product=product %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- MOST POPULAR -->
+  <section class="products-section-dark">
+    <div class="products-section-inner">
+      <div class="section-header" style="margin-bottom:48px;">
+        <div class="section-eyebrow">Clientèle Favorite</div>
+        <h2 class="section-title">Most <em>Popular</em></h2>
+      </div>
+      <div class="products-grid">
+        {% for product in trending_products %}
+          {% include "partials/_product_card.html" with product=product %}
+        {% endfor %}
+      </div>
+      <div style="text-align:center;margin-top:48px;">
+        <a href="" class="btn-outline">Explore All Favourites</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDITORIAL -->
+  <section class="editorial">
+    <div class="editorial-visual">
+      <div class="editorial-ornament">
+        <span class="editorial-monogram">Kr</span>
+      </div>
+      <div style="position:absolute;top:30px;left:30px;width:36px;height:36px;border-top:1px solid rgba(200,169,106,0.3);border-left:1px solid rgba(200,169,106,0.3);"></div>
+      <div style="position:absolute;bottom:30px;right:30px;width:36px;height:36px;border-bottom:1px solid rgba(200,169,106,0.3);border-right:1px solid rgba(200,169,106,0.3);"></div>
+      <div style="position:absolute;bottom:30px;left:30px;width:36px;height:36px;border-bottom:1px solid rgba(200,169,106,0.3);border-left:1px solid rgba(200,169,106,0.3);"></div>
+      <div style="position:absolute;top:30px;right:30px;width:36px;height:36px;border-top:1px solid rgba(200,169,106,0.3);border-right:1px solid rgba(200,169,106,0.3);"></div>
+    </div>
+    <div class="editorial-text">
+      <div class="section-eyebrow" style="justify-content:flex-start;margin-bottom:24px;">
+        <span style="width:40px;height:1px;background:var(--kira-gold);display:block;"></span>
+        Notre Histoire
+      </div>
+      <h2 class="editorial-heading">The Art of <em>Slow</em><br>Luxury</h2>
+      <p class="editorial-body">
+        Each Kira piece is born in the quiet of our ateliers, where time is measured not in minutes, but in the patience of hands shaping leather that will outlast generations.
+      </p>
+      <p class="editorial-body" style="margin-top:-12px;">
+        Our master artisans, each trained for a minimum of ten years, devote themselves to a single craft. In an age of abundance, Kira is a study in deliberate scarcity.
+      </p>
+      <a href="#" class="btn-primary" style="align-self:flex-start;">Discover Our Story</a>
+    </div>
+  </section>
+
+  <!-- LOOKBOOK -->
+  <div class="lookbook-outer">
+    <div class="lookbook">
+      <div class="section-header">
+        <div class="section-eyebrow">Lookbook SS 2025</div>
+        <h2 class="section-title">Wear the <em>Silence</em></h2>
+      </div>
+      <div class="lookbook-grid">
+        <div class="look-card">
+          <div class="look-art look-1">
+            <div class="look-inner-art"><span class="look-figure">K</span></div>
+          </div>
+          <div class="look-label">
+            <div class="look-num">Look / 01</div>
+            <div class="look-title">La Lumière du Matin</div>
+          </div>
+        </div>
+        <div class="look-card">
+          <div class="look-art look-2">
+            <div class="look-inner-art"><span class="look-figure">Kr</span></div>
+          </div>
+          <div class="look-label">
+            <div class="look-num">Look / 02</div>
+            <div class="look-title" style="color:rgba(200,169,106,0.9);">La Nuit Étoilée</div>
+          </div>
+        </div>
+        <div class="look-card">
+          <div class="look-art look-3">
+            <div class="look-inner-art"><span class="look-figure">ra</span></div>
+          </div>
+          <div class="look-label">
+            <div class="look-num">Look / 03</div>
+            <div class="look-title" style="color:rgba(200,169,106,0.9);">Le Crépuscule</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <section class="services">
+    <div class="section-header" style="margin-bottom:56px;">
+      <div class="section-eyebrow">Our Commitment</div>
+      <h2 class="section-title">The Kira <em>Promise</em></h2>
+    </div>
+    <div class="services-grid">
+      <div style="text-align:center;padding:0 16px;">
+        <div class="service-icon">
+          <svg viewBox="0 0 48 48"><path d="M24 4l3 8h8l-6.5 5 2.5 8L24 20l-7 5 2.5-8L13 12h8z"/><path d="M8 36h32M16 44h16"/></svg>
+        </div>
+        <div class="service-name">Made to Order</div>
+        <p class="service-desc">Every piece crafted with singular attention to your specifications and desires.</p>
+      </div>
+      <div style="text-align:center;padding:0 16px;border-left:1px solid var(--border-light);">
+        <div class="service-icon">
+          <svg viewBox="0 0 48 48"><path d="M6 24l6-12h24l6 12"/><rect x="4" y="24" width="40" height="18" rx="2"/><path d="M16 24v18M32 24v18"/></svg>
+        </div>
+        <div class="service-name">Free Shipping</div>
+        <p class="service-desc">Complimentary worldwide delivery, presented in our signature packaging.</p>
+      </div>
+      <div style="text-align:center;padding:0 16px;border-left:1px solid var(--border-light);">
+        <div class="service-icon">
+          <svg viewBox="0 0 48 48"><path d="M24 44c0 0-18-10-18-26 0-6.6 8-10 18-10s18 3.4 18 10c0 16-18 26-18 26z"/><path d="M18 24l4 4 8-8"/></svg>
+        </div>
+        <div class="service-name">Lifetime Care</div>
+        <p class="service-desc">Kira guarantees the restoration and care of every piece, for life.</p>
+      </div>
+      <div style="text-align:center;padding:0 16px;border-left:1px solid var(--border-light);">
+        <div class="service-icon">
+          <svg viewBox="0 0 48 48"><circle cx="24" cy="20" r="10"/><path d="M8 44c0-8.8 7.2-16 16-16s16 7.2 16 16"/><path d="M24 32v12M30 38l-6 6-6-6"/></svg>
+        </div>
+        <div class="service-name">Private Client</div>
+        <p class="service-desc">Dedicated advisors and exclusive access to Kira's private collections.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter">
+    <div class="newsletter-pattern"></div>
+    <div class="newsletter-inner">
+      <div class="newsletter-eyebrow">The Kira Journal</div>
+      <h2 class="newsletter-title">Stay <em>Intimate</em><br>with the Maison</h2>
+      <p class="newsletter-sub">Receive invitations to exclusive previews, private events, and the stories behind each collection, delivered with discretion.</p>
+      <div class="newsletter-form">
+        <input type="email" class="newsletter-input" placeholder="Your email address">
+        <button class="newsletter-btn">Subscribe</button>
+      </div>
+      <p class="newsletter-privacy">By subscribing you agree to our Privacy Policy. Unsubscribe at any time.</p>
+    </div>
+  </section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // ─── NEW ARRIVALS SWIPER ───
+  new Swiper('.new-arrivals-swiper', {
+    slidesPerView: 'auto',
+    spaceBetween: 20,
+    grabCursor: true,
+    freeMode: true,
+    navigation: {
+      prevEl: '#newArrPrev',
+      nextEl: '#newArrNext',
+    },
+    breakpoints: {
+      0:    { slidesPerView: 1.2, spaceBetween: 12 },
+      480:  { slidesPerView: 1.8, spaceBetween: 16 },
+      768:  { slidesPerView: 2.5, spaceBetween: 20 },
+      1024: { slidesPerView: 3.5, spaceBetween: 20 },
+      1280: { slidesPerView: 4.2, spaceBetween: 24 },
+    },
+  });
+
+  // ─── NEWSLETTER ───
+  document.querySelector('.newsletter-btn').addEventListener('click', () => {
+    const input = document.querySelector('.newsletter-input');
+    if (input.value && input.value.includes('@')) {
+      input.value = '';
+      input.placeholder = 'Thank you — welcome to the Maison.';
+      input.style.borderColor = 'var(--kira-gold)';
+    }
+  });
+</script>
+{% endblock %}

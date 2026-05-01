@@ -1,0 +1,190 @@
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+
+    <button class="hamburger" id="hamburgerBtn" aria-label="Open navigation" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="nav-left">
+      <div class="nav-item">
+        <a href="#">Women</a>
+        <div class="mega-menu">
+          <div class="mega-col">
+            <div class="mega-col-title">New Arrivals</div>
+            <a href="#">View All New</a>
+            <a href="#">Featured</a>
+            <a href="#">Seasonal Edit</a>
+          </div>
+          <div class="mega-col">
+            <div class="mega-col-title">Bags</div>
+            <a href="#">Evening Bags</a>
+            <a href="#">Totes</a>
+            <a href="#">Clutches</a>
+            <a href="#">Shoulder Bags</a>
+          </div>
+          <div class="mega-col">
+            <div class="mega-col-title">Ready-to-Wear</div>
+            <a href="#">Dresses</a>
+            <a href="#">Coats</a>
+            <a href="#">Knitwear</a>
+            <a href="#">Trousers</a>
+          </div>
+        </div>
+      </div>
+      <div class="nav-item">
+        <a href="#">Men</a>
+        <div class="mega-menu">
+          <div class="mega-col">
+            <div class="mega-col-title">New Arrivals</div>
+            <a href="#">View All New</a>
+            <a href="#">Featured</a>
+          </div>
+          <div class="mega-col">
+            <div class="mega-col-title">Bags</div>
+            <a href="#">Briefcases</a>
+            <a href="#">Backpacks</a>
+            <a href="#">Cardholders</a>
+          </div>
+          <div class="mega-col">
+            <div class="mega-col-title">Ready-to-Wear</div>
+            <a href="#">Suits</a>
+            <a href="#">Outerwear</a>
+            <a href="#">Shirts</a>
+          </div>
+        </div>
+      </div>
+      <a href="#">Leather Goods</a>
+      <a href="#">Jewellery</a>
+      <a href="#">Watches</a>
+    </nav>
+
+    <a href="{% url 'store:home' %}" class="logo">
+      <span class="logo-text">KIRA</span>
+      <span class="logo-sub">Maison de Luxe</span>
+    </a>
+
+    <div class="nav-right">
+      <button class="icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+      </button>
+      <button class="icon-btn nav-right-account" aria-label="Account">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </button>
+      <div class="cart-wrapper">
+        <button class="icon-btn" aria-label="Shopping bag">
+          <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        </button>
+        <span class="cart-count">{{ cart_count|default:0 }}</span>
+      </div>
+    </div>
+
+  </div>
+</header>
+
+<!-- MOBILE SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- MOBILE SIDEBAR -->
+<nav class="mobile-sidebar" id="mobileSidebar" aria-label="Mobile navigation">
+  <div class="sidebar-header">
+    <a href="{% url 'store:home' %}" class="sidebar-logo">
+      <span class="logo-text" style="font-size:22px;letter-spacing:0.32em;">KIRA</span>
+      <span class="logo-sub">Maison de Luxe</span>
+    </a>
+    <button class="sidebar-close" id="sidebarClose" aria-label="Close navigation">
+      <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <div class="sidebar-body">
+    <div class="sidebar-section">
+      <div class="sidebar-nav-item">
+        <button class="sidebar-nav-toggle" data-target="sidebar-women">
+          Women
+          <svg class="toggle-arrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="sidebar-sub" id="sidebar-women">
+          <div class="sidebar-sub-group">
+            <div class="sidebar-sub-title">New Arrivals</div>
+            <a href="#">View All New</a>
+            <a href="#">Featured</a>
+            <a href="#">Seasonal Edit</a>
+          </div>
+          <div class="sidebar-sub-group">
+            <div class="sidebar-sub-title">Bags</div>
+            <a href="#">Evening Bags</a>
+            <a href="#">Totes</a>
+            <a href="#">Clutches</a>
+            <a href="#">Shoulder Bags</a>
+          </div>
+          <div class="sidebar-sub-group">
+            <div class="sidebar-sub-title">Ready-to-Wear</div>
+            <a href="#">Dresses</a>
+            <a href="#">Coats</a>
+            <a href="#">Knitwear</a>
+            <a href="#">Trousers</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-nav-item">
+        <button class="sidebar-nav-toggle" data-target="sidebar-men">
+          Men
+          <svg class="toggle-arrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="sidebar-sub" id="sidebar-men">
+          <div class="sidebar-sub-group">
+            <div class="sidebar-sub-title">New Arrivals</div>
+            <a href="#">View All New</a>
+            <a href="#">Featured</a>
+          </div>
+          <div class="sidebar-sub-group">
+            <div class="sidebar-sub-title">Bags</div>
+            <a href="#">Briefcases</a>
+            <a href="#">Backpacks</a>
+            <a href="#">Cardholders</a>
+          </div>
+          <div class="sidebar-sub-group">
+            <div class="sidebar-sub-title">Ready-to-Wear</div>
+            <a href="#">Suits</a>
+            <a href="#">Outerwear</a>
+            <a href="#">Shirts</a>
+          </div>
+        </div>
+      </div>
+
+      <a href="#" class="sidebar-link">Leather Goods</a>
+      <a href="#" class="sidebar-link">Jewellery</a>
+      <a href="#" class="sidebar-link">Watches</a>
+      <a href="#" class="sidebar-link">Fragrances</a>
+      <a href="#" class="sidebar-link">Gifts</a>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <a href="#" class="sidebar-link sidebar-link-sm">Our Story</a>
+      <a href="#" class="sidebar-link sidebar-link-sm">Find a Boutique</a>
+      <a href="#" class="sidebar-link sidebar-link-sm">Book an Appointment</a>
+      <a href="#" class="sidebar-link sidebar-link-sm">My Account</a>
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-footer-label">Follow the Maison</div>
+    <div class="footer-social" style="justify-content:flex-start;gap:12px;">
+      <div class="social-btn">
+        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+      </div>
+      <div class="social-btn">
+        <svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+      </div>
+      <div class="social-btn">
+        <svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+      </div>
+    </div>
+  </div>
+</nav>

@@ -12,7 +12,7 @@
 
   {% include "partials/_categories.html" %}
 
-  <!-- HERO -->
+  <!-- HERO (always shown) -->
   <section class="hero">
     <div class="hero-split">
       <div class="hero-model">
@@ -24,7 +24,6 @@
         <div style="position:absolute;top:24px;left:24px;font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:0.2em;color:rgba(200,169,106,0.5);text-transform:uppercase;font-weight:300;">SS 2025</div>
         <div style="position:absolute;bottom:24px;right:24px;font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:0.2em;color:rgba(200,169,106,0.5);text-transform:uppercase;font-weight:300;">Look 01</div>
       </div>
-
       <div class="hero-product-side">
         <div class="hero-eyebrow fade-up">The Spring Collection 2025</div>
         <h1 class="hero-title fade-up delay-1">
@@ -59,39 +58,24 @@
       </div>
     </div>
   </section>
-
-  <!-- COLLECTIONS -->
+  
+  
+  {% if show_collections %}
   <section class="collections-section">
     <div class="section-header">
       <div class="section-eyebrow">Nouvelles Collections</div>
       <h2 class="section-title">The World of <em>Kira</em></h2>
     </div>
     <div class="collections-grid">
-      <a href="#" class="collection-card large">
-        <div class="card-img card-atelier"></div>
-        <div class="collection-card-body">
-          <div class="collection-eyebrow">New Collection</div>
-          <div class="collection-name">Atelier<br>Signature</div>
-        </div>
-      </a>
-      <a href="#" class="collection-card">
-        <div class="card-img card-voyage"></div>
-        <div class="collection-card-body">
-          <div class="collection-eyebrow">Travel</div>
-          <div class="collection-name">Voyage<br>Collection</div>
-        </div>
-      </a>
-      <a href="#" class="collection-card">
-        <div class="card-img card-bijoux"></div>
-        <div class="collection-card-body">
-          <div class="collection-eyebrow">Fine Jewellery</div>
-          <div class="collection-name">Bijoux<br>d'Élite</div>
-        </div>
-      </a>
+      {% for collection in collections %}
+        {% include "partials/_collection_card.html" with collection=collection first=forloop.first %}
+      {% endfor %}
     </div>
   </section>
+  {% endif %}
 
-  <!-- MONOGRAM BAND -->
+
+  <!-- MONOGRAM BAND (always shown) -->
   <div class="monogram-band">
     <div class="monogram-pattern-bg"></div>
     <div class="monogram-band-inner">
@@ -105,6 +89,7 @@
   </div>
 
   <!-- ICONS OF THE MAISON -->
+  {% if show_featured %}
   <section class="products">
     <div class="section-header">
       <div class="section-eyebrow">Sélection</div>
@@ -119,8 +104,10 @@
       <a href="{% url 'store:product_list' %}" class="btn-outline">View All Products</a>
     </div>
   </section>
+  {% endif %}
 
   <!-- NEW ARRIVALS -->
+  {% if show_new_arrivals %}
   <section class="products-scroll-section">
     <div class="section-header">
       <div class="section-header-text">
@@ -146,8 +133,10 @@
       </div>
     </div>
   </section>
+  {% endif %}
 
   <!-- MOST POPULAR -->
+  {% if show_trending %}
   <section class="products-section-dark">
     <div class="products-section-inner">
       <div class="section-header" style="margin-bottom:48px;">
@@ -164,8 +153,9 @@
       </div>
     </div>
   </section>
+  {% endif %}
 
-  <!-- EDITORIAL -->
+  <!-- EDITORIAL (always shown) -->
   <section class="editorial">
     <div class="editorial-visual">
       <div class="editorial-ornament">
@@ -193,45 +183,23 @@
   </section>
 
   <!-- LOOKBOOK -->
+  {% if show_lookbook %}
   <div class="lookbook-outer">
     <div class="lookbook">
       <div class="section-header">
-        <div class="section-eyebrow">Lookbook SS 2025</div>
+        <div class="section-eyebrow">Lookbook</div>
         <h2 class="section-title">Wear the <em>Silence</em></h2>
       </div>
       <div class="lookbook-grid">
-        <div class="look-card">
-          <div class="look-art look-1">
-            <div class="look-inner-art"><span class="look-figure">K</span></div>
-          </div>
-          <div class="look-label">
-            <div class="look-num">Look / 01</div>
-            <div class="look-title">La Lumière du Matin</div>
-          </div>
-        </div>
-        <div class="look-card">
-          <div class="look-art look-2">
-            <div class="look-inner-art"><span class="look-figure">Kr</span></div>
-          </div>
-          <div class="look-label">
-            <div class="look-num">Look / 02</div>
-            <div class="look-title" style="color:rgba(200,169,106,0.9);">La Nuit Étoilée</div>
-          </div>
-        </div>
-        <div class="look-card">
-          <div class="look-art look-3">
-            <div class="look-inner-art"><span class="look-figure">ra</span></div>
-          </div>
-          <div class="look-label">
-            <div class="look-num">Look / 03</div>
-            <div class="look-title" style="color:rgba(200,169,106,0.9);">Le Crépuscule</div>
-          </div>
-        </div>
+        {% for lookbook in lookbooks %}
+          {% include "partials/_lookbook_card.html" with lookbook=lookbook %}
+        {% endfor %}
       </div>
     </div>
   </div>
-
-  <!-- SERVICES -->
+  {% endif %}
+  
+  <!-- SERVICES (always shown) -->
   <section class="services">
     <div class="section-header" style="margin-bottom:56px;">
       <div class="section-eyebrow">Our Commitment</div>
@@ -269,7 +237,7 @@
     </div>
   </section>
 
-  <!-- NEWSLETTER -->
+  <!-- NEWSLETTER (always shown) -->
   <section class="newsletter">
     <div class="newsletter-pattern"></div>
     <div class="newsletter-inner">
@@ -287,8 +255,8 @@
 {% endblock %}
 
 {% block extra_js %}
+{% if show_new_arrivals %}
 <script>
-  // ─── NEW ARRIVALS SWIPER ───
   new Swiper('.new-arrivals-swiper', {
     slidesPerView: 'auto',
     spaceBetween: 20,
@@ -306,8 +274,9 @@
       1280: { slidesPerView: 4.2, spaceBetween: 24 },
     },
   });
-
-  // ─── NEWSLETTER ───
+</script>
+{% endif %}
+<script>
   document.querySelector('.newsletter-btn').addEventListener('click', () => {
     const input = document.querySelector('.newsletter-input');
     if (input.value && input.value.includes('@')) {

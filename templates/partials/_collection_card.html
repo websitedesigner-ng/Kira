@@ -1,0 +1,9 @@
+<a href="{{ collection.get_absolute_url }}" class="collection-card {% if first %}large{% endif %}">
+  <div class="card-img">
+    <img src="{{ collection.image.url }}" alt="{{ collection.name }}">
+  </div>
+  <div class="collection-card-body">
+    <div class="collection-eyebrow">{{ collection.name }}</div>
+    <div class="collection-name">{{ collection.name }}</div>
+  </div>
+</a>

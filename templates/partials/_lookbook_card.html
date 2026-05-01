@@ -1,0 +1,7 @@
+<a href="{{ lookbook.get_absolute_url }}" class="look-card">
+  <img class="look-art" src="{{ lookbook.cover_image.url }}" alt="{{ lookbook.title }}">
+  <div class="look-label">
+    <div class="look-num">{{ lookbook.season|default:"Lookbook" }}</div>
+    <div class="look-title">{{ lookbook.title }}</div>
+  </div>
+</a>

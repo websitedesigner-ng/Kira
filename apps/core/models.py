@@ -41,22 +41,26 @@ class Category(models.Model):
 class Collection(models.Model):
     name = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(unique=True)
-
     description = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='collections/')
     order = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
-
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ["order", "name"]
+        ordering = ['order', 'name']
 
     def __str__(self):
-        return self.title
-    
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
     def get_absolute_url(self):
-        return reverse(f'store:collection/{self.slug}/')
+        return reverse('store:collection_detail', kwargs={'slug': self.slug})
 
 
 class Tag(models.Model):
@@ -95,7 +99,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     # Image — replaces the JS-generated SVG art
-    image = models.ImageField(upload_to='products/', blank=True, null=True)
+    image = models.ImageField(upload_to='products/')
 
     # Badge shown on the card corner
     badge = models.CharField(max_length=20, choices=BADGE_CHOICES, blank=True)
@@ -229,7 +233,7 @@ class LookBook(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
     description = models.TextField(blank=True, null=True)
-    cover_image = models.ImageField(upload_to="lookbooks/covers/", blank=True, null=True)
+    cover_image = models.ImageField(upload_to="lookbooks/covers/")
     season = models.CharField(max_length=100, blank=True, null=True)  # e.g Summer 2026
     is_published = models.BooleanField(default=False)
 
@@ -237,6 +241,9 @@ class LookBook(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+    
+    def get_absolute_url(self):
+        return reverse('store:lookbook_detail', kwargs={'slug': self.slug})
 
     def __str__(self):
         return self.title

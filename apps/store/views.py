@@ -1,5 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Product, Category, Collection, LookBook
+from django_filters.views import FilterView
+from .filters import ProductFilter
+
 
 
 def home(request):
@@ -25,28 +28,30 @@ def home(request):
 
 
 def product_list(request):
-    products = Product.objects.filter(is_active=True)
-    category_slug   = request.GET.get('category')
-    active_category = None
-
-    if category_slug:
-        active_category = get_object_or_404(Category, slug=category_slug)
-        products = products.filter(category=active_category)
-
+    f = ProductFilter(
+        request.GET,
+        queryset=Product.objects.filter(is_active=True).select_related('category', 'collection')
+    )
     return render(request, 'store/product_list.html', {
-        'products': products,
-        'active_category': active_category,
+        'filter':          f,
+        'products':        f.qs,
+        'active_category': f.form.cleaned_data.get('category') if f.form.is_valid() else None,
     })
 
 
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, is_active=True)
+
+    # related by same collection first, fall back to category
     related = Product.objects.filter(
-        category=product.category, is_active=True
-    ).exclude(id=product.id)[:4]
+        is_active=True
+    ).exclude(id=product.id).filter(
+        models.Q(collection=product.collection) |
+        models.Q(category=product.category)
+    ).distinct()[:4]
 
     return render(request, 'store/product_detail.html', {
-        'product': product,
+        'product':         product,
         'related_products': related,
     })
 

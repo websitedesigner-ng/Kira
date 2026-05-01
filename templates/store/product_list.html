@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}All Products — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/product_list.css' %}">
+<link rel="stylesheet" href="{% static 'css/products.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  {% include "partials/_categories.html" %}
+
+  <!-- PAGE HEADER -->
+  <section class="pl-hero">
+    <div class="pl-hero-inner">
+      <div class="section-eyebrow">The Collection</div>
+      <h1 class="pl-hero-title">All <em>Products</em></h1>
+      <p class="pl-hero-sub">{{ products|length }} piece{% if products|length != 1 %}s{% endif %}</p>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <div class="pl-layout">
+
+    <!-- SIDEBAR FILTERS -->
+    <aside class="pl-sidebar" id="filterSidebar">
+      <div class="pl-sidebar-inner">
+
+        <div class="pl-filter-header">
+          <span class="pl-filter-title">Refine</span>
+          {% if request.GET %}
+            <a href="{% url 'store:product_list' %}" class="pl-clear-all">Clear all</a>
+          {% endif %}
+        </div>
+
+        <form method="GET" id="filterForm">
+
+          <!-- SEARCH -->
+          <div class="pl-filter-group">
+            <div class="pl-filter-label">Search</div>
+            <div class="pl-search-wrap">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+              <input
+                type="search"
+                name="q"
+                value="{{ filter.form.q.value|default:'' }}"
+                placeholder="Search products…"
+                class="pl-search-input"
+                autocomplete="off"
+              >
+            </div>
+          </div>
+
+          <!-- CATEGORY -->
+          <div class="pl-filter-group">
+            <button type="button" class="pl-filter-toggle" data-target="filter-category">
+              Category
+              <svg class="pl-toggle-arrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="pl-filter-body open" id="filter-category">
+              {% for choice in filter.form.category.field.queryset %}
+              <label class="pl-check-label">
+                <input type="radio" name="category" value="{{ choice.slug }}"
+                  {% if filter.form.category.value == choice.slug %}checked{% endif %}>
+                <span class="pl-check-custom"></span>
+                {{ choice.name }}
+              </label>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- COLLECTION -->
+          <div class="pl-filter-group">
+            <button type="button" class="pl-filter-toggle" data-target="filter-collection">
+              Collection
+              <svg class="pl-toggle-arrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="pl-filter-body open" id="filter-collection">
+              {% for choice in filter.form.collection.field.queryset %}
+              <label class="pl-check-label">
+                <input type="radio" name="collection" value="{{ choice.slug }}"
+                  {% if filter.form.collection.value == choice.slug %}checked{% endif %}>
+                <span class="pl-check-custom"></span>
+                {{ choice.name }}
+              </label>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- PRICE -->
+          <div class="pl-filter-group">
+            <button type="button" class="pl-filter-toggle" data-target="filter-price">
+              Price
+              <svg class="pl-toggle-arrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="pl-filter-body open" id="filter-price">
+              <div class="pl-price-row">
+                <div class="pl-price-input-wrap">
+                  <span>£</span>
+                  <input type="number" name="min_price" placeholder="Min"
+                    value="{{ filter.form.min_price.value|default:'' }}" class="pl-price-input">
+                </div>
+                <div class="pl-price-sep">—</div>
+                <div class="pl-price-input-wrap">
+                  <span>£</span>
+                  <input type="number" name="max_price" placeholder="Max"
+                    value="{{ filter.form.max_price.value|default:'' }}" class="pl-price-input">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BADGE -->
+          <div class="pl-filter-group">
+            <button type="button" class="pl-filter-toggle" data-target="filter-badge">
+              Label
+              <svg class="pl-toggle-arrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="pl-filter-body open" id="filter-badge">
+              {% for value, label in filter.form.badge.field.choices %}
+              {% if value %}
+              <label class="pl-check-label">
+                <input type="radio" name="badge" value="{{ value }}"
+                  {% if filter.form.badge.value == value %}checked{% endif %}>
+                <span class="pl-check-custom"></span>
+                {{ label }}
+              </label>
+              {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary" style="width:100%;text-align:center;margin-top:8px;">Apply</button>
+        </form>
+
+      </div>
+    </aside>
+
+    <!-- PRODUCT GRID -->
+    <div class="pl-main">
+
+      <!-- TOOLBAR -->
+      <div class="pl-toolbar">
+        <button class="pl-filter-btn" id="filterToggleBtn" aria-label="Toggle filters">
+          <svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="10" y2="18"/></svg>
+          Filters
+          {% if request.GET %}
+            <span class="pl-active-dot"></span>
+          {% endif %}
+        </button>
+
+        <div class="pl-sort-wrap">
+          <select name="sort" form="filterForm" class="pl-sort-select" onchange="document.getElementById('filterForm').submit()">
+            <option value="">Sort: Featured</option>
+            <option value="price_asc"  {% if request.GET.sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+            <option value="price_desc" {% if request.GET.sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+            <option value="newest"     {% if request.GET.sort == 'newest' %}selected{% endif %}>Newest First</option>
+          </select>
+          <svg class="pl-sort-arrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+      </div>
+
+      <!-- ACTIVE FILTERS -->
+      {% if request.GET %}
+      <div class="pl-active-filters">
+        {% if request.GET.q %}
+          <span class="pl-filter-tag">
+            "{{ request.GET.q }}"
+            <a href="?{% for k,v in request.GET.items %}{% if k != 'q' %}{{ k }}={{ v }}&{% endif %}{% endfor %}" class="pl-tag-remove">×</a>
+          </span>
+        {% endif %}
+        {% if request.GET.category %}
+          <span class="pl-filter-tag">
+            {{ active_category.name }}
+            <a href="?{% for k,v in request.GET.items %}{% if k != 'category' %}{{ k }}={{ v }}&{% endif %}{% endfor %}" class="pl-tag-remove">×</a>
+          </span>
+        {% endif %}
+        {% if request.GET.min_price or request.GET.max_price %}
+          <span class="pl-filter-tag">
+            £{{ request.GET.min_price|default:'0' }} — £{{ request.GET.max_price|default:'∞' }}
+            <a href="?{% for k,v in request.GET.items %}{% if k != 'min_price' and k != 'max_price' %}{{ k }}={{ v }}&{% endif %}{% endfor %}" class="pl-tag-remove">×</a>
+          </span>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      <!-- GRID -->
+      {% if products %}
+      <div class="pl-grid">
+        {% for product in products %}
+          {% include "partials/_product_card.html" with product=product %}
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="pl-empty">
+        <div class="pl-empty-monogram">K</div>
+        <p class="pl-empty-text">No pieces found</p>
+        <a href="{% url 'store:product_list' %}" class="btn-outline" style="margin-top:24px;">Clear Filters</a>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // ─── FILTER SIDEBAR TOGGLE (mobile) ───
+  const filterToggleBtn = document.getElementById('filterToggleBtn');
+  const filterSidebar   = document.getElementById('filterSidebar');
+
+  filterToggleBtn.addEventListener('click', () => {
+    filterSidebar.classList.toggle('open');
+    document.body.classList.toggle('filter-open');
+  });
+
+  // ─── FILTER GROUP ACCORDIONS ───
+  document.querySelectorAll('.pl-filter-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = document.getElementById(btn.dataset.target);
+      const isOpen = target.classList.toggle('open');
+      btn.querySelector('.pl-toggle-arrow').style.transform = isOpen ? 'rotate(180deg)' : '';
+    });
+  });
+
+  // ─── SORT ───
+  {% if request.GET.sort %}
+  document.querySelector('.pl-sort-select').value = '{{ request.GET.sort }}';
+  {% endif %}
+</script>
+{% endblock %}

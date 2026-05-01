@@ -29,6 +29,44 @@
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
         <script>
+            const searchToggle = document.getElementById('searchToggle');
+            const searchBar    = document.getElementById('searchBar');
+            const searchInput  = document.getElementById('searchInput');
+            const searchClear  = document.getElementById('searchClear');
+          
+            searchToggle.addEventListener('click', () => {
+              const isOpen = searchBar.classList.toggle('open');
+              searchToggle.classList.toggle('active', isOpen);
+              searchToggle.setAttribute('aria-expanded', isOpen);
+              searchBar.setAttribute('aria-hidden', !isOpen);
+              if (isOpen) {
+                setTimeout(() => searchInput.focus(), 50);
+              } else {
+                searchInput.value = '';
+                searchClear.classList.remove('visible');
+              }
+            });
+          
+            searchInput.addEventListener('input', () => {
+              searchClear.classList.toggle('visible', searchInput.value.length > 0);
+            });
+          
+            searchClear.addEventListener('click', () => {
+              searchInput.value = '';
+              searchClear.classList.remove('visible');
+              searchInput.focus();
+            });
+          
+            document.addEventListener('keydown', (e) => {
+              if (e.key === 'Escape' && searchBar.classList.contains('open')) {
+                searchBar.classList.remove('open');
+                searchToggle.classList.remove('active');
+                searchToggle.setAttribute('aria-expanded', false);
+                searchBar.setAttribute('aria-hidden', true);
+                searchInput.value = '';
+                searchClear.classList.remove('visible');
+              }
+            });
             // ─── MOBILE SIDEBAR ───
             const hamburgerBtn = document.getElementById("hamburgerBtn");
             const mobileSidebar = document.getElementById("mobileSidebar");

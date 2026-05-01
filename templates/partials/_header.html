@@ -67,8 +67,9 @@
     </a>
 
     <div class="nav-right">
-      <button class="icon-btn" aria-label="Search">
-        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+      <button class="icon-btn search-toggle" id="searchToggle" aria-label="Search" aria-expanded="false">
+        <svg class="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+        <svg class="icon-close" viewBox="0 0 24 24" style="display:none;"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </button>
       <button class="icon-btn nav-right-account" aria-label="Account">
         <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -81,6 +82,27 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- SEARCH BAR -->
+  <div class="search-bar" id="searchBar" aria-hidden="true">
+    <div class="search-bar-inner">
+      <form class="search-form" action="{% url 'store:product_list' %}" method="GET" role="search">
+        <svg class="search-form-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input
+          type="search"
+          name="q"
+          id="searchInput"
+          class="search-input"
+          placeholder="Search for products, collections…"
+          autocomplete="off"
+          aria-label="Search"
+        >
+        <button type="button" class="search-clear" id="searchClear" aria-label="Clear search">
+          <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </form>
+    </div>
   </div>
 </header>
 
@@ -100,6 +122,17 @@
   </div>
 
   <div class="sidebar-body">
+
+    <!-- MOBILE SEARCH -->
+    <div class="sidebar-search">
+      <form action="{% url 'store:product_list' %}" method="GET" role="search">
+        <div class="sidebar-search-wrap">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="search" name="q" placeholder="Search…" autocomplete="off" aria-label="Search">
+        </div>
+      </form>
+    </div>
+
     <div class="sidebar-section">
       <div class="sidebar-nav-item">
         <button class="sidebar-nav-toggle" data-target="sidebar-women">

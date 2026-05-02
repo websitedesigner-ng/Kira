@@ -12,4 +12,5 @@ urlpatterns = [
     path('payment/callback/',             views.payment_callback, name='payment_callback'),
     path('payment/webhook/',              views.paystack_webhook, name='paystack_webhook'),
     path('order/<str:reference>/',        views.order_confirmed,  name='order_confirmed'),
+    path('order-now/<int:product_id>/', views.order_now, name='order_now'),
 ]

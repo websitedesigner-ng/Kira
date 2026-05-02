@@ -131,18 +131,22 @@
 
       <!-- ACTIONS -->
       <div class="pd-actions">
-        <form method="POST" action="{% url 'orders:cart_add' product.id %}" id="addToCartForm">
+        <form method="POST" action="{% url 'orders:cart_add' product.id %}" id="addToCartForm" style="flex:1;">
           {% csrf_token %}
           <input type="hidden" name="variant_id" id="cartVariantId" value="">
           <input type="hidden" name="quantity" value="1">
-          <div class="pd-actions">
-            <button type="submit" class="btn-primary pd-add-btn" id="pdAddBtn" disabled>
-              Add to Bag
-            </button>
-            <a href="" type="button" class="pd-wishlist-btn" aria-label="Save to wishlist">
-              Order Now
-            </a>
-          </div>
+          <button type="submit" class="btn-primary pd-add-btn" id="pdAddBtn" disabled style="width:100%;">
+            Add to Bag
+          </button>
+        </form>
+      
+        <form method="POST" action="{% url 'orders:order_now' product.id %}" id="orderNowForm">
+          {% csrf_token %}
+          <input type="hidden" name="variant_id" id="orderNowVariantId" value="">
+          <input type="hidden" name="quantity" value="1">
+          <button type="submit" class="pd-order-now-btn" id="pdOrderNowBtn" disabled>
+            Order Now
+          </button>
         </form>
       </div>
 
@@ -266,20 +270,24 @@
           const stock = parseInt(btn.dataset.stock);
           selectedSize.textContent = btn.dataset.size;
   
-          // set variant for form
-          const variantInput = document.getElementById('cartVariantId');
-          if (variantInput) variantInput.value = btn.dataset.variant;
+          // set variant for both forms
+          const cartVariantInput    = document.getElementById('cartVariantId');
+          const orderNowVariantInput = document.getElementById('orderNowVariantId');
+          if (cartVariantInput)     cartVariantInput.value     = btn.dataset.variant;
+          if (orderNowVariantInput) orderNowVariantInput.value = btn.dataset.variant;
   
           if (stock > 0) {
-              pdAddBtn.disabled = false;
-              pdAddBtn.textContent = 'Add to Bag';
-              pdStock.textContent  = stock <= 3 ? `Only ${stock} left` : 'In Stock';
-              pdStock.className    = stock <= 3 ? 'pd-stock low' : 'pd-stock in';
+              pdAddBtn.disabled      = false;
+              pdOrderNowBtn.disabled = false;
+              pdAddBtn.textContent   = 'Add to Bag';
+              pdStock.textContent    = stock <= 3 ? `Only ${stock} left` : 'In Stock';
+              pdStock.className      = stock <= 3 ? 'pd-stock low' : 'pd-stock in';
           } else {
-              pdAddBtn.disabled = true;
-              pdAddBtn.textContent = 'Out of Stock';
-              pdStock.textContent  = 'Out of Stock';
-              pdStock.className    = 'pd-stock out';
+              pdAddBtn.disabled      = true;
+              pdOrderNowBtn.disabled = true;
+              pdAddBtn.textContent   = 'Out of Stock';
+              pdStock.textContent    = 'Out of Stock';
+              pdStock.className      = 'pd-stock out';
           }
       });
   });

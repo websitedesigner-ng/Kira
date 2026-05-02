@@ -67,10 +67,37 @@ def cart_remove(request, item_id):
 
     return redirect('orders:cart_detail')
 
-
 def checkout(request):
-    cart  = SessionCart(request)
-    items = cart.get_items()
+    cart         = SessionCart(request)
+    express      = request.session.get('express_order')
+    express_item = None
+
+    if express:
+        try:
+            express_product = Product.objects.get(id=express['product_id'], is_active=True)
+            express_variant = None
+            if express['variant_id']:
+                express_variant = ProductVariant.objects.get(id=express['variant_id'])
+
+            # Build a temporary item-like object for the template
+            class ExpressItem:
+                def __init__(self, product, variant, quantity):
+                    self.product  = product
+                    self.variant  = variant
+                    self.quantity = quantity
+
+            express_item  = ExpressItem(express_product, express_variant, express['quantity'])
+            items         = [express_item]
+            total         = (
+                express_variant.final_price if express_variant else express_product.price
+            ) * express['quantity']
+
+        except (Product.DoesNotExist, ProductVariant.DoesNotExist):
+            request.session.pop('express_order', None)
+            return redirect('orders:cart_detail')
+    else:
+        items = cart.get_items()
+        total = cart.get_total()
 
     if not items:
         return redirect('orders:cart_detail')
@@ -89,13 +116,13 @@ def checkout(request):
 
         if not all([name, email, address, city, country]):
             return render(request, 'orders/checkout.html', {
-                'items': items,
-                'total': cart.get_total(),
-                'error': 'Please fill in all required fields.',
-                'post':  request.POST,
+                'items':        items,
+                'total':        total,
+                'express_item': express_item,
+                'error':        'Please fill in all required fields.',
+                'post':         request.POST,
             })
 
-        # Create order in pending state
         order = Order.objects.create(
             reference         = uuid.uuid4().hex[:12].upper(),
             customer_name     = name,
@@ -110,7 +137,7 @@ def checkout(request):
             shipping_postcode = postcode,
             shipping_country  = country,
             notes             = notes,
-            total             = cart.get_total(),
+            total             = total,
             status            = 'pending',
         )
 
@@ -123,10 +150,11 @@ def checkout(request):
                 price    = item.variant.final_price if item.variant else item.product.price,
             )
 
-        # Store order reference in session so we can clear cart after payment
         request.session['pending_order_ref'] = order.reference
 
-        # Initialise Paystack
+        # Clear express order from session
+        request.session.pop('express_order', None)
+
         callback_url = request.build_absolute_uri(
             reverse('orders:payment_callback')
         )
@@ -139,19 +167,22 @@ def checkout(request):
                 metadata     = {'order_reference': order.reference, 'customer_name': name},
             )
             return redirect(authorization_url)
-        except Exception as e:
+        except Exception:
             order.delete()
             return render(request, 'orders/checkout.html', {
-                'items': items,
-                'total': cart.get_total(),
-                'error': 'Payment initialisation failed. Please try again.',
-                'post':  request.POST,
+                'items':        items,
+                'total':        total,
+                'express_item': express_item,
+                'error':        'Payment initialisation failed. Please try again.',
+                'post':         request.POST,
             })
 
     return render(request, 'orders/checkout.html', {
-        'items': items,
-        'total': cart.get_total(),
+        'items':        items,
+        'total':        total,
+        'express_item': express_item,
     })
+
 
 
 def payment_callback(request):
@@ -225,3 +256,21 @@ def order_confirmed(request, reference):
         'order': order,
         'items': order.items.select_related('product', 'variant').all(),
     })
+
+def order_now(request, product_id):
+    product    = get_object_or_404(Product, id=product_id, is_active=True)
+    variant_id = request.POST.get('variant_id')
+    quantity   = int(request.POST.get('quantity', 1))
+    variant    = None
+
+    if variant_id:
+        variant = get_object_or_404(ProductVariant, id=variant_id, product=product)
+
+    # Store as a temporary "express order" in session
+    request.session['express_order'] = {
+        'product_id': product.id,
+        'variant_id': variant.id if variant else None,
+        'quantity':   quantity,
+    }
+
+    return redirect('orders:checkout')

@@ -124,6 +124,7 @@ def checkout(request):
             })
 
         order = Order.objects.create(
+            user = request.user if request.user.is_authenticated else None,
             reference         = uuid.uuid4().hex[:12].upper(),
             customer_name     = name,
             customer_email    = email,

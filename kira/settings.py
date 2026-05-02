@@ -23,6 +23,7 @@ GA4_MEASUREMENT_ID   = os.environ.get('GA4_MEASUREMENT_ID', '')
 PAYSTACK_SECRET_KEY  = os.environ['PAYSTACK_SECRET_KEY']
 PAYSTACK_PUBLIC_KEY  = os.environ.get('PAYSTACK_PUBLIC_KEY', '')
 
+AUTH_USER_MODEL = 'accounts.User'
 
 DEBUG = True
 
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.store',
     'apps.orders',
+    'apps.accounts',
 ]
 
 MIDDLEWARE = [
@@ -128,4 +130,4 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 LOGIN_URL = '/account/login/'
-LOGIN_REDIRECT_URL = '/account/profile/'
+LOGIN_REDIRECT_URL = '/account/'

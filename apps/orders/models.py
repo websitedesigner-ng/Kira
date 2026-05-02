@@ -1,8 +1,7 @@
 from django.db import models
 from apps.store.models import Product, ProductVariant
-
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 from apps.store.models import Product, ProductVariant
 
 
@@ -11,7 +10,7 @@ class Address(models.Model):
     Reusable saved address — belongs to a user account.
     Created when a user saves an address during checkout or in their profile.
     """
-    user       = models.ForeignKey(User, on_delete=models.CASCADE, related_name='addresses')
+    user       = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='addresses')
     label      = models.CharField(max_length=60, blank=True)  # e.g. "Home", "Office"
     full_name  = models.CharField(max_length=200)
     phone      = models.CharField(max_length=30, blank=True)
@@ -65,8 +64,8 @@ class Order(models.Model):
 
     # ─── WHO ───
     # nullable so guest orders work; filled when user is logged in
-    user           = models.ForeignKey(
-        User, on_delete=models.SET_NULL,
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
         null=True, blank=True, related_name='orders'
     )
     customer_name  = models.CharField(max_length=200)
@@ -135,6 +134,12 @@ class OrderItem(models.Model):
 
 
 class Cart(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True, blank=True,
+        related_name='cart'
+    )
     session_key  = models.CharField(max_length=40, unique=True)
     customer_email = models.EmailField(blank=True, null=True)
     created_at   = models.DateTimeField(auto_now_add=True)

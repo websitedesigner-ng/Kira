@@ -2,7 +2,8 @@ from django.shortcuts import render, get_object_or_404
 from .models import Product, Category, Collection, LookBook
 from django_filters.views import FilterView
 from .filters import ProductFilter
-
+from django.core.paginator import Paginator
+from django.db import models
 
 
 def home(request):
@@ -27,16 +28,32 @@ def home(request):
     return render(request, 'home.html', context)
 
 
+
 def product_list(request):
     f = ProductFilter(
         request.GET,
         queryset=Product.objects.filter(is_active=True).select_related('category', 'collection')
     )
+    qs = f.qs
+
+    sort = request.GET.get('sort')
+    if sort == 'price_asc':
+        qs = qs.order_by('price')
+    elif sort == 'price_desc':
+        qs = qs.order_by('-price')
+    elif sort == 'newest':
+        qs = qs.order_by('-created_at')
+
+    paginator = Paginator(qs, 8)
+    page      = request.GET.get('page')
+    products  = paginator.get_page(page)
+
     return render(request, 'store/product_list.html', {
         'filter':          f,
-        'products':        f.qs,
+        'products':        products,
         'active_category': f.form.cleaned_data.get('category') if f.form.is_valid() else None,
     })
+
 
 
 def product_detail(request, slug):

@@ -1,0 +1,312 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ product.name }} — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/product_detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/products.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <!-- BREADCRUMB -->
+  <nav class="pd-breadcrumb">
+    <a href="{% url 'store:home' %}">Home</a>
+    <span>／</span>
+    <a href="{% url 'store:product_list' %}">Products</a>
+    {% if product.category %}
+    <span>／</span>
+    <a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a>
+    {% endif %}
+    <span>／</span>
+    <span>{{ product.name }}</span>
+  </nav>
+
+  <!-- PRODUCT -->
+  <section class="pd-layout">
+
+    <!-- GALLERY -->
+    <div class="pd-gallery">
+      <div class="pd-main-img-wrap" id="pdMainImgWrap">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="pd-main-img" id="pdMainImg">
+        {% if product.badge %}
+          <span class="pd-badge">{{ product.badge }}</span>
+        {% endif %}
+      </div>
+
+      {% if product.gallery.exists %}
+      <div class="pd-thumbs">
+        <button class="pd-thumb active" data-img="{{ product.image.url }}">
+          <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        </button>
+        {% for img in product.gallery.all %}
+        <button class="pd-thumb" data-img="{{ img.image.url }}">
+          <img src="{{ img.image.url }}" alt="{{ img.alt_text|default:product.name }}">
+        </button>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- INFO -->
+    <div class="pd-info">
+
+      <!-- EYEBROW -->
+      <div class="pd-eyebrow">
+        {% if product.collection %}
+          <a href="{{ product.collection.get_absolute_url }}" class="pd-collection-link">{{ product.collection.name }}</a>
+        {% endif %}
+        {% if product.is_new_arrival %}<span class="pd-tag">New Arrival</span>{% endif %}
+        {% if product.is_trending %}<span class="pd-tag">Trending</span>{% endif %}
+      </div>
+
+      <h1 class="pd-name">{{ product.name }}</h1>
+
+      <div class="pd-price">
+        £{{ product.price }}
+      </div>
+
+      {% if product.description %}
+      <p class="pd-description">{{ product.description }}</p>
+      {% endif %}
+
+      <div class="pd-divider"></div>
+
+      <!-- VARIANTS -->
+      {% with variants=product.variants.filter %}
+      {% if product.variants.exists %}
+
+        <!-- COLORS -->
+        {% regroup product.variants.all by color as color_groups %}
+        {% if color_groups|length > 1 or color_groups.0.grouper %}
+        <div class="pd-option-group">
+          <div class="pd-option-label">
+            Colour
+            <span class="pd-option-selected" id="selectedColor">
+              {{ product.variants.first.color|default:'' }}
+            </span>
+          </div>
+          <div class="pd-swatches">
+            {% for group in color_groups %}
+            {% if group.grouper %}
+            <button class="pd-swatch {% if forloop.first %}active{% endif %}"
+              data-color="{{ group.grouper }}"
+              title="{{ group.grouper }}"
+              style="background: {{ group.grouper|lower }};">
+            </button>
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- SIZES -->
+        <div class="pd-option-group">
+          <div class="pd-option-label">
+            Size
+            <span class="pd-option-selected" id="selectedSize">— Select —</span>
+          </div>
+          <div class="pd-sizes" id="sizeGrid">
+            {% for variant in product.variants.all %}
+            {% if variant.is_active %}
+            <button
+              class="pd-size-btn {% if variant.stock == 0 %}out-of-stock{% endif %}"
+              data-size="{{ variant.size }}"
+              data-variant="{{ variant.id }}"
+              data-stock="{{ variant.stock }}"
+              {% if variant.stock == 0 %}disabled{% endif %}>
+              {{ variant.size }}
+            </button>
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+
+      {% endif %}
+      {% endwith %}
+
+      <!-- STOCK STATUS -->
+      <div class="pd-stock" id="pdStock"></div>
+
+      <!-- ACTIONS -->
+      <div class="pd-actions">
+        <button class="btn-primary pd-add-btn" id="pdAddBtn" disabled>
+          Add to Bag
+        </button>
+        <button class="pd-wishlist-btn" aria-label="Save to wishlist">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
+      </div>
+
+      <!-- DETAILS ACCORDION -->
+      {% if product.details.exists or product.dimensions %}
+      <div class="pd-accordion">
+
+        {% if product.details.exists %}
+        <div class="pd-acc-item">
+          <button class="pd-acc-toggle" data-target="acc-details">
+            Product Details
+            <svg class="pd-acc-arrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="pd-acc-body open" id="acc-details">
+            <dl class="pd-details-list">
+              {% for detail in product.details.all %}
+              <div class="pd-detail-row">
+                <dt>{{ detail.title }}</dt>
+                <dd>{{ detail.value }}</dd>
+              </div>
+              {% endfor %}
+            </dl>
+          </div>
+        </div>
+        {% endif %}
+
+        {% if product.dimensions %}
+        <div class="pd-acc-item">
+          <button class="pd-acc-toggle" data-target="acc-dimensions">
+            Dimensions
+            <svg class="pd-acc-arrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="pd-acc-body open" id="acc-dimensions">
+            <dl class="pd-details-list">
+              {% if product.dimensions.length_cm %}
+              <div class="pd-detail-row"><dt>Length</dt><dd>{{ product.dimensions.length_cm }} cm</dd></div>
+              {% endif %}
+              {% if product.dimensions.width_cm %}
+              <div class="pd-detail-row"><dt>Width</dt><dd>{{ product.dimensions.width_cm }} cm</dd></div>
+              {% endif %}
+              {% if product.dimensions.height_cm %}
+              <div class="pd-detail-row"><dt>Height</dt><dd>{{ product.dimensions.height_cm }} cm</dd></div>
+              {% endif %}
+              {% if product.dimensions.weight_kg %}
+              <div class="pd-detail-row"><dt>Weight</dt><dd>{{ product.dimensions.weight_kg }} kg</dd></div>
+              {% endif %}
+            </dl>
+          </div>
+        </div>
+        {% endif %}
+
+        <div class="pd-acc-item">
+          <button class="pd-acc-toggle" data-target="acc-shipping">
+            Shipping & Returns
+            <svg class="pd-acc-arrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="pd-acc-body open" id="acc-shipping">
+            <p class="pd-acc-text">Complimentary worldwide delivery on all orders. Items are dispatched within 2–3 business days, presented in our signature packaging.</p>
+            <p class="pd-acc-text">Returns accepted within 14 days of receipt. Items must be unworn and in original condition.</p>
+          </div>
+        </div>
+
+      </div>
+      {% endif %}
+
+      <!-- TAGS -->
+      {% if product.tags.exists %}
+      <div class="pd-tags">
+        {% for tag in product.tags.all %}
+        <a href="{% url 'store:product_list' %}?tag={{ tag.slug }}" class="pd-tag-link">{{ tag.name }}</a>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+    </div>
+  </section>
+
+  <!-- RELATED -->
+  {% if related_products %}
+  <section class="pd-related">
+    <div class="pd-related-inner">
+      <div class="section-header">
+        <div class="section-eyebrow">You May Also Like</div>
+        <h2 class="section-title">Related <em>Pieces</em></h2>
+      </div>
+      <div class="pd-related-grid">
+        {% for product in related_products %}
+          {% include "partials/_product_card.html" with product=product %}
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // ─── GALLERY ───
+  const thumbs   = document.querySelectorAll('.pd-thumb');
+  const mainImg  = document.getElementById('pdMainImg');
+
+  thumbs.forEach(thumb => {
+    thumb.addEventListener('click', () => {
+      mainImg.src = thumb.dataset.img;
+      thumbs.forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+    });
+  });
+
+  // ─── SIZE SELECTION ───
+  const sizeBtns     = document.querySelectorAll('.pd-size-btn');
+  const selectedSize = document.getElementById('selectedSize');
+  const pdAddBtn     = document.getElementById('pdAddBtn');
+  const pdStock      = document.getElementById('pdStock');
+
+  sizeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      sizeBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const stock = parseInt(btn.dataset.stock);
+      selectedSize.textContent = btn.dataset.size;
+
+      if (stock > 0) {
+        pdAddBtn.disabled = false;
+        pdAddBtn.textContent = 'Add to Bag';
+        pdStock.textContent  = stock <= 3 ? `Only ${stock} left` : 'In Stock';
+        pdStock.className    = stock <= 3 ? 'pd-stock low' : 'pd-stock in';
+      } else {
+        pdAddBtn.disabled = true;
+        pdAddBtn.textContent = 'Out of Stock';
+        pdStock.textContent  = 'Out of Stock';
+        pdStock.className    = 'pd-stock out';
+      }
+    });
+  });
+
+  // ─── COLOUR SWATCHES ───
+  const swatches      = document.querySelectorAll('.pd-swatch');
+  const selectedColor = document.getElementById('selectedColor');
+
+  swatches.forEach(swatch => {
+    swatch.addEventListener('click', () => {
+      swatches.forEach(s => s.classList.remove('active'));
+      swatch.classList.add('active');
+      if (selectedColor) selectedColor.textContent = swatch.dataset.color;
+
+      // reset size selection when colour changes
+      sizeBtns.forEach(b => b.classList.remove('active'));
+      if (selectedSize) selectedSize.textContent = '— Select —';
+      pdAddBtn.disabled = true;
+      pdStock.textContent = '';
+      pdStock.className = 'pd-stock';
+    });
+  });
+
+  // ─── ACCORDION ───
+  document.querySelectorAll('.pd-acc-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const body   = document.getElementById(btn.dataset.target);
+      const isOpen = body.classList.toggle('open');
+      btn.querySelector('.pd-acc-arrow').style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+      btn.classList.toggle('active', isOpen);
+    });
+  });
+
+  // ─── WISHLIST ───
+  const wishlistBtn = document.querySelector('.pd-wishlist-btn');
+  wishlistBtn.addEventListener('click', () => {
+    wishlistBtn.classList.toggle('saved');
+  });
+</script>
+{% endblock %}

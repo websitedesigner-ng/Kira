@@ -1,4 +1,5 @@
 import django_filters
+from django.db import models
 from .models import Product, Category, Collection, Tag
 
 class ProductFilter(django_filters.FilterSet):

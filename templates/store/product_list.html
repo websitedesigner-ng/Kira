@@ -9,9 +9,6 @@
 {% endblock %}
 
 {% block content %}
-
-  {% include "partials/_categories.html" %}
-
   <!-- PAGE HEADER -->
   <section class="pl-hero">
     <div class="pl-hero-inner">
@@ -143,13 +140,13 @@
 
       <!-- TOOLBAR -->
       <div class="pl-toolbar">
-        <button class="pl-filter-btn" id="filterToggleBtn" aria-label="Toggle filters">
-          <svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="10" y2="18"/></svg>
-          Filters
-          {% if request.GET %}
-            <span class="pl-active-dot"></span>
-          {% endif %}
-        </button>
+      <button class="pl-filter-btn" id="filterToggleBtn" aria-label="Toggle filters">
+        <svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="10" y2="18"/></svg>
+        Filters
+        {% if request.GET.q or request.GET.category or request.GET.collection or request.GET.min_price or request.GET.max_price or request.GET.badge %}
+          <span class="pl-active-dot"></span>
+        {% endif %}
+      </button>
 
         <div class="pl-sort-wrap">
           <select name="sort" form="filterForm" class="pl-sort-select" onchange="document.getElementById('filterForm').submit()">
@@ -200,30 +197,89 @@
         <a href="{% url 'store:product_list' %}" class="btn-outline" style="margin-top:24px;">Clear Filters</a>
       </div>
       {% endif %}
+      
+      {% if products.paginator.num_pages > 1 %}
+      <nav class="pl-pagination">
+      
+        {% if products.has_previous %}
+          <a href="?{% for k,v in request.GET.items %}{% if k != 'page' %}{{ k }}={{ v }}&{% endif %}{% endfor %}page={{ products.previous_page_number }}" class="pl-page-btn pl-page-prev">
+            <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+          </a>
+        {% else %}
+          <span class="pl-page-btn pl-page-prev disabled">
+            <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+          </span>
+        {% endif %}
+      
+        <div class="pl-page-numbers">
+          {% for num in products.paginator.page_range %}
+            {% if products.number == num %}
+              <span class="pl-page-num active">{{ num }}</span>
+            {% elif num == 1 or num == products.paginator.num_pages or num >= products.number|add:"-2" and num <= products.number|add:"2" %}
+              <a href="?{% for k,v in request.GET.items %}{% if k != 'page' %}{{ k }}={{ v }}&{% endif %}{% endfor %}page={{ num }}" class="pl-page-num">{{ num }}</a>
+            {% elif num == products.number|add:"-3" or num == products.number|add:"3" %}
+              <span class="pl-page-ellipsis">…</span>
+            {% endif %}
+          {% endfor %}
+        </div>
+      
+        {% if products.has_next %}
+          <a href="?{% for k,v in request.GET.items %}{% if k != 'page' %}{{ k }}={{ v }}&{% endif %}{% endfor %}page={{ products.next_page_number }}" class="pl-page-btn pl-page-next">
+            <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+          </a>
+        {% else %}
+          <span class="pl-page-btn pl-page-next disabled">
+            <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+          </span>
+        {% endif %}
+      
+      </nav>
+      {% endif %}
 
     </div>
   </div>
+  <div class="pl-overlay" id="plOverlay"></div>
 
 {% endblock %}
 
 {% block extra_js %}
 <script>
-  // ─── FILTER SIDEBAR TOGGLE (mobile) ───
+  // ─── FILTER SIDEBAR ───
   const filterToggleBtn = document.getElementById('filterToggleBtn');
   const filterSidebar   = document.getElementById('filterSidebar');
-
-  filterToggleBtn.addEventListener('click', () => {
-    filterSidebar.classList.toggle('open');
-    document.body.classList.toggle('filter-open');
+  
+  function openFilters() {
+      filterSidebar.classList.add('open');
+      document.body.classList.add('filter-open');
+  }
+  
+  function closeFilters() {
+      filterSidebar.classList.remove('open');
+      document.body.classList.remove('filter-open');
+  }
+  
+  filterToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openFilters();
   });
-
+  
+  filterSidebar.addEventListener('click', (e) => {
+      e.stopPropagation();
+  });
+  
+  document.addEventListener('click', closeFilters);
+  
+  document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeFilters();
+  });
+  
   // ─── FILTER GROUP ACCORDIONS ───
   document.querySelectorAll('.pl-filter-toggle').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = document.getElementById(btn.dataset.target);
-      const isOpen = target.classList.toggle('open');
-      btn.querySelector('.pl-toggle-arrow').style.transform = isOpen ? 'rotate(180deg)' : '';
-    });
+      btn.addEventListener('click', () => {
+          const target = document.getElementById(btn.dataset.target);
+          const isOpen = target.classList.toggle('open');
+          btn.querySelector('.pl-toggle-arrow').style.transform = isOpen ? 'rotate(180deg)' : '';
+      });
   });
 
   // ─── SORT ───

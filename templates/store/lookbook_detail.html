@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ lookbook.title }} — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/lookbook_detail.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+{% endblock %}
+
+{% block content %}
+
+  <!-- HERO -->
+  <section class="ld-hero">
+    <div class="ld-hero-img-wrap">
+      <img src="{{ lookbook.cover_image.url }}" alt="{{ lookbook.title }}" class="ld-hero-img">
+      <div class="ld-hero-overlay"></div>
+    </div>
+    <div class="ld-hero-content">
+      <div class="ld-hero-eyebrow">{{ lookbook.season|default:"Lookbook" }}</div>
+      <h1 class="ld-hero-title">{{ lookbook.title }}</h1>
+      {% if lookbook.description %}
+      <p class="ld-hero-desc">{{ lookbook.description }}</p>
+      {% endif %}
+      <div class="ld-hero-meta">
+        <span>{{ images|length }} Image{% if images|length != 1 %}s{% endif %}</span>
+        <span class="ld-hero-dot">·</span>
+        <span>{{ lookbook.created_at|date:"Y" }}</span>
+      </div>
+    </div>
+    <a href="#ld-gallery" class="ld-scroll-hint">
+      <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </a>
+  </section>
+
+  <!-- BREADCRUMB -->
+  <nav class="ld-breadcrumb">
+    <a href="{% url 'store:home' %}">Home</a>
+    <span>／</span>
+    <a href="{% url 'store:lookbook_list' %}">Lookbooks</a>
+    <span>／</span>
+    <span>{{ lookbook.title }}</span>
+  </nav>
+
+  {% if images %}
+
+  <!-- MASONRY GALLERY -->
+  <section class="ld-gallery" id="ld-gallery">
+    <div class="ld-gallery-inner">
+      {% for img in images %}
+      <div class="ld-gallery-item" data-index="{{ forloop.counter0 }}">
+        <img
+          src="{{ img.image.url }}"
+          alt="{{ img.caption|default:lookbook.title }}"
+          class="ld-gallery-img"
+          loading="{% if forloop.counter <= 4 %}eager{% else %}lazy{% endif %}"
+        >
+        {% if img.caption %}
+        <div class="ld-gallery-caption">
+          <span class="ld-caption-num">{{ forloop.counter|stringformat:"02d" }}</span>
+          <span class="ld-caption-text">{{ img.caption }}</span>
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div class="ld-lightbox" id="ldLightbox" aria-hidden="true">
+    <div class="ld-lightbox-overlay" id="ldLightboxOverlay"></div>
+
+    <button class="ld-lb-close" id="ldLbClose" aria-label="Close">
+      <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+
+    <button class="ld-lb-prev" id="ldLbPrev" aria-label="Previous">
+      <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+
+    <button class="ld-lb-next" id="ldLbNext" aria-label="Next">
+      <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+
+    <div class="ld-lb-swiper swiper" id="ldSwiper">
+      <div class="swiper-wrapper">
+        {% for img in images %}
+        <div class="swiper-slide ld-lb-slide">
+          <img src="{{ img.image.url }}" alt="{{ img.caption|default:lookbook.title }}" class="ld-lb-img">
+          {% if img.caption %}
+          <div class="ld-lb-caption">
+            <span class="ld-lb-num">{{ forloop.counter|stringformat:"02d" }} / {{ images|length|stringformat:"02d" }}</span>
+            <span class="ld-lb-text">{{ img.caption }}</span>
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  {% endif %}
+
+  <!-- OTHER LOOKBOOKS -->
+  {% if other_lookbooks %}
+  <section class="ld-other">
+    <div class="ld-other-inner">
+      <div class="section-header">
+        <div class="section-eyebrow">Continue Exploring</div>
+        <h2 class="section-title">More <em>Stories</em></h2>
+      </div>
+      <div class="ld-other-grid">
+        {% for lb in other_lookbooks %}
+        <a href="{{ lb.get_absolute_url }}" class="ld-other-card">
+          <div class="ld-other-img-wrap">
+            <img src="{{ lb.cover_image.url }}" alt="{{ lb.title }}" class="ld-other-img">
+          </div>
+          <div class="ld-other-overlay">
+            <div class="ld-other-season">{{ lb.season|default:"Lookbook" }}</div>
+            <div class="ld-other-title">{{ lb.title }}</div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+  // ─── LIGHTBOX SWIPER ───
+  const lightbox  = document.getElementById('ldLightbox');
+  const overlay   = document.getElementById('ldLightboxOverlay');
+  const closeBtn  = document.getElementById('ldLbClose');
+  const prevBtn   = document.getElementById('ldLbPrev');
+  const nextBtn   = document.getElementById('ldLbNext');
+  const galleryItems = document.querySelectorAll('.ld-gallery-item');
+
+  const swiper = new Swiper('#ldSwiper', {
+    loop: true,
+    keyboard: { enabled: true },
+    grabCursor: true,
+    speed: 400,
+  });
+
+  function openLightbox(index) {
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    swiper.slideToLoop(index, 0);
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  galleryItems.forEach(item => {
+    item.addEventListener('click', () => {
+      openLightbox(parseInt(item.dataset.index));
+    });
+  });
+
+  closeBtn.addEventListener('click', closeLightbox);
+  overlay.addEventListener('click', closeLightbox);
+  prevBtn.addEventListener('click', () => swiper.slidePrev());
+  nextBtn.addEventListener('click', () => swiper.slideNext());
+
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape')     closeLightbox();
+    if (e.key === 'ArrowLeft')  swiper.slidePrev();
+    if (e.key === 'ArrowRight') swiper.slideNext();
+  });
+</script>
+{% endblock %}

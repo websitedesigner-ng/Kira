@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ collection.name }} — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/collection_detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/products.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <!-- HERO -->
+  <section class="cd-hero">
+    <div class="cd-hero-img-wrap">
+      <img src="{{ collection.image.url }}" alt="{{ collection.name }}" class="cd-hero-img">
+      <div class="cd-hero-overlay"></div>
+    </div>
+    <div class="cd-hero-content">
+      <div class="section-eyebrow" style="color:rgba(200,169,106,0.8);">Collection</div>
+      <h1 class="cd-hero-title">{{ collection.name }}</h1>
+      {% if collection.description %}
+      <p class="cd-hero-desc">{{ collection.description }}</p>
+      {% endif %}
+      <div class="cd-hero-meta">
+        <span>{{ products|length }} Piece{% if products|length != 1 %}s{% endif %}</span>
+        <span class="cd-hero-dot">·</span>
+        <span>{{ collection.created_at|date:"Y" }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BREADCRUMB -->
+  <nav class="cd-breadcrumb">
+    <a href="{% url 'store:home' %}">Home</a>
+    <span>／</span>
+    <a href="{% url 'store:collection_list' %}">Collections</a>
+    <span>／</span>
+    <span>{{ collection.name }}</span>
+  </nav>
+
+  <!-- PRODUCTS -->
+  <section class="cd-section">
+    <div class="cd-section-inner">
+
+      {% if products %}
+        <div class="cd-toolbar">
+          <p class="cd-count">{{ products|length }} piece{% if products|length != 1 %}s{% endif %}</p>
+        </div>
+
+        <div class="cd-grid">
+          {% for product in products %}
+            {% include "partials/_product_card.html" with product=product %}
+          {% endfor %}
+        </div>
+
+      {% else %}
+        <div class="cd-empty">
+          <div class="cd-empty-monogram">K</div>
+          <p class="cd-empty-text">No pieces in this collection yet</p>
+          <a href="{% url 'store:product_list' %}" class="btn-outline" style="margin-top:24px;">Browse All Products</a>
+        </div>
+      {% endif %}
+
+    </div>
+  </section>
+
+  <!-- OTHER COLLECTIONS -->
+  {% if other_collections %}
+  <section class="cd-other">
+    <div class="cd-other-inner">
+      <div class="section-header">
+        <div class="section-eyebrow">Explore Further</div>
+        <h2 class="section-title">Other <em>Collections</em></h2>
+      </div>
+      <div class="cd-other-grid">
+        {% for col in other_collections %}
+        <a href="{{ col.get_absolute_url }}" class="cd-other-card">
+          <div class="cd-other-img-wrap">
+            <img src="{{ col.image.url }}" alt="{{ col.name }}" class="cd-other-img">
+          </div>
+          <div class="cd-other-overlay">
+            <div class="cd-other-name">{{ col.name }}</div>
+            <div class="cd-other-cta">
+              Explore
+              <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+{% endblock %}

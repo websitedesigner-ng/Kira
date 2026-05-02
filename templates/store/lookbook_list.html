@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Lookbooks — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/lookbook_list.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <!-- HERO -->
+  <section class="ll-hero">
+    <div class="ll-hero-inner">
+      <div class="section-eyebrow">Visual Stories</div>
+      <h1 class="ll-hero-title">The <em>Lookbooks</em></h1>
+      <p class="ll-hero-sub">Each season, a new story. Each image, a world.</p>
+    </div>
+  </section>
+
+  <!-- LOOKBOOKS -->
+  {% if lookbooks %}
+  <section class="ll-section">
+    <div class="ll-section-inner">
+      <div class="ll-grid">
+        {% for lookbook in lookbooks %}
+        <a href="{{ lookbook.get_absolute_url }}" class="ll-card">
+          <div class="ll-card-img-wrap">
+            <img src="{{ lookbook.cover_image.url }}" alt="{{ lookbook.title }}" class="ll-card-img">
+          </div>
+          <div class="ll-card-overlay">
+            <div class="ll-card-body">
+              <div class="ll-card-season">{{ lookbook.season|default:"Lookbook" }}</div>
+              <div class="ll-card-title">{{ lookbook.title }}</div>
+              {% if lookbook.description %}
+              <p class="ll-card-desc">{{ lookbook.description|truncatewords:10 }}</p>
+              {% endif %}
+              <div class="ll-card-cta">
+                View Lookbook
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </div>
+            </div>
+          </div>
+          <div class="ll-card-count">
+            {{ lookbook.images.count }} <span>Images</span>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGINATION -->
+  {% if lookbooks.paginator.num_pages > 1 %}
+  <nav class="ll-pagination">
+    {% if lookbooks.has_previous %}
+      <a href="?page={{ lookbooks.previous_page_number }}" class="ll-page-btn">
+        <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+      </a>
+    {% else %}
+      <span class="ll-page-btn disabled">
+        <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+      </span>
+    {% endif %}
+
+    <div class="ll-page-numbers">
+      {% for num in lookbooks.paginator.page_range %}
+        {% if lookbooks.number == num %}
+          <span class="ll-page-num active">{{ num }}</span>
+        {% elif num == 1 or num == lookbooks.paginator.num_pages or num >= lookbooks.number|add:"-2" and num <= lookbooks.number|add:"2" %}
+          <a href="?page={{ num }}" class="ll-page-num">{{ num }}</a>
+        {% elif num == lookbooks.number|add:"-3" or num == lookbooks.number|add:"3" %}
+          <span class="ll-page-ellipsis">…</span>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% if lookbooks.has_next %}
+      <a href="?page={{ lookbooks.next_page_number }}" class="ll-page-btn">
+        <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </a>
+    {% else %}
+      <span class="ll-page-btn disabled">
+        <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </span>
+    {% endif %}
+  </nav>
+  {% endif %}
+
+  {% else %}
+  <div class="ll-empty">
+    <div class="ll-empty-monogram">K</div>
+    <p class="ll-empty-text">No lookbooks published yet</p>
+  </div>
+  {% endif %}
+
+{% endblock %}

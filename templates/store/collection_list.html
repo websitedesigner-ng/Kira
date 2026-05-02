@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Collections — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/collection_list.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <!-- HERO -->
+  <section class="cl-hero">
+    <div class="cl-hero-inner">
+      <div class="section-eyebrow">Maison de Luxe</div>
+      <h1 class="cl-hero-title">The <em>Collections</em></h1>
+      <p class="cl-hero-sub">Each collection is a world unto itself — a distinct vision, a singular aesthetic.</p>
+    </div>
+  </section>
+
+  <!-- COLLECTIONS -->
+  {% if collections %}
+  <section class="cl-section">
+    <div class="cl-grid">
+      {% for collection in collections %}
+      <a href="{{ collection.get_absolute_url }}" class="cl-card {% if forloop.counter|divisibleby:3 %}cl-card--wide{% endif %}">
+        <div class="cl-card-img-wrap">
+          <img src="{{ collection.image.url }}" alt="{{ collection.name }}" class="cl-card-img">
+        </div>
+        <div class="cl-card-overlay">
+          <div class="cl-card-body">
+            <div class="cl-card-eyebrow">Collection</div>
+            <div class="cl-card-name">{{ collection.name }}</div>
+            {% if collection.description %}
+            <p class="cl-card-desc">{{ collection.description|truncatewords:12 }}</p>
+            {% endif %}
+            <div class="cl-card-cta">
+              Explore
+              <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+  {% if collections.paginator.num_pages > 1 %}
+    <nav class="cl-pagination">
+    
+      {% if collections.has_previous %}
+        <a href="?page={{ collections.previous_page_number }}" class="cl-page-btn">
+          <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+        </a>
+      {% else %}
+        <span class="cl-page-btn disabled">
+          <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+        </span>
+      {% endif %}
+    
+      <div class="cl-page-numbers">
+        {% for num in collections.paginator.page_range %}
+          {% if collections.number == num %}
+            <span class="cl-page-num active">{{ num }}</span>
+          {% elif num == 1 or num == collections.paginator.num_pages or num >= collections.number|add:"-2" and num <= collections.number|add:"2" %}
+            <a href="?page={{ num }}" class="cl-page-num">{{ num }}</a>
+          {% elif num == collections.number|add:"-3" or num == collections.number|add:"3" %}
+            <span class="cl-page-ellipsis">…</span>
+          {% endif %}
+        {% endfor %}
+      </div>
+    
+      {% if collections.has_next %}
+        <a href="?page={{ collections.next_page_number }}" class="cl-page-btn">
+          <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      {% else %}
+        <span class="cl-page-btn disabled">
+          <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+        </span>
+      {% endif %}
+    
+    </nav>
+    {% endif %}
+
+  <!-- MONOGRAM BAND -->
+  <div class="monogram-band">
+    <div class="monogram-pattern-bg"></div>
+    <div class="monogram-band-inner">
+      <div class="monogram-logo">K</div>
+      <div class="monogram-tagline">Maison de Luxe · Paris · Est. 1892</div>
+      <p class="monogram-desc">
+        "Each collection is born of a singular obsession, a texture, a silhouette, a moment in time preserved in cloth and craft."
+      </p>
+      <a href="{% url 'store:product_list' %}" class="btn-gold">Shop All Products</a>
+    </div>
+  </div>
+
+{% endblock %}

@@ -73,20 +73,52 @@ def product_detail(request, slug):
     })
 
 
+
+def collection_list(request):
+    paginator   = Paginator(Collection.objects.filter(is_active=True).order_by('order'), 9)
+    page        = request.GET.get('page')
+    collections = paginator.get_page(page)
+
+    return render(request, 'store/collection_list.html', {
+        'collections': collections,
+    })
+
+    
+
 def collection_detail(request, slug):
-    collection = get_object_or_404(Collection, slug=slug, is_active=True)
-    products   = collection.products.filter(is_active=True)
+    collection       = get_object_or_404(Collection, slug=slug, is_active=True)
+    products         = collection.products.filter(is_active=True)
+    other_collections = Collection.objects.filter(
+        is_active=True
+    ).exclude(id=collection.id).order_by('order')[:3]
 
     return render(request, 'store/collection_detail.html', {
-        'collection': collection,
-        'products':   products,
+        'collection':        collection,
+        'products':          products,
+        'other_collections': other_collections,
     })
+
+
+
+def lookbook_list(request):
+    paginator = Paginator(LookBook.objects.filter(is_published=True), 9)
+    page      = request.GET.get('page')
+    lookbooks = paginator.get_page(page)
+
+    return render(request, 'store/lookbook_list.html', {
+        'lookbooks': lookbooks,
+    })
+
 
 
 def lookbook_detail(request, slug):
     lookbook = get_object_or_404(LookBook, slug=slug, is_published=True)
+    other_lookbooks = LookBook.objects.filter(
+        is_published=True
+    ).exclude(id=lookbook.id).order_by('-created_at')[:3]
 
     return render(request, 'store/lookbook_detail.html', {
-        'lookbook': lookbook,
-        'images':   lookbook.images.all(),
+        'lookbook':        lookbook,
+        'images':          lookbook.images.all(),
+        'other_lookbooks': other_lookbooks,
     })

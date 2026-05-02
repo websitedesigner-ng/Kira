@@ -1,0 +1,331 @@
+/* ════════════════════════════════════════
+   COLLECTION DETAIL
+   ════════════════════════════════════════ */
+
+/* ─── HERO ─── */
+.cd-hero {
+    position: relative;
+    height: 70vh;
+    min-height: 480px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+}
+
+.cd-hero-img-wrap {
+    position: absolute;
+    inset: 0;
+}
+
+.cd-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transform: scale(1.04);
+    transition: transform 6s ease;
+}
+
+.cd-hero:hover .cd-hero-img {
+    transform: scale(1);
+}
+
+.cd-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.8) 0%,
+        rgba(0, 0, 0, 0.25) 50%,
+        rgba(0, 0, 0, 0.1) 100%
+    );
+}
+
+.cd-hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 80px 64px;
+    max-width: 800px;
+}
+
+.cd-hero-title {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(48px, 7vw, 88px);
+    font-weight: 300;
+    color: var(--kira-white);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 14px 0 20px;
+}
+
+.cd-hero-desc {
+    font-size: 14px;
+    line-height: 1.9;
+    color: rgba(255, 255, 255, 0.65);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    max-width: 480px;
+    margin-bottom: 24px;
+}
+
+.cd-hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+    font-weight: 300;
+}
+
+.cd-hero-dot {
+    color: var(--kira-gold);
+}
+
+/* ─── BREADCRUMB ─── */
+.cd-breadcrumb {
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border-light);
+    background: var(--kira-cream);
+}
+
+.cd-breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.cd-breadcrumb a:hover {
+    color: var(--kira-brown);
+}
+.cd-breadcrumb span:last-child {
+    color: var(--text-primary);
+}
+
+/* ─── PRODUCTS ─── */
+.cd-section {
+    padding: 56px 0 80px;
+}
+
+.cd-section-inner {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+.cd-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.cd-count {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 300;
+}
+
+.cd-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+}
+
+/* ─── EMPTY ─── */
+.cd-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 40px;
+    text-align: center;
+}
+
+.cd-empty-monogram {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 80px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--kira-tan);
+    line-height: 1;
+    margin-bottom: 16px;
+}
+
+.cd-empty-text {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 300;
+}
+
+/* ─── OTHER COLLECTIONS ─── */
+.cd-other {
+    background: var(--kira-cream);
+    border-top: 1px solid var(--border-light);
+}
+
+.cd-other-inner {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 80px 40px;
+}
+
+.cd-other-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+}
+
+.cd-other-card {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    overflow: hidden;
+    aspect-ratio: 3/4;
+}
+
+.cd-other-img-wrap {
+    position: absolute;
+    inset: 0;
+}
+
+.cd-other-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+    display: block;
+}
+
+.cd-other-card:hover .cd-other-img {
+    transform: scale(1.05);
+}
+
+.cd-other-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.75) 0%,
+        transparent 60%
+    );
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 28px 24px;
+}
+
+.cd-other-name {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 26px;
+    font-weight: 300;
+    color: var(--kira-white);
+    line-height: 1.1;
+    margin-bottom: 10px;
+}
+
+.cd-other-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--kira-gold);
+    font-weight: 400;
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
+}
+
+.cd-other-card:hover .cd-other-cta {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.cd-other-cta svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.5;
+    transition: transform 0.2s ease;
+}
+
+.cd-other-card:hover .cd-other-cta svg {
+    transform: translateX(4px);
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1100px) {
+    .cd-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 860px) {
+    .cd-hero-content {
+        padding: 0 40px 48px;
+    }
+    .cd-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .cd-other-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .cd-section-inner {
+        padding: 0 20px;
+    }
+    .cd-other-inner {
+        padding: 60px 20px;
+    }
+    .cd-breadcrumb {
+        padding: 14px 20px;
+    }
+
+    .cd-other-cta {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 600px) {
+    .cd-hero {
+        height: 60vh;
+    }
+    .cd-hero-content {
+        padding: 0 20px 36px;
+    }
+    .cd-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2px;
+        row-gap: 16px;
+    }
+    .cd-other-grid {
+        grid-template-columns: 1fr;
+    }
+    .cd-breadcrumb {
+        display: none;
+    }
+    .cd-section {
+        padding: 40px 0 60px;
+    }
+}

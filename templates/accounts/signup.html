@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Create Account — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="auth-wrap">
+
+  <div class="auth-inner">
+
+    <div class="auth-header">
+      <div class="section-eyebrow">Join the Maison</div>
+      <h1 class="auth-title">Create <em>Account</em></h1>
+    </div>
+
+    {% if error %}
+    <div class="auth-error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" class="auth-form">
+      {% csrf_token %}
+
+      <div class="auth-row">
+        <div class="auth-field">
+          <label class="auth-label">First Name <span>*</span></label>
+          <input type="text" name="first_name" class="auth-input"
+            value="{{ post.first_name|default:'' }}" required autocomplete="given-name" autofocus>
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">Last Name</label>
+          <input type="text" name="last_name" class="auth-input"
+            value="{{ post.last_name|default:'' }}" autocomplete="family-name">
+        </div>
+      </div>
+
+      <div class="auth-field">
+        <label class="auth-label">Email Address <span>*</span></label>
+        <input type="email" name="email" class="auth-input"
+          value="{{ post.email|default:'' }}" required autocomplete="email">
+      </div>
+
+      <div class="auth-field">
+        <label class="auth-label">Phone Number</label>
+        <input type="tel" name="phone" class="auth-input"
+          value="{{ post.phone|default:'' }}" autocomplete="tel">
+      </div>
+
+      <div class="auth-field">
+        <label class="auth-label">Password <span>*</span></label>
+        <div class="auth-input-wrap">
+          <input type="password" name="password1" class="auth-input"
+            required autocomplete="new-password" id="password1Input">
+          <button type="button" class="auth-eye" id="togglePassword1" aria-label="Toggle password">
+            <svg class="eye-show" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="eye-hide" viewBox="0 0 24 24" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
+        <span class="auth-hint">Minimum 8 characters</span>
+      </div>
+
+      <div class="auth-field">
+        <label class="auth-label">Confirm Password <span>*</span></label>
+        <div class="auth-input-wrap">
+          <input type="password" name="password2" class="auth-input"
+            required autocomplete="new-password" id="password2Input">
+          <button type="button" class="auth-eye" id="togglePassword2" aria-label="Toggle password">
+            <svg class="eye-show" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="eye-hide" viewBox="0 0 24 24" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <p class="auth-terms">
+        By creating an account you agree to our
+        <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a>.
+      </p>
+
+      <button type="submit" class="btn-primary auth-submit">Create Account</button>
+
+    </form>
+
+    <div class="auth-divider"><span>Already have an account?</span></div>
+
+    <a href="{% url 'accounts:login' %}" class="btn-outline auth-alt-btn">Sign In</a>
+
+  </div>
+
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function togglePass(btnId, inputId) {
+    const btn   = document.getElementById(btnId);
+    const input = document.getElementById(inputId);
+    btn.addEventListener('click', () => {
+      const isPass = input.type === 'password';
+      input.type = isPass ? 'text' : 'password';
+      btn.querySelector('.eye-show').style.display = isPass ? 'none'  : 'block';
+      btn.querySelector('.eye-hide').style.display = isPass ? 'block' : 'none';
+    });
+  }
+  togglePass('togglePassword1', 'password1Input');
+  togglePass('togglePassword2', 'password2Input');
+</script>
+{% endblock %}

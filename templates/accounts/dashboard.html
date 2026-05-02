@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Account — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/account.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <section class="ac-hero">
+    <div class="ac-hero-inner">
+      <div class="section-eyebrow">My Account</div>
+      <h1 class="ac-hero-title">Welcome, <em>{{ request.user.first_name|default:request.user.email }}</em></h1>
+    </div>
+  </section>
+
+  <div class="ac-layout">
+
+    <!-- SIDEBAR NAV -->
+    {% include "accounts/partials/_account_nav.html" %}
+
+    <!-- MAIN -->
+    <div class="ac-main">
+
+      <!-- STATS -->
+      <div class="ac-stats">
+        <div class="ac-stat">
+          <div class="ac-stat-num">{{ request.user.orders.count }}</div>
+          <div class="ac-stat-label">Total Orders</div>
+        </div>
+        <div class="ac-stat">
+          <div class="ac-stat-num">{{ request.user.addresses.count }}</div>
+          <div class="ac-stat-label">Saved Addresses</div>
+        </div>
+        <div class="ac-stat">
+          <div class="ac-stat-num">
+            {% with request.user.orders.filter as orders %}
+              {{ request.user.orders.all|length }}
+            {% endwith %}
+          </div>
+          <div class="ac-stat-label">Member Since {{ request.user.date_joined|date:"Y" }}</div>
+        </div>
+      </div>
+
+      <!-- RECENT ORDERS -->
+      <div class="ac-section">
+        <div class="ac-section-header">
+          <span class="ac-section-title">Recent Orders</span>
+          <a href="{% url 'accounts:order_history' %}" class="ac-section-link">View All</a>
+        </div>
+
+        {% if recent_orders %}
+        <div class="ac-orders">
+          {% for order in recent_orders %}
+          <a href="{% url 'accounts:order_detail' order.reference %}" class="ac-order-row">
+            <div class="ac-order-ref">
+              <span class="ac-order-ref-num">{{ order.reference }}</span>
+              <span class="ac-order-date">{{ order.created_at|date:"d M Y" }}</span>
+            </div>
+            <div class="ac-order-items-preview">
+              {% for item in order.items.all|slice:":3" %}
+              <div class="ac-order-thumb">
+                {% if item.product.image %}
+                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                {% endif %}
+              </div>
+              {% endfor %}
+              {% if order.items.count > 3 %}
+              <div class="ac-order-thumb ac-order-thumb--more">+{{ order.items.count|add:"-3" }}</div>
+              {% endif %}
+            </div>
+            <div class="ac-order-meta">
+              <span class="ac-order-total">£{{ order.total }}</span>
+              <span class="ac-order-status ac-status--{{ order.status }}">{{ order.get_status_display }}</span>
+            </div>
+            <svg class="ac-order-arrow" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+          </a>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="ac-empty">
+          <p class="ac-empty-text">No orders yet.</p>
+          <a href="{% url 'store:product_list' %}" class="btn-outline" style="margin-top:16px;">Start Shopping</a>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- ADDRESSES PREVIEW -->
+      <div class="ac-section">
+        <div class="ac-section-header">
+          <span class="ac-section-title">Saved Addresses</span>
+          <a href="{% url 'accounts:addresses' %}" class="ac-section-link">Manage</a>
+        </div>
+
+        {% with addresses=request.user.addresses.all %}
+        {% if addresses %}
+        <div class="ac-addresses-grid">
+          {% for address in addresses|slice:":2" %}
+          <div class="ac-address-card {% if address.is_default %}ac-address-card--default{% endif %}">
+            {% if address.is_default %}
+            <span class="ac-address-default-badge">Default</span>
+            {% endif %}
+            {% if address.label %}
+            <div class="ac-address-label">{{ address.label }}</div>
+            {% endif %}
+            <div class="ac-address-name">{{ address.full_name }}</div>
+            <div class="ac-address-lines">
+              <p>{{ address.line1 }}</p>
+              {% if address.line2 %}<p>{{ address.line2 }}</p>{% endif %}
+              <p>{{ address.city }}{% if address.state %}, {{ address.state }}{% endif %} {{ address.postcode }}</p>
+              <p>{{ address.country }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="ac-empty">
+          <p class="ac-empty-text">No saved addresses.</p>
+          <a href="{% url 'accounts:address_add' %}" class="btn-outline" style="margin-top:16px;">Add Address</a>
+        </div>
+        {% endif %}
+        {% endwith %}
+      </div>
+
+    </div>
+  </div>
+
+{% endblock %}

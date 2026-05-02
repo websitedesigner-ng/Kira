@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Sign In — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="auth-wrap">
+
+  <div class="auth-inner">
+
+    <div class="auth-header">
+      <div class="section-eyebrow">Welcome Back</div>
+      <h1 class="auth-title">Sign <em>In</em></h1>
+    </div>
+
+    {% if error %}
+    <div class="auth-error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" class="auth-form">
+      {% csrf_token %}
+      {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+
+      <div class="auth-field">
+        <label class="auth-label">Email Address <span>*</span></label>
+        <input type="email" name="email" class="auth-input"
+          value="{{ post.email|default:'' }}" required autocomplete="email" autofocus>
+      </div>
+
+      <div class="auth-field">
+        <label class="auth-label">
+          Password <span>*</span>
+          <a href="#" class="auth-forgot">Forgot password?</a>
+        </label>
+        <div class="auth-input-wrap">
+          <input type="password" name="password" class="auth-input"
+            required autocomplete="current-password" id="passwordInput">
+          <button type="button" class="auth-eye" id="togglePassword" aria-label="Toggle password">
+            <svg class="eye-show" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="eye-hide" viewBox="0 0 24 24" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary auth-submit">Sign In</button>
+
+    </form>
+
+    <div class="auth-divider"><span>New to Kira?</span></div>
+
+    <a href="{% url 'accounts:signup' %}" class="btn-outline auth-alt-btn">Create an Account</a>
+
+  </div>
+
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const togglePassword = document.getElementById('togglePassword');
+  const passwordInput  = document.getElementById('passwordInput');
+  togglePassword.addEventListener('click', () => {
+    const isPassword = passwordInput.type === 'password';
+    passwordInput.type = isPassword ? 'text' : 'password';
+    togglePassword.querySelector('.eye-show').style.display = isPassword ? 'none'  : 'block';
+    togglePassword.querySelector('.eye-hide').style.display = isPassword ? 'block' : 'none';
+  });
+</script>
+{% endblock %}

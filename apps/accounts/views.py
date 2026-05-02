@@ -7,7 +7,6 @@ from .models import User
 from apps.orders.models import Order, Address
 from apps.orders.cart import SessionCart
 
-
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('accounts:dashboard')
@@ -16,11 +15,11 @@ def login_view(request):
         email    = request.POST.get('email', '').strip().lower()
         password = request.POST.get('password', '')
         user     = authenticate(request, username=email, password=password)
-    if user:
-        login(request, user)
-        SessionCart(request)
-        return redirect(request.POST.get('next') or 'accounts:dashboard')
-        
+
+        if user:
+            login(request, user)
+            SessionCart(request)
+            return redirect(request.POST.get('next') or 'accounts:dashboard')
 
         return render(request, 'accounts/login.html', {
             'error': 'Invalid email or password.',
@@ -30,6 +29,7 @@ def login_view(request):
     return render(request, 'accounts/login.html', {
         'next': request.GET.get('next', ''),
     })
+
 
 
 def signup_view(request):

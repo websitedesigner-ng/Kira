@@ -131,12 +131,19 @@
 
       <!-- ACTIONS -->
       <div class="pd-actions">
-        <button class="btn-primary pd-add-btn" id="pdAddBtn" disabled>
-          Add to Bag
-        </button>
-        <button class="pd-wishlist-btn" aria-label="Save to wishlist">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        </button>
+        <form method="POST" action="{% url 'orders:cart_add' product.id %}" id="addToCartForm">
+          {% csrf_token %}
+          <input type="hidden" name="variant_id" id="cartVariantId" value="">
+          <input type="hidden" name="quantity" value="1">
+          <div class="pd-actions">
+            <button type="submit" class="btn-primary pd-add-btn" id="pdAddBtn" disabled>
+              Add to Bag
+            </button>
+            <a href="" type="button" class="pd-wishlist-btn" aria-label="Save to wishlist">
+              Order Now
+            </a>
+          </div>
+        </form>
       </div>
 
       <!-- DETAILS ACCORDION -->
@@ -251,28 +258,32 @@
   const selectedSize = document.getElementById('selectedSize');
   const pdAddBtn     = document.getElementById('pdAddBtn');
   const pdStock      = document.getElementById('pdStock');
-
   sizeBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      sizeBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      const stock = parseInt(btn.dataset.stock);
-      selectedSize.textContent = btn.dataset.size;
-
-      if (stock > 0) {
-        pdAddBtn.disabled = false;
-        pdAddBtn.textContent = 'Add to Bag';
-        pdStock.textContent  = stock <= 3 ? `Only ${stock} left` : 'In Stock';
-        pdStock.className    = stock <= 3 ? 'pd-stock low' : 'pd-stock in';
-      } else {
-        pdAddBtn.disabled = true;
-        pdAddBtn.textContent = 'Out of Stock';
-        pdStock.textContent  = 'Out of Stock';
-        pdStock.className    = 'pd-stock out';
-      }
-    });
+      btn.addEventListener('click', () => {
+          sizeBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+  
+          const stock = parseInt(btn.dataset.stock);
+          selectedSize.textContent = btn.dataset.size;
+  
+          // set variant for form
+          const variantInput = document.getElementById('cartVariantId');
+          if (variantInput) variantInput.value = btn.dataset.variant;
+  
+          if (stock > 0) {
+              pdAddBtn.disabled = false;
+              pdAddBtn.textContent = 'Add to Bag';
+              pdStock.textContent  = stock <= 3 ? `Only ${stock} left` : 'In Stock';
+              pdStock.className    = stock <= 3 ? 'pd-stock low' : 'pd-stock in';
+          } else {
+              pdAddBtn.disabled = true;
+              pdAddBtn.textContent = 'Out of Stock';
+              pdStock.textContent  = 'Out of Stock';
+              pdStock.className    = 'pd-stock out';
+          }
+      });
   });
+  
 
   // ─── COLOUR SWATCHES ───
   const swatches      = document.querySelectorAll('.pd-swatch');

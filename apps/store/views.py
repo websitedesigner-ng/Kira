@@ -44,7 +44,7 @@ def product_list(request):
     elif sort == 'newest':
         qs = qs.order_by('-created_at')
 
-    paginator = Paginator(qs, 8)
+    paginator = Paginator(qs, 9)
     page      = request.GET.get('page')
     products  = paginator.get_page(page)
 

@@ -11,24 +11,23 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(BASE_DIR / '.env')
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
+SECRET_KEY        = os.environ['SECRET_KEY']
+GA4_MEASUREMENT_ID   = os.environ.get('GA4_MEASUREMENT_ID', '')
+PAYSTACK_SECRET_KEY  = os.environ['PAYSTACK_SECRET_KEY']
+PAYSTACK_PUBLIC_KEY  = os.environ.get('PAYSTACK_PUBLIC_KEY', '')
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-i+e&kkw#fj80ebf6a79w5tlq-e)1*hjj$4_(qxd#&4^jti31up'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-GA4_MEASUREMENT_ID = 'G-XXXXXXXXXX'
 
 # Application definition
 
@@ -40,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.store',
-    'apps.orders'
+    'apps.orders',
 ]
 
 MIDDLEWARE = [
@@ -66,7 +65,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'apps.store.context_processors.global_context',
-                'apps.store.context_processors.analytics'
+                'apps.store.context_processors.analytics',
+                'apps.store.context_processors.cart',
             ],
         },
     },
@@ -126,3 +126,6 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+LOGIN_URL = '/account/login/'
+LOGIN_REDIRECT_URL = '/account/profile/'

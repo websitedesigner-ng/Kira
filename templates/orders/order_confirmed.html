@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Order Confirmed — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/order_confirmed.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="oc-wrap">
+
+  <div class="oc-icon">
+    <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="22"/><path d="M14 24l7 7 13-13"/></svg>
+  </div>
+
+  <div class="oc-eyebrow">Thank You</div>
+  <h1 class="oc-title">Order <em>Confirmed</em></h1>
+  <p class="oc-sub">
+    A confirmation has been sent to <strong>{{ order.customer_email }}</strong>
+  </p>
+
+  <div class="oc-reference">
+    <span class="oc-ref-label">Order Reference</span>
+    <span class="oc-ref-num">{{ order.reference }}</span>
+  </div>
+
+  <!-- ITEMS -->
+  <div class="oc-items">
+    {% for item in items %}
+    <div class="oc-item">
+      <div class="oc-item-img-wrap">
+        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="oc-item-img">
+      </div>
+      <div class="oc-item-info">
+        <div class="oc-item-collection">{{ item.product.collection.name|default:"" }}</div>
+        <div class="oc-item-name">{{ item.product.name }}</div>
+        {% if item.variant %}
+        <div class="oc-item-variant">
+          {% if item.variant.size %}{{ item.variant.size }}{% endif %}
+          {% if item.variant.color %} · {{ item.variant.color }}{% endif %}
+        </div>
+        {% endif %}
+        <div class="oc-item-qty">Qty: {{ item.quantity }}</div>
+      </div>
+      <div class="oc-item-price">£{{ item.price }}</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- TOTAL -->
+  <div class="oc-total">
+    <span>Total</span>
+    <span>£{{ order.total }}</span>
+  </div>
+
+  <!-- SHIPPING -->
+  <div class="oc-shipping">
+    <div class="oc-shipping-title">Shipping To</div>
+    <p>{{ order.shipping_name }}</p>
+    <p>{{ order.shipping_line1 }}</p>
+    {% if order.shipping_line2 %}
+    <p>{{ order.shipping_line2 }}</p>
+    {% endif %}
+    <p>
+      {{ order.shipping_city }}{% if order.shipping_state %}, {{ order.shipping_state }}{% endif %}
+      {% if order.shipping_postcode %} {{ order.shipping_postcode }}{% endif %}
+    </p>
+    <p>{{ order.shipping_country }}</p>
+    {% if order.shipping_phone %}
+    <p>{{ order.shipping_phone }}</p>
+    {% endif %}
+  </div>
+
+  <div class="oc-actions">
+    <a href="{% url 'store:product_list' %}" class="btn-primary">Continue Shopping</a>
+    <a href="{% url 'store:collection_list' %}" class="btn-outline">Browse Collection</a>
+  </div>
+
+</section>
+{% endblock %}

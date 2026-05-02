@@ -1,0 +1,208 @@
+/* ════════════════════════════════════════
+   ORDER CONFIRMED
+   ════════════════════════════════════════ */
+
+.oc-wrap {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 80px 40px 100px;
+    text-align: center;
+}
+
+.oc-icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 28px;
+    color: #5a8a5a;
+}
+
+.oc-icon svg {
+    width: 100%;
+    height: 100%;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.5;
+}
+
+.oc-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--kira-gold);
+    font-weight: 400;
+    margin-bottom: 12px;
+}
+
+.oc-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+}
+
+.oc-title em { font-style: italic; color: var(--kira-brown); }
+
+.oc-sub {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 1.8;
+    letter-spacing: 0.02em;
+    margin-bottom: 32px;
+}
+
+.oc-reference {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid var(--border-light);
+    background: var(--kira-cream);
+    padding: 14px 28px;
+    margin-bottom: 48px;
+}
+
+.oc-ref-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.oc-ref-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    color: var(--text-primary);
+}
+
+/* ─── ITEMS ─── */
+.oc-items {
+    border-top: 1px solid var(--border-light);
+    margin-bottom: 0;
+    text-align: left;
+}
+
+.oc-item {
+    display: grid;
+    grid-template-columns: 72px 1fr auto;
+    gap: 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border-light);
+    align-items: center;
+}
+
+.oc-item-img-wrap {
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    background: var(--kira-cream);
+}
+
+.oc-item-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.oc-item-collection {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--kira-gold);
+    margin-bottom: 4px;
+}
+
+.oc-item-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+
+.oc-item-variant,
+.oc-item-qty {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 300;
+    letter-spacing: 0.04em;
+}
+
+.oc-item-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+/* ─── TOTAL ─── */
+.oc-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0 40px;
+    border-bottom: 1px solid var(--border-light);
+    margin-bottom: 40px;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--text-primary);
+}
+
+.oc-total span:last-child {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    text-transform: none;
+}
+
+/* ─── SHIPPING ─── */
+.oc-shipping {
+    background: var(--kira-cream);
+    border: 1px solid var(--border-light);
+    padding: 24px 28px;
+    text-align: left;
+    margin-bottom: 48px;
+}
+
+.oc-shipping-title {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-bottom: 12px;
+}
+
+.oc-shipping p {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    letter-spacing: 0.02em;
+}
+
+/* ─── ACTIONS ─── */
+.oc-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 600px) {
+    .oc-wrap  { padding: 56px 20px 80px; }
+    .oc-title { font-size: 38px; }
+    .oc-actions { flex-direction: column; }
+    .oc-actions .btn-primary,
+    .oc-actions .btn-outline { width: 100%; text-align: center; }
+}

@@ -34,7 +34,7 @@
         </p>
         <div class="hero-actions fade-up delay-3">
           <a href="{% url 'store:collection_list' %}" class="btn-primary">Discover the Collection</a>
-          <a href="{% url 'store:lookbook_list' %}" class="btn-outline">View Lookbook</a>
+          <a href="{% url 'store:product_list' %}" class="btn-outline">View Products</a>
         </div>
         <div class="hero-divider-row">
           <div class="hero-divider-line"></div>
@@ -195,6 +195,8 @@
           {% include "partials/_lookbook_card.html" with lookbook=lookbook %}
         {% endfor %}
       </div>
+      <a href="{% url 'store:lookbook_list' %}" class="btn-outline" style="margin-top: 16px;">View Lookbook</a>
+        </div>
     </div>
   </div>
   {% endif %}

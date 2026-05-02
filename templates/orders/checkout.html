@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Checkout — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <section class="co-hero">
+    <div class="co-hero-inner">
+      <div class="section-eyebrow">Almost There</div>
+      <h1 class="co-title">Check<em>out</em></h1>
+    </div>
+  </section>
+
+  <div class="co-layout">
+
+    <!-- FORM -->
+    <div class="co-form-col">
+
+      {% if error %}
+      <div class="co-error">{{ error }}</div>
+      {% endif %}
+
+      <form method="POST" id="checkoutForm">
+        {% csrf_token %}
+
+        <div class="co-section">
+          <div class="co-section-title">Contact Information</div>
+          <div class="co-fields">
+            <div class="co-field co-field--full">
+              <label class="co-label">Full Name <span>*</span></label>
+              <input type="text" name="name" class="co-input"
+                value="{{ post.name|default:'' }}" required autocomplete="name">
+            </div>
+            <div class="co-field">
+              <label class="co-label">Email Address <span>*</span></label>
+              <input type="email" name="email" class="co-input"
+                value="{{ post.email|default:'' }}" required autocomplete="email">
+            </div>
+            <div class="co-field">
+              <label class="co-label">Phone Number</label>
+              <input type="tel" name="phone" class="co-input"
+                value="{{ post.phone|default:'' }}" autocomplete="tel">
+            </div>
+          </div>
+        </div>
+
+        <div class="co-section">
+          <div class="co-section-title">Shipping Address</div>
+          <div class="co-fields">
+            <div class="co-field co-field--full">
+              <label class="co-label">Street Address <span>*</span></label>
+              <input type="text" name="address" class="co-input"
+                value="{{ post.address|default:'' }}" required autocomplete="street-address">
+            </div>
+            <div class="co-field">
+              <label class="co-label">City <span>*</span></label>
+              <input type="text" name="city" class="co-input"
+                value="{{ post.city|default:'' }}" required autocomplete="address-level2">
+            </div>
+            <div class="co-field">
+              <label class="co-label">Country <span>*</span></label>
+              <input type="text" name="country" class="co-input"
+                value="{{ post.country|default:'' }}" required autocomplete="country-name">
+            </div>
+            <div class="co-field co-field--full">
+              <label class="co-label">Order Notes</label>
+              <textarea name="notes" class="co-input co-textarea"
+                rows="3" placeholder="Any special requests or instructions…">{{ post.notes|default:'' }}</textarea>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary co-submit">
+          Place Order
+        </button>
+
+      </form>
+    </div>
+
+    <!-- ORDER SUMMARY -->
+    <div class="co-summary-col">
+      <div class="co-summary">
+        <div class="co-summary-title">Your Order</div>
+
+        {% for item in items %}
+        <div class="co-summary-item">
+          <div class="co-summary-img-wrap">
+            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="co-summary-img">
+            <span class="co-summary-qty">{{ item.quantity }}</span>
+          </div>
+          <div class="co-summary-info">
+            <div class="co-summary-name">{{ item.product.name }}</div>
+            {% if item.variant %}
+            <div class="co-summary-variant">
+              {% if item.variant.size %}{{ item.variant.size }}{% endif %}
+              {% if item.variant.color %} · {{ item.variant.color }}{% endif %}
+            </div>
+            {% endif %}
+          </div>
+          <div class="co-summary-price">
+            £{% if item.variant %}{{ item.variant.final_price }}{% else %}{{ item.product.price }}{% endif %}
+          </div>
+        </div>
+        {% endfor %}
+
+        <div class="co-summary-divider"></div>
+
+        <div class="co-summary-rows">
+          <div class="co-summary-row">
+            <span>Subtotal</span>
+            <span>£{{ total }}</span>
+          </div>
+          <div class="co-summary-row co-summary-row--muted">
+            <span>Shipping</span>
+            <span>Complimentary</span>
+          </div>
+        </div>
+
+        <div class="co-summary-total">
+          <span>Total</span>
+          <span>£{{ total }}</span>
+        </div>
+
+        <a href="{% url 'orders:cart_detail' %}" class="co-edit-bag">← Edit Bag</a>
+      </div>
+    </div>
+
+  </div>
+
+{% endblock %}

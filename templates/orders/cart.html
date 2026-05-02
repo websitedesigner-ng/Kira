@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Your Bag — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <section class="cart-hero">
+    <div class="cart-hero-inner">
+      <div class="section-eyebrow">Your Selection</div>
+      <h1 class="cart-title">Your <em>Bag</em></h1>
+      <p class="cart-sub">{{ count }} item{% if count != 1 %}s{% endif %}</p>
+    </div>
+  </section>
+
+  <div class="cart-layout">
+
+    {% if items %}
+
+    <!-- ITEMS -->
+    <div class="cart-items">
+      {% for item in items %}
+      <div class="cart-item" id="cart-item-{{ item.id }}">
+        <a href="{{ item.product.get_absolute_url }}" class="cart-item-img-wrap">
+          <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="cart-item-img">
+        </a>
+
+        <div class="cart-item-info">
+          <div class="cart-item-collection">{{ item.product.collection.name|default:"" }}</div>
+          <a href="{{ item.product.get_absolute_url }}" class="cart-item-name">{{ item.product.name }}</a>
+
+          {% if item.variant %}
+          <div class="cart-item-variant">
+            {% if item.variant.size %}Size: {{ item.variant.size }}{% endif %}
+            {% if item.variant.color %} / {{ item.variant.color }}{% endif %}
+          </div>
+          {% endif %}
+
+          <div class="cart-item-price">
+            £{% if item.variant %}{{ item.variant.final_price }}{% else %}{{ item.product.price }}{% endif %}
+          </div>
+        </div>
+
+        <div class="cart-item-actions">
+          <!-- QUANTITY -->
+          <div class="cart-qty">
+            <button class="cart-qty-btn"
+              data-action="update"
+              data-item="{{ item.id }}"
+              data-qty="{{ item.quantity|add:'-1' }}">−</button>
+            <span class="cart-qty-num">{{ item.quantity }}</span>
+            <button class="cart-qty-btn"
+              data-action="update"
+              data-item="{{ item.id }}"
+              data-qty="{{ item.quantity|add:'1' }}">+</button>
+          </div>
+
+          <!-- SUBTOTAL -->
+          <div class="cart-item-subtotal" id="subtotal-{{ item.id }}">
+            £{% if item.variant %}
+              {{ item.variant.final_price|floatformat:2 }}
+            {% else %}
+              {{ item.product.price|floatformat:2 }}
+            {% endif %}
+          </div>
+
+          <!-- REMOVE -->
+          <button class="cart-remove-btn"
+            data-action="remove"
+            data-item="{{ item.id }}"
+            aria-label="Remove">
+            <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="cart-summary">
+      <div class="cart-summary-inner">
+        <div class="cart-summary-title">Order Summary</div>
+
+        <div class="cart-summary-rows">
+          <div class="cart-summary-row">
+            <span>Subtotal</span>
+            <span id="cartTotal">£{{ total }}</span>
+          </div>
+          <div class="cart-summary-row cart-summary-row--muted">
+            <span>Shipping</span>
+            <span>Complimentary</span>
+          </div>
+        </div>
+
+        <div class="cart-summary-total">
+          <span>Total</span>
+          <span id="cartTotalFinal">£{{ total }}</span>
+        </div>
+        <a href="{% url 'orders:checkout' %}" class="btn-primary cart-checkout-btn">
+          Proceed to Checkout
+        </a>
+        
+
+        <a href="{% url 'store:product_list' %}" class="cart-continue">
+          ← Continue Shopping
+        </a>
+      </div>
+    </div>
+
+    {% else %}
+
+    <div class="cart-empty">
+      <div class="cart-empty-monogram">K</div>
+      <p class="cart-empty-text">Your bag is empty</p>
+      <a href="{% url 'store:product_list' %}" class="btn-outline" style="margin-top:28px;">Explore the Collection</a>
+    </div>
+
+    {% endif %}
+
+  </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const csrfToken = '{{ csrf_token }}';
+
+  async function cartAction(url, itemId, qty = null) {
+    const body = new FormData();
+    body.append('csrfmiddlewaretoken', csrfToken);
+    if (qty !== null) body.append('quantity', qty);
+
+    const res  = await fetch(url, { method: 'POST', body, headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+    const data = await res.json();
+
+    // update header count
+    document.querySelectorAll('.cart-count').forEach(el => el.textContent = data.count);
+
+    if (data.total !== undefined) {
+      document.getElementById('cartTotal').textContent      = '£' + parseFloat(data.total).toFixed(2);
+      document.getElementById('cartTotalFinal').textContent = '£' + parseFloat(data.total).toFixed(2);
+    }
+
+    return data;
+  }
+
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+
+    const action = btn.dataset.action;
+    const itemId = btn.dataset.item;
+
+    if (action === 'remove') {
+      const data = await cartAction(`/cart/remove/${itemId}/`, itemId);
+      if (data.success !== false) {
+        document.getElementById(`cart-item-${itemId}`)?.remove();
+        if (document.querySelectorAll('.cart-item').length === 0) {
+          location.reload();
+        }
+      }
+    }
+
+    if (action === 'update') {
+      const qty = parseInt(btn.dataset.qty);
+      if (qty < 1) {
+        // treat as remove
+        const data = await cartAction(`/cart/remove/${itemId}/`, itemId);
+        document.getElementById(`cart-item-${itemId}`)?.remove();
+        if (document.querySelectorAll('.cart-item').length === 0) location.reload();
+        return;
+      }
+      const data = await cartAction(`/cart/update/${itemId}/`, itemId, qty);
+      // update qty display
+      const row = document.getElementById(`cart-item-${itemId}`);
+      if (row) {
+        row.querySelector('.cart-qty-num').textContent = qty;
+        // update +/- buttons with new qty
+        row.querySelectorAll('[data-action="update"]').forEach(b => {
+          const direction = b.textContent.trim() === '+' ? 1 : -1;
+          b.dataset.qty = qty + direction;
+        });
+      }
+    }
+  });
+</script>
+{% endblock %}

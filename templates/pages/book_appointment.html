@@ -1,0 +1,305 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Book an Appointment — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/book_appointment.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <!-- HERO -->
+  <section class="ba-hero">
+    <div class="ba-hero-inner">
+      <div class="section-eyebrow">En Personne</div>
+      <h1 class="ba-hero-title">Visit the <em>Atelier</em></h1>
+      <p class="ba-hero-sub">
+        Private consultations by appointment. An hour set aside entirely for you.
+      </p>
+    </div>
+  </section>
+
+  <!-- INTRO STRIP -->
+  <div class="ba-intro">
+    <div class="ba-intro-inner">
+      <div class="ba-intro-item">
+        <div class="ba-intro-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="ba-intro-text">
+          <strong>One Hour</strong>
+          Private, unhurried consultation with an atelier specialist
+        </div>
+      </div>
+      <div class="ba-intro-divider"></div>
+      <div class="ba-intro-item">
+        <div class="ba-intro-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+        </div>
+        <div class="ba-intro-text">
+          <strong>Full Access</strong>
+          Browse the complete collection, including archive and bespoke commissions
+        </div>
+      </div>
+      <div class="ba-intro-divider"></div>
+      <div class="ba-intro-item">
+        <div class="ba-intro-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div class="ba-intro-text">
+          <strong>14 Rue du Faubourg</strong>
+          Saint-Honoré, 75008 Paris — Mon to Sat, 10 am – 7 pm
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPLIT: LEFT INFO + RIGHT FORM -->
+  <div class="ba-split">
+
+    <!-- LEFT PANEL -->
+    <div class="ba-panel-left">
+      <div class="ba-panel-left-inner">
+
+        <p class="ba-left-title">What to expect<br>from your visit.</p>
+
+        <div class="ba-step">
+          <div class="ba-step-num">01</div>
+          <div class="ba-step-body">
+            <strong>Arrival & Welcome</strong>
+            You are greeted by your designated atelier specialist and offered a private space to begin your visit at your own pace.
+          </div>
+        </div>
+
+        <div class="ba-step">
+          <div class="ba-step-num">02</div>
+          <div class="ba-step-body">
+            <strong>Collection Viewing</strong>
+            Browse the full seasonal collection alongside archival pieces. There is no pressure, no upselling — only conversation.
+          </div>
+        </div>
+
+        <div class="ba-step">
+          <div class="ba-step-num">03</div>
+          <div class="ba-step-body">
+            <strong>Fitting & Counsel</strong>
+            Try anything you wish. Your specialist will offer guidance on fit, care, and customisation if desired.
+          </div>
+        </div>
+
+        <div class="ba-step">
+          <div class="ba-step-num">04</div>
+          <div class="ba-step-body">
+            <strong>Commission or Take Away</strong>
+            Leave with your chosen pieces, or begin the process of a bespoke commission with the atelier team.
+          </div>
+        </div>
+
+        <div class="ba-left-note">
+          <div class="ba-left-note-label">Please note</div>
+          Appointments are confirmed by email within one business day. Should you need to reschedule, we ask for 24 hours' notice.
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: BOOKING FORM -->
+    <div class="ba-panel-right">
+      <div class="ba-form-eyebrow">Reserve Your Visit</div>
+      <h2 class="ba-form-title">Request an <em>Appointment</em></h2>
+
+      <!-- Visit type selector -->
+      <div class="ba-type-tabs" id="ba-tabs">
+        <button class="ba-type-tab active" data-type="Personal Shopping">Personal Shopping</button>
+        <button class="ba-type-tab" data-type="Bespoke Commission">Bespoke</button>
+        <button class="ba-type-tab" data-type="Repair Consultation">Repair</button>
+        <button class="ba-type-tab" data-type="Press & Editorial">Press</button>
+      </div>
+
+      <form class="ba-form" id="ba-form" method="post" action="{% url 'pages:book_appointment_submit' %}" novalidate>
+        {% csrf_token %}
+        <input type="hidden" name="visit_type" id="ba-type-input" value="Personal Shopping">
+
+        <div class="ba-field-row">
+          <div class="ba-field">
+            <label class="ba-label" for="ba-first-name">First Name <span>*</span></label>
+            <input class="ba-input" type="text" id="ba-first-name" name="first_name" placeholder="Isabelle" required>
+          </div>
+          <div class="ba-field">
+            <label class="ba-label" for="ba-last-name">Last Name <span>*</span></label>
+            <input class="ba-input" type="text" id="ba-last-name" name="last_name" placeholder="Moreau" required>
+          </div>
+        </div>
+
+        <div class="ba-field-row">
+          <div class="ba-field">
+            <label class="ba-label" for="ba-email">Email Address <span>*</span></label>
+            <input class="ba-input" type="email" id="ba-email" name="email" placeholder="isabelle@example.com" required>
+          </div>
+          <div class="ba-field">
+            <label class="ba-label" for="ba-phone">Phone Number <span>*</span></label>
+            <input class="ba-input" type="tel" id="ba-phone" name="phone" placeholder="+33 6 00 00 00 00" required>
+          </div>
+        </div>
+
+        <!-- Date & time preference -->
+        <div class="ba-field-row">
+          <div class="ba-field">
+            <label class="ba-label" for="ba-date">Preferred Date <span>*</span></label>
+            <input class="ba-input" type="date" id="ba-date" name="preferred_date" required>
+          </div>
+          <div class="ba-field">
+            <label class="ba-label" for="ba-time">Preferred Time <span>*</span></label>
+            <div class="ba-select-wrap">
+              <select class="ba-select" id="ba-time" name="preferred_time" required>
+                <option value="" disabled selected>Select a time</option>
+                <option value="10:00">10:00 am</option>
+                <option value="11:00">11:00 am</option>
+                <option value="12:00">12:00 pm</option>
+                <option value="14:00">2:00 pm</option>
+                <option value="15:00">3:00 pm</option>
+                <option value="16:00">4:00 pm</option>
+                <option value="17:00">5:00 pm</option>
+                <option value="18:00">6:00 pm</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alt date -->
+        <div class="ba-field-row">
+          <div class="ba-field">
+            <label class="ba-label" for="ba-alt-date">Alternative Date</label>
+            <input class="ba-input" type="date" id="ba-alt-date" name="alternative_date">
+          </div>
+          <div class="ba-field">
+            <label class="ba-label" for="ba-guests">Number of Guests</label>
+            <div class="ba-select-wrap">
+              <select class="ba-select" id="ba-guests" name="guests">
+                <option value="1">Just myself</option>
+                <option value="2">2 guests</option>
+                <option value="3">3 guests</option>
+                <option value="4+">4 or more</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bespoke field — shown only for Bespoke tab -->
+        <div class="ba-field ba-bespoke-field" id="ba-bespoke-wrap">
+          <label class="ba-label" for="ba-piece">Piece or Category of Interest</label>
+          <input class="ba-input" type="text" id="ba-piece" name="piece_interest" placeholder="e.g. Structured coat, custom bag, etc.">
+        </div>
+
+        <div class="ba-field">
+          <label class="ba-label" for="ba-notes">Any additional notes</label>
+          <textarea class="ba-textarea" id="ba-notes" name="notes" placeholder="Tell us how we can best prepare for your visit…"></textarea>
+        </div>
+
+        <!-- How did you hear about us -->
+        <div class="ba-field">
+          <label class="ba-label" for="ba-referral">How did you hear about us?</label>
+          <div class="ba-select-wrap">
+            <select class="ba-select" id="ba-referral" name="referral">
+              <option value="" disabled selected>Select one</option>
+              <option value="instagram">Instagram</option>
+              <option value="press">Press / Editorial</option>
+              <option value="word_of_mouth">Word of mouth</option>
+              <option value="existing_client">Existing client</option>
+              <option value="search">Search</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="ba-submit-row">
+          <p class="ba-submit-note">
+            All appointments are subject to availability and confirmed by email within one business day.
+          </p>
+          <button type="submit" class="btn-primary">Request Appointment</button>
+        </div>
+
+      </form>
+
+      <!-- Success state -->
+      <div class="ba-success" id="ba-success">
+        <div class="ba-success-rule"></div>
+        <p class="ba-success-title">Request received.</p>
+        <p class="ba-success-body">
+          Your appointment request has been noted. A member of the atelier team will confirm your visit within one business day. We look forward to welcoming you.
+        </p>
+        <div class="ba-success-rule"></div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ATELIER BAND -->
+  <div class="ba-atelier-band">
+    <div class="ba-atelier-inner">
+      <div class="ba-atelier-col">
+        <div class="ba-atelier-label">Address</div>
+        <div class="ba-atelier-value">14 Rue du Faubourg Saint-Honoré<br>75008 Paris, France</div>
+      </div>
+      <div class="ba-atelier-sep"></div>
+      <div class="ba-atelier-col">
+        <div class="ba-atelier-label">Hours</div>
+        <div class="ba-atelier-value">Monday – Saturday<br>10 am – 7 pm CET</div>
+      </div>
+      <div class="ba-atelier-sep"></div>
+      <div class="ba-atelier-col">
+        <div class="ba-atelier-label">Nearest Métro</div>
+        <div class="ba-atelier-value">Concorde (1, 8, 12)<br>Madeleine (8, 12, 14)</div>
+      </div>
+      <div class="ba-atelier-sep"></div>
+      <div class="ba-atelier-col">
+        <div class="ba-atelier-label">Enquiries</div>
+        <div class="ba-atelier-value">
+          <a href="mailto:appointments@kira-paris.com">appointments@kira-paris.com</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+  /* ── Visit type tabs ── */
+  const tabs = document.querySelectorAll('.ba-type-tab');
+  const typeInput = document.getElementById('ba-type-input');
+  const bespokeWrap = document.getElementById('ba-bespoke-wrap');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      typeInput.value = tab.dataset.type;
+      bespokeWrap.classList.toggle('visible', tab.dataset.type === 'Bespoke Commission');
+    });
+  });
+
+  /* ── Disable past dates ── */
+  const dateInput = document.getElementById('ba-date');
+  const altDateInput = document.getElementById('ba-alt-date');
+  const today = new Date().toISOString().split('T')[0];
+  dateInput.min = today;
+  altDateInput.min = today;
+
+  /* ── Success state ── */
+  const form = document.getElementById('ba-form');
+  const success = document.getElementById('ba-success');
+
+  {% if messages %}
+    {% for message in messages %}
+      {% if message.tags == 'success' %}
+        form.style.display = 'none';
+        success.classList.add('visible');
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+</script>
+{% endblock %}

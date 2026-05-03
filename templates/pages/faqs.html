@@ -1,0 +1,309 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Frequently Asked Questions — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/faqs.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <!-- HERO -->
+  <section class="fq-hero">
+    <div class="fq-hero-inner">
+      <div class="section-eyebrow">Questions &amp; Answers</div>
+      <h1 class="fq-hero-title">How Can We <em>Help?</em></h1>
+      <p class="fq-hero-sub">
+        Everything you may wish to know about orders, care, appointments, and the atelier.
+      </p>
+    </div>
+  </section>
+
+  <!-- CATEGORY NAV -->
+  <nav class="fq-nav" id="fq-nav">
+    <div class="fq-nav-inner">
+      <button class="fq-nav-btn active" data-cat="all">All</button>
+      <button class="fq-nav-btn" data-cat="orders">Orders &amp; Payment</button>
+      <button class="fq-nav-btn" data-cat="delivery">Delivery &amp; Returns</button>
+      <button class="fq-nav-btn" data-cat="care">Product Care</button>
+      <button class="fq-nav-btn" data-cat="bespoke">Bespoke &amp; Repairs</button>
+      <button class="fq-nav-btn" data-cat="atelier">The Atelier</button>
+    </div>
+  </nav>
+
+  <!-- FAQ BODY -->
+  <div class="fq-body">
+    <div class="fq-body-inner">
+
+      <!-- ── ORDERS & PAYMENT ── -->
+      <div class="fq-group" data-cat="orders">
+        <div class="fq-group-label">Orders &amp; Payment</div>
+
+        <div class="fq-item">
+          <button class="fq-question" aria-expanded="false">
+            <span>What payment methods do you accept?</span>
+            <span class="fq-icon"></span>
+          </button>
+          <div class="fq-answer">
+            <p>We accept all major credit and debit cards — Visa, Mastercard, and American Express — as well as bank transfer for orders above €2,000. All transactions are processed securely and your card details are never stored. For bespoke commissions, a 50% deposit is required to begin work.</p>
+          </div>
+        </div>
+
+        <div class="fq-item">
+          <button class="fq-question" aria-expanded="false">
+            <span>Can I amend or cancel my order after placing it?</span>
+            <span class="fq-icon"></span>
+          </button>
+          <div class="fq-answer">
+            <p>Orders can be amended or cancelled within 24 hours of placement, provided they have not yet been dispatched. Please contact our client relations team at <a href="mailto:hello@kira-paris.com">hello@kira-paris.com</a> as soon as possible. Once an order has been dispatched, our returns policy applies.</p>
+          </div>
+        </div>
+
+        <div class="fq-item">
+          <button class="fq-question" aria-expanded="false">
+            <span>Is my personal and payment information secure?</span>
+            <span class="fq-icon"></span>
+          </button>
+          <div class="fq-answer">
+            <p>Yes. All transactions are encrypted using SSL technology. We do not store card details on our servers. Your personal data is handled in accordance with our Privacy Policy and is never shared with third parties for marketing purposes.</p>
+          </div>
+        </div>
+
+        <div class="fq-item">
+          <button class="fq-question" aria-expanded="false">
+            <span>Do you offer gift packaging?</span>
+            <span class="fq-icon"></span>
+          </button>
+          <div class="fq-answer">
+            <p>Every Kira order arrives in our signature packaging — a rigid box lined with archival tissue, sealed with a wax stamp, and accompanied by a care card. For gift orders, we can include a handwritten note; simply add your message at checkout. Gift wrapping is complimentary.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── DELIVERY & RETURNS ── -->
+      <div class="fq-group" data-cat="delivery">
+        <div class="fq-group-label">Delivery &amp; Returns</div>
+
+        <div class="fq-item">
+          <button class="fq-question" aria-expanded="false">
+            <span>How long will my order take to arrive?</span>
+            <span class="fq-icon"></span>
+          </button>
+          <div class="fq-answer">
+            <p>Orders within France are delivered within 2–3 business days. European deliveries typically take 3–5 business days, and international orders 5–10 business days depending on destination. All orders are dispatched from our Paris atelier and shipped with full tracking and signature-on-delivery.</p>
+          </div>
+        </div>
+
+        <div class="fq-item">
+          <button class="fq-question" aria-expanded="false">
+            <span>Do you ship internationally?</span>
+            <span class="fq-icon"></span>
+          </button>
+          <div class="fq-answer">
+            <p>Yes, we ship to over 60 countries worldwide. Shipping costs and estimated delivery times are calculated at checkout based on your location. Please note that import duties and taxes may apply depending on your country — these are the responsibility of the recipient and are not included in our prices.</p>
+          </div>
+        </div>
+
+        <div class="fq-item">
+          <button class="fq-question" aria-expanded="false">
+            <span>What is your returns policy?</span>
+            <span class="fq-icon"></span>
+          </button>
+          <div class="fq-answer">
+            <p>We accept returns within 14 days of receipt, provided items are unworn, undamaged, and returned in their original packaging with tags attached. To initiate a return, please contact our client relations team. Bespoke and made-to-order pieces are non-returnable. Return shipping costs are the responsibility of the client unless the item is faulty.</p>
+          </div>
+        </div>
+
+        <div class="fq-item">
+          <button class="fq-question" aria-expanded="false">
+            <span>How long does a refund take to process?</span>
+            <span class="fq-icon"></span>
+          </button>
+          <div class="fq-answer">
+            <p>Once we have received and inspected your return, refunds are processed within 5–7 business days. The amount will be credited to your original payment method. You will receive an email confirmation once the refund has been initiated. Please allow additional time for your bank to process the transaction.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── PRODUCT CARE ── -->
+      <div class="fq-group" data-cat="care">
+        <div class="fq-group-label">Product Care</div>
+
+        <div class="fq-item">
+          <button class="fq-question" aria-expanded="false">
+            <span>How should I care for my Kira leather pieces?</span>
+            <span class="fq-icon"></span>
+          </button>
+          <div class="fq-answer">
+            <p>Leather should be kept away from direct sunlight and moisture. We recommend conditioning your piece every 3–6 months with a high-quality, colourless leather cream. For surface dirt, use a barely damp soft cloth and allow to dry naturally away from heat. Never use chemical cleaners or immerse the leather in water. Each piece includes a detailed care card.</p>
+          </div>
+        </div>
+
+        <div class="fq-item">
+          <button class="fq-question" aria-expanded="false">
+            <span>How do I store my pieces when not in use?</span>
+            <span class="fq-icon"></span>
+          </button>
+          <div class="fq-answer">
+            <p>Store leather goods in the dust bag provided, stuffed lightly with acid-free tissue to help them retain their shape. Avoid plastic covers, which trap moisture. For garments, use padded hangers and breathable garment bags in a cool, dry wardrobe away from direct light.</p>
+          </div>
+        </div>
+
+        <div class="fq-item">
+          <button class="fq-question" aria-expanded="false">
+            <span>Can I have my piece professionally cleaned?</span>
+            <span class="fq-icon"></span>
+          </button>
+          <div class="fq-answer">
+            <p>Yes, and we strongly recommend it for significant soiling or before long-term storage. We can arrange professional cleaning through our network of trusted specialists — simply contact the atelier. For garments, dry-cleaning is advised; please follow the care label instructions specific to each piece.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── BESPOKE & REPAIRS ── -->
+      <div class="fq-group" data-cat="bespoke">
+        <div class="fq-group-label">Bespoke &amp; Repairs</div>
+
+        <div class="fq-item">
+          <button class="fq-question" aria-expanded="false">
+            <span>Do you offer bespoke or made-to-order pieces?</span>
+            <span class="fq-icon"></span>
+          </button>
+          <div class="fq-answer">
+            <p>Yes. Bespoke commissions are a central part of what we do. The process begins with a private consultation at the atelier, where you work directly with a member of the design team to define materials, proportions, and details. Lead times for bespoke work are typically 8–16 weeks depending on the complexity of the piece. A 50% deposit is required to begin.</p>
+          </div>
+        </div>
+
+        <div class="fq-item">
+          <button class="fq-question" aria-expanded="false">
+            <span>Can you repair an older Kira piece?</span>
+            <span class="fq-icon"></span>
+          </button>
+          <div class="fq-answer">
+            <p>We repair all Kira pieces regardless of age. Our craftsmen can re-stitch seams, replace hardware, condition and re-dye leather, and restore structure. To arrange a repair, please bring your piece to the atelier or contact us to discuss postal repair options. Quotes are provided free of charge before any work begins.</p>
+          </div>
+        </div>
+
+        <div class="fq-item">
+          <button class="fq-question" aria-expanded="false">
+            <span>Can you monogram or personalise a piece?</span>
+            <span class="fq-icon"></span>
+          </button>
+          <div class="fq-answer">
+            <p>Yes. Hot-foil monogramming is available on most leather goods, applied by hand in gold, silver, or blind (uncoloured). Personalisation is offered on new purchases and existing pieces alike. Please allow 5–7 additional business days for personalised orders. Note that monogrammed pieces cannot be returned.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── THE ATELIER ── -->
+      <div class="fq-group" data-cat="atelier">
+        <div class="fq-group-label">The Atelier</div>
+
+        <div class="fq-item">
+          <button class="fq-question" aria-expanded="false">
+            <span>Do I need an appointment to visit?</span>
+            <span class="fq-icon"></span>
+          </button>
+          <div class="fq-answer">
+            <p>Appointments are preferred as they allow us to prepare the space and ensure dedicated time with a specialist. Walk-ins are welcome during opening hours but may be asked to wait if the atelier is engaged with an appointment. To guarantee your visit, we recommend booking in advance via our <a href="{% url 'pages:book_appointment' %}">appointment page</a>.</p>
+          </div>
+        </div>
+
+        <div class="fq-item">
+          <button class="fq-question" aria-expanded="false">
+            <span>Where is the atelier located?</span>
+            <span class="fq-icon"></span>
+          </button>
+          <div class="fq-answer">
+            <p>The Kira atelier is at 14 Rue du Faubourg Saint-Honoré, 75008 Paris. The nearest Métro stations are Concorde (lines 1, 8, 12) and Madeleine (lines 8, 12, 14). We are open Monday to Saturday, 10 am to 7 pm CET. We are closed on Sundays and French public holidays.</p>
+          </div>
+        </div>
+
+        <div class="fq-item">
+          <button class="fq-question" aria-expanded="false">
+            <span>Do you have an online shop?</span>
+            <span class="fq-icon"></span>
+          </button>
+          <div class="fq-answer">
+            <p>Yes — our full ready-to-wear collection is available online. However, certain limited and archival pieces are available exclusively at the atelier. If you are looking for something specific and cannot find it online, please contact us and we will advise on availability.</p>
+          </div>
+        </div>
+
+        <div class="fq-item">
+          <button class="fq-question" aria-expanded="false">
+            <span>Do you offer corporate or press enquiries?</span>
+            <span class="fq-icon"></span>
+          </button>
+          <div class="fq-answer">
+            <p>For press, editorial, and styling enquiries please contact us at <a href="mailto:press@kira-paris.com">press@kira-paris.com</a>. For corporate gifting or bulk orders, reach us at <a href="mailto:hello@kira-paris.com">hello@kira-paris.com</a>. We work with a small number of partners each season and welcome conversations that align with the values of the house.</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div><!-- /fq-body-inner -->
+  </div><!-- /fq-body -->
+
+
+  <!-- STILL HAVE QUESTIONS -->
+  <section class="fq-cta">
+    <div class="fq-cta-inner">
+      <div class="section-eyebrow">Still Need Help?</div>
+      <h2 class="fq-cta-title">Speak to the <em>Atelier</em></h2>
+      <p class="fq-cta-sub">Our client relations team responds to every enquiry personally, within one business day.</p>
+      <div class="fq-cta-actions">
+        <a href="{% url 'pages:contact' %}" class="btn-primary">Contact Us</a>
+        <a href="{% url 'pages:book_appointment' %}" class="btn-outline">Book an Appointment</a>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+  /* ── Category filter ── */
+  const navBtns = document.querySelectorAll('.fq-nav-btn');
+  const groups  = document.querySelectorAll('.fq-group');
+
+  navBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      navBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cat = btn.dataset.cat;
+      groups.forEach(g => {
+        g.style.display = (cat === 'all' || g.dataset.cat === cat) ? '' : 'none';
+      });
+    });
+  });
+
+  /* ── Accordion ── */
+  document.querySelectorAll('.fq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item     = btn.closest('.fq-item');
+      const answer   = item.querySelector('.fq-answer');
+      const isOpen   = btn.getAttribute('aria-expanded') === 'true';
+
+      /* Close all others in the same group */
+      item.closest('.fq-group').querySelectorAll('.fq-item').forEach(i => {
+        i.querySelector('.fq-question').setAttribute('aria-expanded', 'false');
+        i.querySelector('.fq-answer').style.maxHeight = null;
+        i.classList.remove('open');
+      });
+
+      if (!isOpen) {
+        btn.setAttribute('aria-expanded', 'true');
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+        item.classList.add('open');
+      }
+    });
+  });
+</script>
+{% endblock %}

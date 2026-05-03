@@ -1,0 +1,493 @@
+/* ════════════════════════════════════════
+   SIZE GUIDE
+   ════════════════════════════════════════ */
+
+/* ─── HERO ─── */
+.sg-hero {
+    background: var(--kira-dark-brown);
+    padding: 100px 40px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.sg-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Crect x='28' y='0' width='4' height='60' fill='%233e2c1c' opacity='0.025'/%3E%3Crect x='0' y='28' width='60' height='4' fill='%233e2c1c' opacity='0.025'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+}
+
+.sg-hero-inner {
+    max-width: 680px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.sg-hero .section-eyebrow {
+    color: rgba(200, 169, 106, 0.7);
+}
+.sg-hero .section-eyebrow::before,
+.sg-hero .section-eyebrow::after {
+    background: rgba(200, 169, 106, 0.4);
+}
+
+.sg-hero-title {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(44px, 6vw, 80px);
+    font-weight: 300;
+    color: var(--kira-white);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 16px 0 20px;
+}
+
+.sg-hero-title em {
+    font-style: italic;
+    color: var(--kira-gold);
+}
+
+.sg-hero-sub {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    line-height: 1.8;
+}
+
+/* ─── LAYOUT ─── */
+.sg-layout {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 72px 40px 80px;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 64px;
+    align-items: start;
+}
+
+/* ─── STICKY NAV ─── */
+.sg-nav {
+    position: sticky;
+    top: 100px;
+}
+
+.sg-nav-label {
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.sg-nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sg-nav-list a {
+    display: block;
+    font-size: 12px;
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 8px 0;
+    border-left: 2px solid transparent;
+    padding-left: 12px;
+    transition:
+        color 0.2s,
+        border-color 0.2s;
+}
+
+.sg-nav-list a:hover,
+.sg-nav-list a.active {
+    color: var(--kira-dark-brown);
+    border-left-color: var(--kira-gold);
+}
+
+/* ─── CONTENT ─── */
+.sg-content {
+    min-width: 0;
+}
+
+.sg-section {
+    padding-bottom: 64px;
+    margin-bottom: 64px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.sg-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.sg-section-eyebrow {
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--kira-gold);
+    font-weight: 400;
+    margin-bottom: 10px;
+}
+
+.sg-section-title {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(26px, 3vw, 38px);
+    font-weight: 300;
+    color: var(--text-primary);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+}
+
+.sg-section-title em {
+    font-style: italic;
+    color: var(--kira-brown);
+}
+
+.sg-section-intro {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 1.9;
+    letter-spacing: 0.02em;
+    margin-bottom: 32px;
+    max-width: 580px;
+}
+
+/* ─── TABLES ─── */
+.sg-table-wrap {
+    overflow-x: auto;
+    margin-bottom: 24px;
+    border: 1px solid var(--border-light);
+}
+
+.sg-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    min-width: 480px;
+}
+
+.sg-table thead tr {
+    background: var(--kira-dark-brown);
+}
+
+.sg-table thead th {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 14px 20px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.sg-table thead th:first-child {
+    color: var(--kira-gold);
+}
+
+.sg-table tbody tr {
+    border-bottom: 1px solid var(--border-light);
+    transition: background 0.15s;
+}
+
+.sg-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.sg-table tbody tr:hover {
+    background: rgba(200, 169, 106, 0.04);
+}
+
+.sg-table tbody td {
+    padding: 13px 20px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+
+.sg-table tbody td:first-child {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text-primary);
+    letter-spacing: 0.04em;
+}
+
+.sg-table-note {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 300;
+    letter-spacing: 0.03em;
+    line-height: 1.7;
+    padding-left: 2px;
+}
+
+.sg-table-note em {
+    font-style: normal;
+    color: var(--kira-brown);
+}
+
+/* ─── HOW TO MEASURE ─── */
+.sg-measure-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    background: var(--border-light);
+    border: 1px solid var(--border-light);
+    margin-bottom: 24px;
+}
+
+.sg-measure-card {
+    background: var(--kira-white);
+    padding: 28px 24px;
+}
+
+.sg-measure-num {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 36px;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(200, 169, 106, 0.2);
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.sg-measure-title {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.sg-measure-body {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 1.8;
+    letter-spacing: 0.02em;
+}
+
+/* ─── CATEGORY TABS ─── */
+.sg-tabs {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border-light);
+    margin-bottom: 28px;
+    overflow: hidden;
+}
+
+.sg-tab {
+    flex: 1;
+    padding: 12px 16px;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--text-muted);
+    background: var(--kira-white);
+    border: none;
+    border-right: 1px solid var(--border-light);
+    cursor: pointer;
+    transition:
+        background 0.15s,
+        color 0.15s;
+    text-align: center;
+}
+
+.sg-tab:last-child {
+    border-right: none;
+}
+
+.sg-tab:hover {
+    background: var(--kira-cream);
+    color: var(--text-primary);
+}
+
+.sg-tab.active {
+    background: var(--kira-dark-brown);
+    color: var(--kira-gold);
+}
+
+.sg-tab-panel {
+    display: none;
+}
+.sg-tab-panel.active {
+    display: block;
+}
+
+/* ─── BELT / SMALL GOODS ─── */
+.sg-inline-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.sg-inline-list span {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-light);
+    padding: 6px 14px;
+    font-weight: 300;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 14px;
+}
+
+/* ─── UNIT TOGGLE ─── */
+.sg-unit-toggle {
+    display: inline-flex;
+    border: 1px solid var(--border-light);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.sg-unit-toggle button {
+    padding: 8px 20px;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--text-muted);
+    background: var(--kira-white);
+    border: none;
+    cursor: pointer;
+    transition:
+        background 0.15s,
+        color 0.15s;
+    border-right: 1px solid var(--border-light);
+}
+
+.sg-unit-toggle button:last-child {
+    border-right: none;
+}
+
+.sg-unit-toggle button.active {
+    background: var(--kira-dark-brown);
+    color: var(--kira-gold);
+}
+
+/* ─── ADVICE BAND ─── */
+.sg-advice {
+    background: var(--kira-dark-brown);
+    padding: 56px 40px;
+    margin: 0 -40px;
+    position: relative;
+}
+
+.sg-advice-inner {
+    max-width: 640px;
+}
+
+.sg-advice-eyebrow {
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(200, 169, 106, 0.6);
+    font-weight: 400;
+    margin-bottom: 12px;
+}
+
+.sg-advice-title {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(22px, 2.5vw, 32px);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--kira-white);
+    line-height: 1.4;
+    margin-bottom: 16px;
+}
+
+.sg-advice-body {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 300;
+    line-height: 1.9;
+    letter-spacing: 0.03em;
+    margin-bottom: 24px;
+    max-width: 480px;
+}
+
+.sg-advice-cta {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--kira-gold);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(200, 169, 106, 0.3);
+    padding-bottom: 3px;
+    font-weight: 400;
+    transition: border-color 0.2s;
+}
+
+.sg-advice-cta:hover {
+    border-color: var(--kira-gold);
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+    .sg-layout {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 48px 24px 64px;
+    }
+    .sg-nav {
+        position: static;
+    }
+    .sg-nav-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+    .sg-nav-list a {
+        border-left: none;
+        border-bottom: 2px solid transparent;
+        padding-left: 0;
+        padding-bottom: 6px;
+    }
+    .sg-nav-list a:hover,
+    .sg-nav-list a.active {
+        border-left-color: transparent;
+        border-bottom-color: var(--kira-gold);
+    }
+    .sg-advice {
+        margin: 0 -24px;
+        padding: 48px 24px;
+    }
+}
+
+@media (max-width: 600px) {
+    .sg-hero {
+        padding: 72px 24px 64px;
+    }
+    .sg-measure-grid {
+        grid-template-columns: 1fr;
+    }
+    .sg-tabs {
+        flex-wrap: wrap;
+    }
+    .sg-tab {
+        flex: none;
+        width: 50%;
+        border-bottom: 1px solid var(--border-light);
+    }
+}

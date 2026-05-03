@@ -9,6 +9,7 @@ urlpatterns = [
     path('', include("apps.store.urls")),
     path('', include('apps.orders.urls')),
     path('account/', include('apps.accounts.urls')),
+    path('', include('apps.pages.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

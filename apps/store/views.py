@@ -32,9 +32,15 @@ def home(request):
 def product_list(request):
     f = ProductFilter(
         request.GET,
-        queryset=Product.objects.filter(is_active=True).select_related('category', 'collection')
+        queryset=Product.objects.filter(is_active=True).select_related('category', 'collection').prefetch_related('tags')
     )
     qs = f.qs
+    
+    tags = request.GET.getlist('tag')
+    if tags:
+        for tag in tags:
+            qs = qs.filter(tags__slug=tag)
+        qs = qs.distinct()
 
     sort = request.GET.get('sort')
     if sort == 'price_asc':

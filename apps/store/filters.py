@@ -1,6 +1,6 @@
 import django_filters
 from django.db import models
-from .models import Product, Category, Collection, Tag
+from .models import Product, Category, Collection
 
 
 
@@ -19,12 +19,6 @@ class ProductFilter(django_filters.FilterSet):
         to_field_name="slug"
     )
 
-    tag = django_filters.ModelMultipleChoiceFilter(
-        queryset=Tag.objects.all(),
-        field_name="tags",
-        to_field_name="slug"
-    )
-
     badge = django_filters.ChoiceFilter(choices=Product.BADGE_CHOICES)
 
     min_price = django_filters.NumberFilter(field_name='price', lookup_expr='gte')
@@ -38,10 +32,9 @@ class ProductFilter(django_filters.FilterSet):
             models.Q(name__icontains=value) |
             models.Q(description__icontains=value) |
             models.Q(collection__name__icontains=value) |
-            models.Q(category__name__icontains=value) |
-            models.Q(tags__name__icontains=value)
+            models.Q(category__name__icontains=value)
         ).distinct()
 
     class Meta:
         model = Product
-        fields = ['q', 'category', 'collection', 'tag', 'badge', 'min_price', 'max_price']
+        fields = ['q', 'category', 'collection', 'badge', 'min_price', 'max_price']

@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Contact — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/contact.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <!-- HERO -->
+  <section class="ct-hero">
+    <div class="ct-hero-inner">
+      <div class="section-eyebrow">Get in Touch</div>
+      <h1 class="ct-hero-title">We Are <em>Listening</em></h1>
+      <p class="ct-hero-sub">
+        Every enquiry is read and responded to by a person. We aim to reply within one business day.
+      </p>
+    </div>
+  </section>
+
+  <!-- SPLIT: LEFT INFO + RIGHT FORM -->
+  <div class="ct-split">
+
+    <!-- LEFT PANEL -->
+    <div class="ct-panel-left">
+      <div class="ct-panel-left-inner">
+
+        <p class="ct-left-title">The atelier is always<br>happy to hear from you.</p>
+
+        <div class="ct-info-block">
+          <div class="ct-info-label">Atelier Address</div>
+          <div class="ct-info-body">
+            14 Rue du Faubourg Saint-Honoré<br>
+            75008 Paris, France
+          </div>
+        </div>
+
+        <div class="ct-divider"></div>
+
+        <div class="ct-info-block">
+          <div class="ct-info-label">Client Relations</div>
+          <div class="ct-info-body">
+            <a href="mailto:hello@kira-paris.com">hello@kira-paris.com</a><br>
+            <a href="tel:+33142601400">+33 1 42 60 14 00</a>
+          </div>
+        </div>
+
+        <div class="ct-info-block">
+          <div class="ct-info-label">Opening Hours</div>
+          <div class="ct-info-body">
+            Monday – Saturday<br>
+            10 am – 7 pm CET<br>
+            <br>
+            Closed Sundays &amp; French public holidays
+          </div>
+        </div>
+
+        <div class="ct-info-block">
+          <div class="ct-info-label">Response Time</div>
+          <div class="ct-info-body">
+            All enquiries are answered within<br>
+            one business day. Orders and<br>
+            repairs within two.
+          </div>
+        </div>
+
+        <div class="ct-channels">
+          <div class="ct-channels-label">Also Reach Us Via</div>
+          <div class="ct-channel-list">
+
+            <a href="#" class="ct-channel">
+              <div class="ct-channel-icon">
+                <!-- Email icon -->
+                <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="1"/><polyline points="2,4 12,13 22,4"/></svg>
+              </div>
+              <div class="ct-channel-text">
+                <strong>Email</strong>
+                hello@kira-paris.com
+              </div>
+            </a>
+
+            <a href="#" class="ct-channel">
+              <div class="ct-channel-icon">
+                <!-- Instagram icon -->
+                <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="rgba(200,169,106,0.7)" stroke="none"/></svg>
+              </div>
+              <div class="ct-channel-text">
+                <strong>Instagram</strong>
+                @kira.paris
+              </div>
+            </a>
+
+            <a href="#" class="ct-channel">
+              <div class="ct-channel-icon">
+                <!-- WhatsApp / phone icon -->
+                <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14z" transform="translate(1 1) scale(0.9)"/></svg>
+              </div>
+              <div class="ct-channel-text">
+                <strong>Phone</strong>
+                +33 1 42 60 14 00
+              </div>
+            </a>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="ct-panel-right">
+      <div class="ct-form-eyebrow">Send a Message</div>
+      <h2 class="ct-form-title">How Can We <em>Help?</em></h2>
+
+      <!-- Subject selector -->
+      <div class="ct-subject-tabs" id="ct-tabs">
+        <button class="ct-subject-tab active" data-subject="General Enquiry">General</button>
+        <button class="ct-subject-tab" data-subject="Order &amp; Delivery">Orders</button>
+        <button class="ct-subject-tab" data-subject="Repair &amp; Care">Repairs</button>
+        <button class="ct-subject-tab" data-subject="Bespoke &amp; Press">Bespoke</button>
+      </div>
+
+      <form class="ct-form" id="ct-form" method="post" action="{% url 'pages:contact_submit' %}" novalidate>
+        {% csrf_token %}
+        <input type="hidden" name="subject" id="ct-subject-input" value="General Enquiry">
+
+        <div class="ct-field-row">
+          <div class="ct-field">
+            <label class="ct-label" for="ct-first-name">First Name <span>*</span></label>
+            <input class="ct-input" type="text" id="ct-first-name" name="first_name" placeholder="Isabelle" required>
+          </div>
+          <div class="ct-field">
+            <label class="ct-label" for="ct-last-name">Last Name <span>*</span></label>
+            <input class="ct-input" type="text" id="ct-last-name" name="last_name" placeholder="Moreau" required>
+          </div>
+        </div>
+
+        <div class="ct-field">
+          <label class="ct-label" for="ct-email">Email Address <span>*</span></label>
+          <input class="ct-input" type="email" id="ct-email" name="email" placeholder="isabelle@example.com" required>
+        </div>
+
+        <div class="ct-field">
+          <label class="ct-label" for="ct-phone">Phone Number</label>
+          <input class="ct-input" type="tel" id="ct-phone" name="phone" placeholder="+33 6 00 00 00 00">
+        </div>
+
+        <!-- Order number — shown only for Orders tab -->
+        <div class="ct-field ct-order-field" id="ct-order-wrap">
+          <label class="ct-label" for="ct-order">Order Number</label>
+          <input class="ct-input" type="text" id="ct-order" name="order_number" placeholder="KR-00000">
+        </div>
+
+        <div class="ct-field">
+          <label class="ct-label" for="ct-message">Message <span>*</span></label>
+          <textarea class="ct-textarea" id="ct-message" name="message" placeholder="Tell us how we can help…" required></textarea>
+        </div>
+
+        <div class="ct-submit-row">
+          <p class="ct-submit-note">We reply within one business day.<br>All correspondence is confidential.</p>
+          <button type="submit" class="btn-primary">Send Message</button>
+        </div>
+
+      </form>
+
+      <!-- Success state (shown via JS after submission) -->
+      <div class="ct-success" id="ct-success">
+        <div class="ct-success-icon"></div>
+        <p class="ct-success-title">Message received.</p>
+        <p class="ct-success-body">
+          Thank you for writing to us. A member of the client relations team will respond within one business day.
+        </p>
+      </div>
+
+    </div><!-- /ct-panel-right -->
+  </div><!-- /ct-split -->
+
+
+  <!-- VISIT THE ATELIER -->
+  <section class="ct-visit">
+    <div class="ct-visit-inner">
+      <div class="ct-visit-content">
+        <div class="ct-visit-eyebrow">In Person</div>
+        <h2 class="ct-visit-title">Visit the <em>Atelier</em></h2>
+        <p class="ct-visit-body">
+          Our Paris atelier is open to clients by appointment. Visits include a private consultation with a member of the atelier team, access to the full collection, and the opportunity to commission bespoke work.
+        </p>
+        <div class="ct-visit-details">
+          <div class="ct-visit-detail">
+            <span class="ct-visit-detail-label">Address</span>
+            <span class="ct-visit-detail-value">14 Rue du Faubourg Saint-Honoré, 75008 Paris</span>
+          </div>
+          <div class="ct-visit-detail">
+            <span class="ct-visit-detail-label">Hours</span>
+            <span class="ct-visit-detail-value">Mon – Sat, 10 am – 7 pm CET<br>Appointments preferred</span>
+          </div>
+          <div class="ct-visit-detail">
+            <span class="ct-visit-detail-label">Nearest</span>
+            <span class="ct-visit-detail-value">Métro Concorde (line 1, 8, 12)<br>Métro Madeleine (line 8, 12, 14)</span>
+          </div>
+        </div>
+        <br>
+        <a href="{% url 'pages:book_appointment' %}" class="btn-outline" style="display:inline-block; margin-top:8px;">Book an Appointment</a>
+      </div>
+
+      <div class="ct-map-block">
+        <div class="ct-map-pin"></div>
+        <div class="ct-map-label">14 Rue du Faubourg<br>Saint-Honoré<br>Paris 75008</div>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+  /* ── Subject tabs ── */
+  const tabs = document.querySelectorAll('.ct-subject-tab');
+  const subjectInput = document.getElementById('ct-subject-input');
+  const orderWrap = document.getElementById('ct-order-wrap');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      subjectInput.value = tab.dataset.subject;
+
+      /* Show order number field only for orders tab */
+      if (tab.dataset.subject === 'Order & Delivery') {
+        orderWrap.classList.add('visible');
+      } else {
+        orderWrap.classList.remove('visible');
+      }
+    });
+  });
+
+  /* ── Form submission feedback ── */
+  const form = document.getElementById('ct-form');
+  const success = document.getElementById('ct-success');
+
+  {% if messages %}
+    {% for message in messages %}
+      {% if message.tags == 'success' %}
+        form.style.display = 'none';
+        success.classList.add('visible');
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+</script>
+{% endblock %}

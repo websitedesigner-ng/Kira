@@ -63,13 +63,22 @@ header {
     width: 22px;
     height: 1.5px;
     background: var(--kira-black);
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition:
+        transform 0.3s ease,
+        opacity 0.3s ease;
     transform-origin: center;
 }
 
-.hamburger.active span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-.hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-.hamburger.active span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+.hamburger.active span:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg);
+}
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+.hamburger.active span:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg);
+}
 
 /* ─── NAV ─── */
 .nav-left {
@@ -86,7 +95,7 @@ header {
 }
 
 nav a {
-    font-family: 'Jost', sans-serif;
+    font-family: "Jost", sans-serif;
     font-size: 11px;
     font-weight: 400;
     letter-spacing: 0.14em;
@@ -95,7 +104,9 @@ nav a {
     text-decoration: none;
     padding-bottom: 2px;
     border-bottom: 1px solid transparent;
-    transition: border-color 0.2s, color 0.2s;
+    transition:
+        border-color 0.2s,
+        color 0.2s;
     white-space: nowrap;
 }
 
@@ -112,7 +123,7 @@ nav a:hover {
 }
 
 .logo-text {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: "Cormorant Garamond", serif;
     font-size: 32px;
     font-weight: 500;
     letter-spacing: 0.35em;
@@ -122,7 +133,7 @@ nav a:hover {
 }
 
 .logo-sub {
-    font-family: 'Jost', sans-serif;
+    font-family: "Jost", sans-serif;
     font-size: 8px;
     letter-spacing: 0.28em;
     color: var(--kira-gold);
@@ -144,7 +155,9 @@ nav a:hover {
     transition: color 0.2s;
 }
 
-.icon-btn:hover { color: var(--kira-gold); }
+.icon-btn:hover {
+    color: var(--kira-gold);
+}
 
 .icon-btn svg {
     width: 20px;
@@ -154,7 +167,9 @@ nav a:hover {
     stroke-width: 1.5;
 }
 
-.cart-wrapper { position: relative; }
+.cart-wrapper {
+    position: relative;
+}
 
 .cart-count {
     position: absolute;
@@ -173,27 +188,60 @@ nav a:hover {
     letter-spacing: 0;
 }
 
-/* ─── MEGA MENU ─── */
-.nav-item { position: relative; }
+/* ─── MEGA MENU (shared base) ─── */
+.nav-item {
+    position: relative;
+}
 
 .mega-menu {
     position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
+    top: calc(100% + 1px); /* sit flush under the header bottom border */
     background: var(--bg-primary);
     border-top: 2px solid var(--kira-gold);
     border-bottom: 1px solid var(--border-light);
     padding: 32px 40px;
-    min-width: 480px;
     display: none;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
     box-shadow: var(--shadow-medium);
+    /* prevent overflow on either edge — overridden per variant below */
+    z-index: 300;
 }
 
-.nav-item:hover .mega-menu { display: grid; }
+/* Standard nav mega menus (Women / Men) — centred under their trigger */
+.nav-left .mega-menu {
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 480px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+}
 
+/* Clamp so it never escapes the viewport on the left */
+.nav-left .nav-item:first-child .mega-menu {
+    left: 0;
+    transform: none;
+}
+
+/* Account dropdown — right-aligned so it never overflows right edge */
+.nav-account-item .mega-menu.account-dropdown {
+    left: auto;
+    right: 0;
+    transform: none;
+    min-width: 200px;
+    padding: 24px 28px;
+    grid-template-columns: 1fr;
+    gap: 0;
+}
+
+.account-col {
+    min-width: 0;
+}
+
+/* Show on hover */
+.nav-item:hover .mega-menu {
+    display: grid;
+}
+
+/* ─── MEGA MENU CONTENT ─── */
 .mega-col-title {
     font-size: 10px;
     letter-spacing: 0.16em;
@@ -254,7 +302,9 @@ nav a:hover {
     overflow: hidden;
 }
 
-.mobile-sidebar.open { transform: translateX(0); }
+.mobile-sidebar.open {
+    transform: translateX(0);
+}
 
 .sidebar-header {
     display: flex;
@@ -282,7 +332,9 @@ nav a:hover {
     transition: color 0.2s;
 }
 
-.sidebar-close:hover { color: var(--kira-gold); }
+.sidebar-close:hover {
+    color: var(--kira-gold);
+}
 
 .sidebar-close svg {
     width: 20px;
@@ -299,9 +351,13 @@ nav a:hover {
     padding: 8px 0 24px;
 }
 
-.sidebar-section { padding: 8px 0; }
+.sidebar-section {
+    padding: 8px 0;
+}
 
-.sidebar-nav-item { border-bottom: 1px solid var(--border-light); }
+.sidebar-nav-item {
+    border-bottom: 1px solid var(--border-light);
+}
 
 .sidebar-nav-toggle {
     width: 100%;
@@ -312,14 +368,16 @@ nav a:hover {
     border: none;
     cursor: pointer;
     padding: 16px 24px;
-    font-family: 'Jost', sans-serif;
+    font-family: "Jost", sans-serif;
     font-size: 11px;
     font-weight: 400;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--text-primary);
     text-align: left;
-    transition: color 0.2s, background 0.2s;
+    transition:
+        color 0.2s,
+        background 0.2s;
 }
 
 .sidebar-nav-toggle:hover {
@@ -337,7 +395,9 @@ nav a:hover {
     flex-shrink: 0;
 }
 
-.sidebar-nav-toggle.expanded .toggle-arrow { transform: rotate(180deg); }
+.sidebar-nav-toggle.expanded .toggle-arrow {
+    transform: rotate(180deg);
+}
 
 .sidebar-sub {
     max-height: 0;
@@ -346,9 +406,13 @@ nav a:hover {
     background: var(--kira-cream);
 }
 
-.sidebar-sub.open { max-height: 600px; }
+.sidebar-sub.open {
+    max-height: 600px;
+}
 
-.sidebar-sub-group { padding: 16px 24px 8px; }
+.sidebar-sub-group {
+    padding: 16px 24px 8px;
+}
 
 .sidebar-sub-title {
     font-size: 9px;
@@ -372,12 +436,14 @@ nav a:hover {
     transition: color 0.2s;
 }
 
-.sidebar-sub a:hover { color: var(--kira-brown); }
+.sidebar-sub a:hover {
+    color: var(--kira-brown);
+}
 
 .sidebar-link {
     display: block;
     padding: 15px 24px;
-    font-family: 'Jost', sans-serif;
+    font-family: "Jost", sans-serif;
     font-size: 11px;
     font-weight: 400;
     letter-spacing: 0.14em;
@@ -385,7 +451,9 @@ nav a:hover {
     color: var(--text-primary);
     text-decoration: none;
     border-bottom: 1px solid var(--border-light);
-    transition: color 0.2s, background 0.2s;
+    transition:
+        color 0.2s,
+        background 0.2s;
 }
 
 .sidebar-link:hover {
@@ -399,7 +467,9 @@ nav a:hover {
     padding: 12px 24px;
 }
 
-.sidebar-link-sm:hover { color: var(--kira-brown); }
+.sidebar-link-sm:hover {
+    color: var(--kira-brown);
+}
 
 .sidebar-divider {
     height: 1px;
@@ -432,7 +502,9 @@ nav a:hover {
     scrollbar-width: none;
 }
 
-.category-strip::-webkit-scrollbar { display: none; }
+.category-strip::-webkit-scrollbar {
+    display: none;
+}
 
 .category-strip-inner {
     display: flex;
@@ -452,7 +524,9 @@ nav a:hover {
     padding: 16px 24px;
     text-decoration: none;
     border-bottom: 2px solid transparent;
-    transition: color 0.2s, border-color 0.2s;
+    transition:
+        color 0.2s,
+        border-color 0.2s;
     white-space: nowrap;
     cursor: pointer;
 }
@@ -461,6 +535,19 @@ nav a:hover {
 .cat-tab.active {
     color: var(--kira-black);
     border-bottom-color: var(--kira-gold);
+}
+
+/* ─── SIDEBAR SOCIAL BUTTONS ─── */
+/* Override .social-btn defaults when inside the white sidebar */
+.mobile-sidebar .social-btn {
+    border-color: var(--border-light);
+    color: var(--text-muted);
+}
+
+.mobile-sidebar .social-btn:hover {
+    border-color: var(--kira-gold);
+    color: var(--kira-gold);
+    background: rgba(200, 169, 106, 0.06);
 }
 
 /* ─── SEARCH BAR ─── */
@@ -516,7 +603,7 @@ nav a:hover {
     background: none;
     border: none;
     outline: none;
-    font-family: 'Cormorant Garamond', serif;
+    font-family: "Cormorant Garamond", serif;
     font-size: 18px;
     font-weight: 300;
     font-style: italic;
@@ -541,8 +628,12 @@ nav a:hover {
     transition: color 0.2s;
 }
 
-.search-clear.visible { display: flex; }
-.search-clear:hover { color: var(--kira-brown); }
+.search-clear.visible {
+    display: flex;
+}
+.search-clear:hover {
+    color: var(--kira-brown);
+}
 
 .search-clear svg {
     width: 16px;
@@ -553,9 +644,15 @@ nav a:hover {
 }
 
 /* Toggle icon swap */
-.search-toggle .icon-close { display: none; }
-.search-toggle.active .icon-search { display: none !important; }
-.search-toggle.active .icon-close  { display: block !important; }
+.search-toggle .icon-close {
+    display: none;
+}
+.search-toggle.active .icon-search {
+    display: none !important;
+}
+.search-toggle.active .icon-close {
+    display: block !important;
+}
 
 /* ─── MOBILE SIDEBAR SEARCH ─── */
 .sidebar-search {
@@ -591,23 +688,34 @@ nav a:hover {
     background: none;
     border: none;
     outline: none;
-    font-family: 'Jost', sans-serif;
+    font-family: "Jost", sans-serif;
     font-size: 12px;
     font-weight: 300;
     letter-spacing: 0.08em;
     color: var(--text-primary);
 }
 
-.sidebar-search-wrap input::placeholder { color: var(--text-muted); }
+.sidebar-search-wrap input::placeholder {
+    color: var(--text-muted);
+}
 
-.search-input::-webkit-search-cancel-button, .sidebar-search-wrap input::-webkit-search-cancel-button {
+.search-input::-webkit-search-cancel-button,
+.sidebar-search-wrap input::-webkit-search-cancel-button {
     display: none;
 }
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 860px) {
-    .hamburger   { display: flex; }
-    .nav-left    { display: none; }
+    .hamburger {
+        display: flex;
+    }
+    .nav-left {
+        display: none;
+    }
+    /* Hide account dropdown trigger on mobile — handled in sidebar */
+    .nav-account-item {
+        display: none;
+    }
 
     .header-inner {
         padding: 0 18px;
@@ -616,34 +724,69 @@ nav a:hover {
         gap: 0;
     }
 
-    .logo-text { font-size: 26px; letter-spacing: 0.28em; }
-    .nav-right { gap: 12px; }
-    .nav-right-account { display: none; }
-    
-    .search-bar.open { height: 56px; }
-    .search-bar-inner { padding: 0 18px; }
-    .search-input { font-size: 16px; }
+    .logo-text {
+        font-size: 26px;
+        letter-spacing: 0.28em;
+    }
+    .nav-right {
+        gap: 12px;
+    }
+    .nav-right-account {
+        display: none;
+    }
+
+    .search-bar.open {
+        height: 56px;
+    }
+    .search-bar-inner {
+        padding: 0 18px;
+    }
+    .search-input {
+        font-size: 16px;
+    }
 }
 
 @media (max-width: 600px) {
-    .announcement-bar { font-size: 10px; padding: 9px 12px; }
+    .announcement-bar {
+        font-size: 10px;
+        padding: 9px 12px;
+    }
 
     .header-inner {
         padding: 0 14px;
         height: 58px;
     }
 
-    .logo-text { font-size: 22px; letter-spacing: 0.24em; }
-    .logo-sub  { font-size: 7px; letter-spacing: 0.2em; }
+    .logo-text {
+        font-size: 22px;
+        letter-spacing: 0.24em;
+    }
+    .logo-sub {
+        font-size: 7px;
+        letter-spacing: 0.2em;
+    }
 
-    .category-strip-inner { padding: 0 24px; }
-    .cat-tab { padding: 13px 16px; font-size: 10px; }
-    
-    .search-bar.open { height: 52px; }
-    .search-bar-inner { padding: 0 14px; }
+    .category-strip-inner {
+        padding: 0 24px;
+    }
+    .cat-tab {
+        padding: 13px 16px;
+        font-size: 10px;
+    }
+
+    .search-bar.open {
+        height: 52px;
+    }
+    .search-bar-inner {
+        padding: 0 14px;
+    }
 }
 
 @media (max-width: 420px) {
-    :root { --sidebar-width: 100vw; }
-    .header-inner { padding: 0 12px; }
+    :root {
+        --sidebar-width: 100vw;
+    }
+    .header-inner {
+        padding: 0 12px;
+    }
 }

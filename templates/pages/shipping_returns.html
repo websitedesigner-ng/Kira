@@ -1,0 +1,356 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Shipping & Returns — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/shipping_returns.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <!-- HERO -->
+  <section class="sr-hero">
+    <div class="sr-hero-inner">
+      <div class="section-eyebrow">Delivery & Returns</div>
+      <h1 class="sr-hero-title">Delivered <em>With Care</em></h1>
+      <p class="sr-hero-sub">
+        Every order is packed by hand in the atelier and dispatched within two business days. We ship worldwide.
+      </p>
+    </div>
+  </section>
+
+  <!-- QUICK FACTS STRIP -->
+  <div class="sr-strip">
+    <div class="sr-strip-item">
+      <div class="sr-strip-value">2 days</div>
+      <div class="sr-strip-label">Dispatch time</div>
+    </div>
+    <div class="sr-strip-item">
+      <div class="sr-strip-value">Free</div>
+      <div class="sr-strip-label">France & EU shipping</div>
+    </div>
+    <div class="sr-strip-item">
+      <div class="sr-strip-value">14 days</div>
+      <div class="sr-strip-label">Return window</div>
+    </div>
+    <div class="sr-strip-item">
+      <div class="sr-strip-value">Worldwide</div>
+      <div class="sr-strip-label">We ship everywhere</div>
+    </div>
+  </div>
+
+  <!-- LAYOUT -->
+  <div class="sr-layout">
+
+    <!-- STICKY NAV -->
+    <nav class="sr-nav">
+      <div class="sr-nav-label">Contents</div>
+      <ul class="sr-nav-list">
+        <li><a href="#shipping">Shipping</a></li>
+        <li><a href="#packaging">Packaging</a></li>
+        <li><a href="#returns">Returns</a></li>
+        <li><a href="#exchanges">Exchanges</a></li>
+        <li><a href="#repairs">Repairs</a></li>
+        <li><a href="#customs">Duties & Customs</a></li>
+      </ul>
+    </nav>
+
+    <!-- CONTENT -->
+    <div class="sr-content">
+
+      <!-- SHIPPING -->
+      <section class="sr-section" id="shipping">
+        <div class="sr-section-eyebrow">Delivery</div>
+        <h2 class="sr-section-title">Shipping <em>Options</em></h2>
+        <p class="sr-section-intro">
+          All orders are dispatched from our Paris atelier within two business days of payment confirmation. Delivery times begin from the date of dispatch, not the date of order.
+        </p>
+
+        <div class="sr-table-wrap">
+          <table class="sr-table">
+            <thead>
+              <tr>
+                <th>Region</th>
+                <th>Service</th>
+                <th>Estimated Delivery</th>
+                <th>Cost</th>
+                <th>Tracking</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>France</td>
+                <td>Colissimo Suivi</td>
+                <td>1 – 2 business days</td>
+                <td><span class="sr-badge sr-badge--free">Free</span></td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>European Union</td>
+                <td>DHL Express</td>
+                <td>2 – 4 business days</td>
+                <td><span class="sr-badge sr-badge--free">Free</span></td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>United Kingdom</td>
+                <td>DHL Express</td>
+                <td>2 – 3 business days</td>
+                <td>€18</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>United States & Canada</td>
+                <td>FedEx International Priority</td>
+                <td>3 – 5 business days</td>
+                <td>€24</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Middle East</td>
+                <td>DHL Express</td>
+                <td>3 – 5 business days</td>
+                <td>€28</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Asia Pacific</td>
+                <td>FedEx International Priority</td>
+                <td>4 – 6 business days</td>
+                <td>€28</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Rest of World</td>
+                <td>DHL Express</td>
+                <td>5 – 8 business days</td>
+                <td>€32</td>
+                <td>Yes</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="sr-table-note">Orders over <em>€500</em> receive complimentary express shipping worldwide. Delivery times are estimates and may vary during peak periods.</p>
+      </section>
+
+      <!-- PACKAGING -->
+      <section class="sr-section" id="packaging">
+        <div class="sr-section-eyebrow">Presentation</div>
+        <h2 class="sr-section-title">How We <em>Pack</em></h2>
+        <p class="sr-section-intro">
+          The unboxing of a Kira piece is considered part of the object itself. Every order is packed by hand by a single member of the atelier team.
+        </p>
+
+        <div class="sr-cards">
+          <div class="sr-card">
+            <div class="sr-card-eyebrow">The Box</div>
+            <div class="sr-card-title">FSC-certified rigid board</div>
+            <div class="sr-card-body">Our signature dark brown box is made from FSC-certified rigid board, embossed with the Kira monogram in blind foil. No gloss, no varnish — only the texture of the material itself.</div>
+          </div>
+          <div class="sr-card">
+            <div class="sr-card-eyebrow">The Wrap</div>
+            <div class="sr-card-title">Unbleached tissue & ribbon</div>
+            <div class="sr-card-body">Each piece is wrapped in unbleached tissue paper and finished with a hand-tied grosgrain ribbon in our house colour. No plastic, no foam, no synthetic fill of any kind.</div>
+          </div>
+          <div class="sr-card">
+            <div class="sr-card-eyebrow">The Dustbag</div>
+            <div class="sr-card-title">Cotton flannel, hand-stamped</div>
+            <div class="sr-card-body">Every bag, wallet, and accessory comes with a natural cotton flannel dustbag, hand-stamped with the Kira mark. It is made to be kept and used.</div>
+          </div>
+          <div class="sr-card">
+            <div class="sr-card-eyebrow">Gifts</div>
+            <div class="sr-card-title">Complimentary gift note</div>
+            <div class="sr-card-body">All orders may include a handwritten gift note at no charge. Add your message at checkout and it will be written on Kira correspondence card and placed within the box.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RETURNS -->
+      <section class="sr-section" id="returns">
+        <div class="sr-section-eyebrow">Returns Policy</div>
+        <h2 class="sr-section-title">The Return <em>Process</em></h2>
+        <p class="sr-section-intro">
+          We accept returns within 14 days of delivery. Items must be unused, in their original condition, and returned in all original packaging. We do not accept returns on bespoke or personalised pieces.
+        </p>
+
+        <div class="sr-timeline">
+          <div class="sr-timeline-item">
+            <div class="sr-timeline-left">
+              <div class="sr-timeline-num">01</div>
+              <div class="sr-timeline-line"></div>
+            </div>
+            <div class="sr-timeline-content">
+              <div class="sr-timeline-title">Request a Return</div>
+              <div class="sr-timeline-body">Email <a href="mailto:returns@kira-paris.com" style="color:var(--kira-brown); text-decoration:none;">returns@kira-paris.com</a> with your order number and reason for return within 14 days of receiving your order. We will respond with a return authorisation number within one business day.</div>
+            </div>
+          </div>
+          <div class="sr-timeline-item">
+            <div class="sr-timeline-left">
+              <div class="sr-timeline-num">02</div>
+              <div class="sr-timeline-line"></div>
+            </div>
+            <div class="sr-timeline-content">
+              <div class="sr-timeline-title">Pack the Item</div>
+              <div class="sr-timeline-body">Return the item in its original packaging — the Kira box, dustbag, tissue, and any accompanying cards. Items returned without original packaging may be subject to a restocking deduction.</div>
+            </div>
+          </div>
+          <div class="sr-timeline-item">
+            <div class="sr-timeline-left">
+              <div class="sr-timeline-num">03</div>
+              <div class="sr-timeline-line"></div>
+            </div>
+            <div class="sr-timeline-content">
+              <div class="sr-timeline-title">Ship to the Atelier</div>
+              <div class="sr-timeline-body">Send the parcel to our Paris atelier using the prepaid return label we provide. We cover return shipping costs for customers in France and the EU. International customers are responsible for return shipping fees.</div>
+            </div>
+          </div>
+          <div class="sr-timeline-item">
+            <div class="sr-timeline-left">
+              <div class="sr-timeline-num">04</div>
+              <div class="sr-timeline-line"></div>
+            </div>
+            <div class="sr-timeline-content">
+              <div class="sr-timeline-title">Inspection & Refund</div>
+              <div class="sr-timeline-body">Upon receipt, the item will be inspected by our atelier team within two business days. Approved refunds are processed to the original payment method within 5 – 10 business days, depending on your bank.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sr-notice">
+          <div class="sr-notice-bar"></div>
+          <div class="sr-notice-body">
+            <strong>Non-returnable items:</strong> Bespoke and personalised pieces, items that have been used, altered, or show signs of wear, and items returned without original packaging are not eligible for a refund. If you are unsure about condition, please contact us before shipping.
+          </div>
+        </div>
+      </section>
+
+      <!-- EXCHANGES -->
+      <section class="sr-section" id="exchanges">
+        <div class="sr-section-eyebrow">Size or Style</div>
+        <h2 class="sr-section-title">Exchanges & <em>Store Credit</em></h2>
+        <p class="sr-section-intro">
+          We offer exchanges on eligible items within 14 days of delivery. If the item you want is not in stock, we will issue a store credit valid for 12 months.
+        </p>
+
+        <div class="sr-cards">
+          <div class="sr-card">
+            <div class="sr-card-eyebrow">Size Exchange</div>
+            <div class="sr-card-title">Same item, different size</div>
+            <div class="sr-card-body">Follow the standard return process and note the size you require. We will ship the replacement as soon as the original is received and inspected. Exchanges are subject to availability.</div>
+          </div>
+          <div class="sr-card">
+            <div class="sr-card-eyebrow">Store Credit</div>
+            <div class="sr-card-title">Valid for 12 months</div>
+            <div class="sr-card-body">If you'd prefer store credit over a refund, simply let us know. Credit is issued immediately upon return approval and can be used across any future order, including bespoke commissions.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- REPAIRS -->
+      <section class="sr-section" id="repairs">
+        <div class="sr-section-eyebrow">Lifetime Care</div>
+        <h2 class="sr-section-title">Sending a Piece for <em>Repair</em></h2>
+        <p class="sr-section-intro">
+          Kira pieces may be returned to the atelier for repair at any point in their life. See our <a href="{% url 'pages:sustainability' %}" style="color:var(--kira-brown); text-decoration:none;">sustainability page</a> for the full details of our repair programme. To initiate a repair, contact us with your piece's hallmark number and a description of the work required.
+        </p>
+
+        <div class="sr-notice">
+          <div class="sr-notice-bar"></div>
+          <div class="sr-notice-body">
+            <strong>Assessment is always free.</strong> We charge material cost only for repair work. A full quote will be provided before any work begins. You are under no obligation to proceed.
+          </div>
+        </div>
+      </section>
+
+      <!-- DUTIES & CUSTOMS -->
+      <section class="sr-section" id="customs">
+        <div class="sr-section-eyebrow">International Orders</div>
+        <h2 class="sr-section-title">Duties & <em>Customs</em></h2>
+        <p class="sr-section-intro">
+          For orders outside the European Union, import duties, taxes, and customs fees may be levied by your country's customs authority upon arrival. These charges are the responsibility of the recipient.
+        </p>
+
+        <div class="sr-table-wrap">
+          <table class="sr-table">
+            <thead>
+              <tr>
+                <th>Region</th>
+                <th>Duties & Taxes</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>France & EU</td>
+                <td>VAT included at checkout</td>
+                <td>No additional charges on delivery</td>
+              </tr>
+              <tr>
+                <td>United Kingdom</td>
+                <td>20% VAT + potential duty</td>
+                <td>Collected by carrier upon delivery</td>
+              </tr>
+              <tr>
+                <td>United States</td>
+                <td>Duty-free up to $800</td>
+                <td>Orders above threshold may incur duty</td>
+              </tr>
+              <tr>
+                <td>Canada</td>
+                <td>GST/HST applicable</td>
+                <td>Rates vary by province</td>
+              </tr>
+              <tr>
+                <td>Australia</td>
+                <td>10% GST on all imports</td>
+                <td>Collected by FedEx upon delivery</td>
+              </tr>
+              <tr>
+                <td>Rest of World</td>
+                <td>Variable</td>
+                <td>Check with your local customs authority</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="sr-table-note">Kira is not responsible for delays caused by customs processing. All items are declared at full purchase value in accordance with international trade law.</p>
+      </section>
+
+    </div><!-- /sr-content -->
+  </div><!-- /sr-layout -->
+
+  <!-- CTA BAND -->
+  <div class="sr-cta-band">
+    <div class="sr-cta-inner">
+      <div class="section-eyebrow">Still Have Questions?</div>
+      <h2 class="sr-cta-title">We Are <em>Here</em></h2>
+      <p class="sr-cta-sub">Our client relations team is available Monday through Saturday, 10 am – 7 pm CET.</p>
+      <div class="sr-cta-actions">
+        <a href="{% url 'pages:contact' %}" class="btn-primary">Contact Us</a>
+        <a href="{% url 'pages:faqs' %}" class="btn-outline">View FAQs</a>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  /* ── Active nav on scroll ── */
+  const sections = document.querySelectorAll('.sr-section[id]');
+  const navLinks = document.querySelectorAll('.sr-nav-list a');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const active = document.querySelector(`.sr-nav-list a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+{% endblock %}

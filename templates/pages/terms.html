@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Terms &amp; Conditions — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/legal.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <section class="lg-hero">
+    <div class="lg-hero-inner">
+      <div class="section-eyebrow">Legal</div>
+      <h1 class="lg-hero-title">Terms &amp; <em>Conditions</em></h1>
+      <p class="lg-hero-meta">Last updated: 1 January 2025</p>
+    </div>
+  </section>
+
+  <div class="lg-body">
+    <div class="lg-body-inner">
+
+      <!-- SIDEBAR NAV -->
+      <nav class="lg-sidebar">
+        <div class="lg-sidebar-label">Contents</div>
+        <a class="lg-sidebar-link" href="#about">1. About Us</a>
+        <a class="lg-sidebar-link" href="#acceptance">2. Acceptance</a>
+        <a class="lg-sidebar-link" href="#orders">3. Orders</a>
+        <a class="lg-sidebar-link" href="#pricing">4. Pricing &amp; Payment</a>
+        <a class="lg-sidebar-link" href="#delivery-tc">5. Delivery</a>
+        <a class="lg-sidebar-link" href="#returns-tc">6. Returns &amp; Refunds</a>
+        <a class="lg-sidebar-link" href="#bespoke-tc">7. Bespoke Orders</a>
+        <a class="lg-sidebar-link" href="#ip">8. Intellectual Property</a>
+        <a class="lg-sidebar-link" href="#liability">9. Liability</a>
+        <a class="lg-sidebar-link" href="#website-use">10. Website Use</a>
+        <a class="lg-sidebar-link" href="#governing-law">11. Governing Law</a>
+        <a class="lg-sidebar-link" href="#contact-tc">12. Contact</a>
+      </nav>
+
+      <!-- CONTENT -->
+      <article class="lg-content">
+
+        <p class="lg-intro">
+          These Terms and Conditions govern your use of the Kira website and the purchase of products from Kira Maison SAS. By placing an order or using our website, you agree to be bound by these terms. Please read them carefully before proceeding.
+        </p>
+
+        <section class="lg-section" id="about">
+          <h2 class="lg-section-title">1. About Us</h2>
+          <p>Kira Maison SAS is a company registered in France under SIRET 123 456 789 00012. Our registered office is at 14 Rue du Faubourg Saint-Honoré, 75008 Paris, France. References to "Kira", "we", "us" or "our" refer to Kira Maison SAS.</p>
+          <p>For enquiries relating to these terms, contact us at <a href="mailto:hello@kira-paris.com">hello@kira-paris.com</a>.</p>
+        </section>
+
+        <section class="lg-section" id="acceptance">
+          <h2 class="lg-section-title">2. Acceptance of Terms</h2>
+          <p>By accessing our website, creating an account, or placing an order, you confirm that you are at least 18 years of age, have the legal capacity to enter into a binding contract, and agree to these Terms and Conditions in full. If you do not agree, please do not use our website or purchase from us.</p>
+          <p>We reserve the right to update these terms at any time. Changes take effect upon publication to our website. Continued use after changes are posted constitutes acceptance of the revised terms.</p>
+        </section>
+
+        <section class="lg-section" id="orders">
+          <h2 class="lg-section-title">3. Orders</h2>
+          <p>When you place an order, you are making an offer to purchase the selected items at the stated price. All orders are subject to acceptance by Kira. We will confirm receipt of your order by email; this confirmation does not constitute acceptance. A binding contract is formed when we dispatch your order and send a dispatch confirmation.</p>
+          <p>We reserve the right to decline any order at our discretion — for example, due to stock unavailability, suspected fraud, pricing errors, or restrictions on the quantity of items that may be purchased. If we decline your order, we will notify you and provide a full refund of any payment taken.</p>
+          <p>Order amendments are accepted within 24 hours of placement, provided the order has not yet been dispatched. Please contact client relations at <a href="mailto:hello@kira-paris.com">hello@kira-paris.com</a> as soon as possible.</p>
+        </section>
+
+        <section class="lg-section" id="pricing">
+          <h2 class="lg-section-title">4. Pricing &amp; Payment</h2>
+          <p>All prices are displayed in Euros (€) and are inclusive of French VAT at the applicable rate. Prices do not include delivery charges, which are calculated at checkout, nor import duties or taxes that may apply in your country of delivery — these remain the responsibility of the recipient.</p>
+          <p>We take all reasonable care to ensure prices are accurate. In the event of a pricing error, we will notify you and offer the opportunity to proceed at the correct price or cancel the order with a full refund.</p>
+          <p>We accept Visa, Mastercard, and American Express. For orders above €2,000, bank transfer is available. Payment is taken at the time of order. All transactions are processed securely; we do not store card details.</p>
+        </section>
+
+        <section class="lg-section" id="delivery-tc">
+          <h2 class="lg-section-title">5. Delivery</h2>
+          <p>We dispatch orders from our Paris atelier. Delivery timescales are estimates and may vary due to carrier delays, customs processing, or circumstances beyond our control. We are not liable for delays outside our reasonable control.</p>
+          <p>Risk in the goods passes to you upon delivery. Title in the goods passes to you upon receipt of full payment. All deliveries require a signature. If you are not available to receive a delivery, a redelivery attempt will be made or the parcel held at a local collection point as directed by the carrier.</p>
+          <p>We ship to over 60 countries. For full delivery information including costs and timescales, please refer to our <a href="{% url 'pages:shipping_returns' %}">Shipping &amp; Returns</a> page.</p>
+        </section>
+
+        <section class="lg-section" id="returns-tc">
+          <h2 class="lg-section-title">6. Returns &amp; Refunds</h2>
+          <p>You have the right to return most items within 14 days of receipt, in accordance with EU consumer rights law. Items must be returned unworn, undamaged, with original tags attached and in their original packaging.</p>
+          <p>The following items are non-returnable:</p>
+          <ul class="lg-list">
+            <li>Bespoke and made-to-order pieces.</li>
+            <li>Personalised or monogrammed items.</li>
+            <li>Items showing signs of wear, damage, or alteration.</li>
+            <li>Items returned outside the 14-day window without prior arrangement.</li>
+          </ul>
+          <p>To initiate a return, contact <a href="mailto:hello@kira-paris.com">hello@kira-paris.com</a>. Return shipping is at the client's expense unless the item is faulty or incorrectly supplied. Refunds are processed within 5–7 business days of receiving and inspecting the returned item and are credited to the original payment method.</p>
+        </section>
+
+        <section class="lg-section" id="bespoke-tc">
+          <h2 class="lg-section-title">7. Bespoke &amp; Made-to-Order</h2>
+          <p>Bespoke and made-to-order commissions are subject to a separate agreement between the client and Kira, confirmed in writing following an atelier consultation. The following general terms apply:</p>
+          <ul class="lg-list">
+            <li>A non-refundable deposit of 50% of the agreed price is required to begin work.</li>
+            <li>The remaining balance is due upon completion and before collection or dispatch.</li>
+            <li>Lead times are indicative; we will communicate any changes promptly.</li>
+            <li>Bespoke pieces cannot be returned or exchanged except in the case of a manufacturing defect.</li>
+            <li>Client-requested modifications after work has commenced may incur additional charges.</li>
+          </ul>
+        </section>
+
+        <section class="lg-section" id="ip">
+          <h2 class="lg-section-title">8. Intellectual Property</h2>
+          <p>All content on this website — including text, images, graphics, logos, design, and code — is the intellectual property of Kira Maison SAS or its licensors and is protected by French and international copyright law. You may not reproduce, distribute, modify, or use any content without our prior written consent.</p>
+          <p>The Kira name, monogram, and all associated trademarks are the exclusive property of Kira Maison SAS. Unauthorised use of our trademarks is strictly prohibited.</p>
+        </section>
+
+        <section class="lg-section" id="liability">
+          <h2 class="lg-section-title">9. Limitation of Liability</h2>
+          <p>To the fullest extent permitted by law, Kira shall not be liable for any indirect, incidental, special, or consequential loss arising from your use of our website or products, including loss of profit, data, or business opportunity.</p>
+          <p>Our total liability for any claim arising from a purchase shall not exceed the price paid for the relevant product. Nothing in these terms limits our liability for death or personal injury caused by negligence, fraud, or any liability that cannot be excluded under French law.</p>
+          <p>We do not warrant that our website will be uninterrupted, error-free, or free from viruses. We are not responsible for the content of external websites linked from our site.</p>
+        </section>
+
+        <section class="lg-section" id="website-use">
+          <h2 class="lg-section-title">10. Website Use</h2>
+          <p>You agree to use our website only for lawful purposes and in a manner that does not infringe the rights of others. You must not:</p>
+          <ul class="lg-list">
+            <li>Use automated tools to scrape, crawl, or extract data from our website.</li>
+            <li>Attempt to gain unauthorised access to any part of our systems.</li>
+            <li>Transmit any harmful, offensive, or unlawful content.</li>
+            <li>Misrepresent your identity or affiliation with any person or entity.</li>
+          </ul>
+          <p>We reserve the right to suspend or terminate access to our website for any user who breaches these terms.</p>
+        </section>
+
+        <section class="lg-section" id="governing-law">
+          <h2 class="lg-section-title">11. Governing Law &amp; Disputes</h2>
+          <p>These Terms and Conditions are governed by the laws of France. Any disputes arising from or relating to these terms or your use of our website shall be subject to the exclusive jurisdiction of the courts of Paris, France, except where mandatory consumer protection laws in your country of residence provide otherwise.</p>
+          <p>If you have a complaint, we encourage you to contact us first at <a href="mailto:hello@kira-paris.com">hello@kira-paris.com</a> so that we may seek to resolve the matter directly. EU residents may also access the European Commission's Online Dispute Resolution platform at <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">ec.europa.eu/consumers/odr</a>.</p>
+        </section>
+
+        <section class="lg-section" id="contact-tc">
+          <h2 class="lg-section-title">12. Contact</h2>
+          <p>For any questions relating to these Terms and Conditions, please contact:</p>
+          <div class="lg-contact-block">
+            <div class="lg-contact-line"><strong>Kira Maison SAS — Client Relations</strong></div>
+            <div class="lg-contact-line">14 Rue du Faubourg Saint-Honoré, 75008 Paris, France</div>
+            <div class="lg-contact-line"><a href="mailto:hello@kira-paris.com">hello@kira-paris.com</a></div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+  </div>
+
+{% endblock %}

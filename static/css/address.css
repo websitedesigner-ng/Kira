@@ -64,29 +64,6 @@
     letter-spacing: 0.02em;
 }
 
-.ac-addr-actions {
-    display: flex;
-    gap: 16px;
-    padding-top: 16px;
-    border-top: 1px solid var(--border-light);
-    margin-top: 4px;
-}
-
-.ac-addr-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-family: 'Jost', sans-serif;
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    font-weight: 400;
-    padding: 0;
-    border-bottom: 1px solid var(--border-light);
-    transition: color 0.2s, border-color 0.2s;
-}
-
 .ac-addr-btn:hover         { color: var(--kira-brown); border-color: var(--kira-tan); }
 .ac-addr-btn--delete:hover { color: #c0392b; border-color: #ffcccc; }
 

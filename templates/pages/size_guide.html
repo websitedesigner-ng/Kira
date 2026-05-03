@@ -1,0 +1,524 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Size Guide — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/size_guide.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <!-- HERO -->
+  <section class="sg-hero">
+    <div class="sg-hero-inner">
+      <div class="section-eyebrow">Fit & Measure</div>
+      <h1 class="sg-hero-title">The Right <em>Fit</em></h1>
+      <p class="sg-hero-sub">
+        All measurements are taken from the finished piece. If you are between sizes, we recommend sizing up — leather softens and conforms with wear.
+      </p>
+    </div>
+  </section>
+
+  <!-- LAYOUT -->
+  <div class="sg-layout">
+
+    <!-- STICKY NAV -->
+    <nav class="sg-nav">
+      <div class="sg-nav-label">Contents</div>
+      <ul class="sg-nav-list">
+        <li><a href="#how-to-measure">How to Measure</a></li>
+        <li><a href="#bags">Bags & Totes</a></li>
+        <li><a href="#belts">Belts</a></li>
+        <li><a href="#wallets">Wallets & Card Holders</a></li>
+        <li><a href="#gloves">Gloves</a></li>
+        <li><a href="#care">A Note on Fit</a></li>
+      </ul>
+    </nav>
+
+    <!-- CONTENT -->
+    <div class="sg-content">
+
+      <!-- HOW TO MEASURE -->
+      <section class="sg-section" id="how-to-measure">
+        <div class="sg-section-eyebrow">Getting Started</div>
+        <h2 class="sg-section-title">How to <em>Measure</em></h2>
+        <p class="sg-section-intro">
+          Use a soft measuring tape and take measurements directly against the body — not over clothing. All dimensions below are in centimetres unless otherwise stated.
+        </p>
+        <div class="sg-measure-grid">
+          <div class="sg-measure-card">
+            <div class="sg-measure-num">01</div>
+            <div class="sg-measure-title">Waist</div>
+            <div class="sg-measure-body">Wrap the tape around your natural waist — the narrowest point of your torso, typically an inch above your navel. Keep the tape level and snug but not tight.</div>
+          </div>
+          <div class="sg-measure-card">
+            <div class="sg-measure-num">02</div>
+            <div class="sg-measure-title">Hand Circumference</div>
+            <div class="sg-measure-body">Wrap the tape around the widest part of your dominant hand, just below the knuckles. Exclude the thumb. This is the measurement used for glove sizing.</div>
+          </div>
+          <div class="sg-measure-card">
+            <div class="sg-measure-num">03</div>
+            <div class="sg-measure-title">Bag Dimensions</div>
+            <div class="sg-measure-body">Bag dimensions are listed as Width × Height × Depth. Width is the widest horizontal point; height is the tallest vertical point; depth is front to back at the base.</div>
+          </div>
+          <div class="sg-measure-card">
+            <div class="sg-measure-num">04</div>
+            <div class="sg-measure-title">Strap Length</div>
+            <div class="sg-measure-body">Strap drop is measured from the top of the handle to the top of the bag body. Shoulder strap lengths are given as a range reflecting the full adjustment span.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- BAGS -->
+      <section class="sg-section" id="bags">
+        <div class="sg-section-eyebrow">Carried Pieces</div>
+        <h2 class="sg-section-title">Bags & <em>Totes</em></h2>
+        <p class="sg-section-intro">
+          Dimensions are of the exterior finished piece. Internal capacity varies slightly based on lining and pocket construction.
+        </p>
+
+        <!-- TABS -->
+        <div class="sg-tabs" id="bag-tabs">
+          <button class="sg-tab active" data-panel="structured">Structured Bags</button>
+          <button class="sg-tab" data-panel="totes">Totes & Shoppers</button>
+          <button class="sg-tab" data-panel="crossbody">Crossbody</button>
+          <button class="sg-tab" data-panel="clutch">Clutch & Evening</button>
+        </div>
+
+        <div class="sg-tab-panel active" id="panel-structured">
+          <div class="sg-table-wrap">
+            <table class="sg-table">
+              <thead>
+                <tr>
+                  <th>Size</th>
+                  <th>Width (cm)</th>
+                  <th>Height (cm)</th>
+                  <th>Depth (cm)</th>
+                  <th>Handle Drop (cm)</th>
+                  <th>Shoulder Strap</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Mini</td>
+                  <td>18</td>
+                  <td>13</td>
+                  <td>7</td>
+                  <td>12</td>
+                  <td>48 – 58 cm</td>
+                </tr>
+                <tr>
+                  <td>Small</td>
+                  <td>24</td>
+                  <td>17</td>
+                  <td>9</td>
+                  <td>14</td>
+                  <td>50 – 62 cm</td>
+                </tr>
+                <tr>
+                  <td>Medium</td>
+                  <td>30</td>
+                  <td>22</td>
+                  <td>11</td>
+                  <td>16</td>
+                  <td>54 – 68 cm</td>
+                </tr>
+                <tr>
+                  <td>Large</td>
+                  <td>36</td>
+                  <td>27</td>
+                  <td>13</td>
+                  <td>18</td>
+                  <td>58 – 72 cm</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="sg-table-note">Shoulder strap length is given as worn drop — i.e. from shoulder to base of bag. <em>Not</em> total strap length. All straps are fully adjustable within the stated range.</p>
+        </div>
+
+        <div class="sg-tab-panel" id="panel-totes">
+          <div class="sg-table-wrap">
+            <table class="sg-table">
+              <thead>
+                <tr>
+                  <th>Style</th>
+                  <th>Width (cm)</th>
+                  <th>Height (cm)</th>
+                  <th>Depth (cm)</th>
+                  <th>Handle Drop (cm)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Day Tote</td>
+                  <td>38</td>
+                  <td>30</td>
+                  <td>14</td>
+                  <td>22</td>
+                </tr>
+                <tr>
+                  <td>Market Tote</td>
+                  <td>46</td>
+                  <td>36</td>
+                  <td>16</td>
+                  <td>26</td>
+                </tr>
+                <tr>
+                  <td>Weekend Tote</td>
+                  <td>52</td>
+                  <td>32</td>
+                  <td>20</td>
+                  <td>28</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="sg-table-note">Totes are unstructured; height and width may vary slightly depending on contents.</p>
+        </div>
+
+        <div class="sg-tab-panel" id="panel-crossbody">
+          <div class="sg-table-wrap">
+            <table class="sg-table">
+              <thead>
+                <tr>
+                  <th>Style</th>
+                  <th>Width (cm)</th>
+                  <th>Height (cm)</th>
+                  <th>Depth (cm)</th>
+                  <th>Strap Range (cm)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Micro</td>
+                  <td>14</td>
+                  <td>10</td>
+                  <td>5</td>
+                  <td>90 – 130</td>
+                </tr>
+                <tr>
+                  <td>Crossbody Small</td>
+                  <td>20</td>
+                  <td>14</td>
+                  <td>6</td>
+                  <td>90 – 140</td>
+                </tr>
+                <tr>
+                  <td>Crossbody Medium</td>
+                  <td>26</td>
+                  <td>18</td>
+                  <td>8</td>
+                  <td>95 – 145</td>
+                </tr>
+                <tr>
+                  <td>Messenger</td>
+                  <td>34</td>
+                  <td>26</td>
+                  <td>10</td>
+                  <td>100 – 150</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="sg-table-note">Crossbody strap lengths are total strap length; worn drop will vary based on body height and preferred carry position.</p>
+        </div>
+
+        <div class="sg-tab-panel" id="panel-clutch">
+          <div class="sg-table-wrap">
+            <table class="sg-table">
+              <thead>
+                <tr>
+                  <th>Style</th>
+                  <th>Width (cm)</th>
+                  <th>Height (cm)</th>
+                  <th>Depth (cm)</th>
+                  <th>Wrist Strap</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Envelope Clutch</td>
+                  <td>28</td>
+                  <td>15</td>
+                  <td>2</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td>Box Clutch</td>
+                  <td>22</td>
+                  <td>12</td>
+                  <td>5</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td>Evening Pouch</td>
+                  <td>18</td>
+                  <td>11</td>
+                  <td>3</td>
+                  <td>Yes</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="sg-table-note">Wrist straps where included are fixed-length at 22 cm internal circumference.</p>
+        </div>
+      </section>
+
+      <!-- BELTS -->
+      <section class="sg-section" id="belts">
+        <div class="sg-section-eyebrow">Waist & Trouser</div>
+        <h2 class="sg-section-title">Belt <em>Sizing</em></h2>
+        <p class="sg-section-intro">
+          Belt size refers to the length from the buckle pin to the middle hole. There are always five holes, spaced 2.5 cm apart. To find your size, measure your waist at the point where you wear your belt.
+        </p>
+        <div class="sg-table-wrap">
+          <table class="sg-table">
+            <thead>
+              <tr>
+                <th>Kira Size</th>
+                <th>Waist (cm)</th>
+                <th>Waist (inches)</th>
+                <th>Total Length (cm)</th>
+                <th>Middle Hole (cm)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>70</td>
+                <td>60 – 68</td>
+                <td>24″ – 27″</td>
+                <td>85</td>
+                <td>70</td>
+              </tr>
+              <tr>
+                <td>75</td>
+                <td>65 – 73</td>
+                <td>26″ – 29″</td>
+                <td>90</td>
+                <td>75</td>
+              </tr>
+              <tr>
+                <td>80</td>
+                <td>70 – 78</td>
+                <td>28″ – 31″</td>
+                <td>95</td>
+                <td>80</td>
+              </tr>
+              <tr>
+                <td>85</td>
+                <td>75 – 83</td>
+                <td>30″ – 33″</td>
+                <td>100</td>
+                <td>85</td>
+              </tr>
+              <tr>
+                <td>90</td>
+                <td>80 – 88</td>
+                <td>32″ – 35″</td>
+                <td>105</td>
+                <td>90</td>
+              </tr>
+              <tr>
+                <td>95</td>
+                <td>85 – 93</td>
+                <td>34″ – 37″</td>
+                <td>110</td>
+                <td>95</td>
+              </tr>
+              <tr>
+                <td>100</td>
+                <td>90 – 98</td>
+                <td>36″ – 39″</td>
+                <td>115</td>
+                <td>100</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="sg-table-note">All Kira belts are available in widths of <em>2 cm, 3 cm, and 4 cm</em>. Width does not affect sizing. If your waist falls between two sizes, choose the larger.</p>
+      </section>
+
+      <!-- WALLETS -->
+      <section class="sg-section" id="wallets">
+        <div class="sg-section-eyebrow">Pocket Goods</div>
+        <h2 class="sg-section-title">Wallets & <em>Card Holders</em></h2>
+        <p class="sg-section-intro">
+          Small leather goods are sized by their finished exterior dimensions. Capacity figures are for guidance; all pieces loosen slightly with use.
+        </p>
+        <div class="sg-table-wrap">
+          <table class="sg-table">
+            <thead>
+              <tr>
+                <th>Style</th>
+                <th>Width (cm)</th>
+                <th>Height (cm)</th>
+                <th>Depth (cm)</th>
+                <th>Card Slots</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Card Holder</td>
+                <td>10</td>
+                <td>7</td>
+                <td>0.5</td>
+                <td>4 – 6</td>
+                <td>No bill compartment</td>
+              </tr>
+              <tr>
+                <td>Slim Bifold</td>
+                <td>10</td>
+                <td>8.5</td>
+                <td>1.2</td>
+                <td>6</td>
+                <td>1 bill, 1 ID window</td>
+              </tr>
+              <tr>
+                <td>Classic Bifold</td>
+                <td>11</td>
+                <td>9</td>
+                <td>1.8</td>
+                <td>8</td>
+                <td>2 bill, 1 coin, 1 ID window</td>
+              </tr>
+              <tr>
+                <td>Long Wallet</td>
+                <td>19</td>
+                <td>9.5</td>
+                <td>2</td>
+                <td>10</td>
+                <td>Full-length bill, 1 zip coin</td>
+              </tr>
+              <tr>
+                <td>Zip-Around</td>
+                <td>20</td>
+                <td>10</td>
+                <td>3</td>
+                <td>12</td>
+                <td>3 bill, 1 zip coin, 1 ID</td>
+              </tr>
+              <tr>
+                <td>Key Holder</td>
+                <td>7</td>
+                <td>11</td>
+                <td>1.5</td>
+                <td>2</td>
+                <td>4 key hooks standard</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="sg-table-note">All wallets accept standard international credit card dimensions (85.6 × 54 mm). Bill compartments are sized for folded A6 notes; <em>long wallets accept unfolded notes</em> up to 160 × 80 mm.</p>
+      </section>
+
+      <!-- GLOVES -->
+      <section class="sg-section" id="gloves">
+        <div class="sg-section-eyebrow">Hand Sizing</div>
+        <h2 class="sg-section-title">Glove <em>Sizing</em></h2>
+        <p class="sg-section-intro">
+          Measure the circumference of your dominant hand just below the knuckles, excluding the thumb. Use the table below to find your size. If between sizes, choose the smaller — leather gloves stretch with wear.
+        </p>
+        <div class="sg-table-wrap">
+          <table class="sg-table">
+            <thead>
+              <tr>
+                <th>Kira Size</th>
+                <th>Hand Circumference (cm)</th>
+                <th>Hand Circumference (inches)</th>
+                <th>Approx. UK/EU Size</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>6</td>
+                <td>15 – 16.5</td>
+                <td>6″ – 6.5″</td>
+                <td>XS</td>
+              </tr>
+              <tr>
+                <td>6.5</td>
+                <td>16.5 – 18</td>
+                <td>6.5″ – 7″</td>
+                <td>S</td>
+              </tr>
+              <tr>
+                <td>7</td>
+                <td>18 – 19.5</td>
+                <td>7″ – 7.5″</td>
+                <td>M</td>
+              </tr>
+              <tr>
+                <td>7.5</td>
+                <td>19.5 – 21</td>
+                <td>7.5″ – 8″</td>
+                <td>L</td>
+              </tr>
+              <tr>
+                <td>8</td>
+                <td>21 – 22.5</td>
+                <td>8″ – 9″</td>
+                <td>XL</td>
+              </tr>
+              <tr>
+                <td>8.5</td>
+                <td>22.5 – 24</td>
+                <td>9″ – 9.5″</td>
+                <td>XXL</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="sg-table-note">All Kira gloves are unlined unless stated. Cashmere-lined styles run <em>half a size smaller</em> — size up if purchasing a lined glove.</p>
+      </section>
+
+      <!-- ADVICE BAND -->
+      <section class="sg-section" id="care">
+        <div class="sg-advice">
+          <div class="sg-advice-inner">
+            <div class="sg-advice-eyebrow">Still Unsure?</div>
+            <p class="sg-advice-title">We measure every piece before it leaves the atelier. We can measure again for you.</p>
+            <p class="sg-advice-body">
+              If you have a question about fit that isn't answered here — or if you're ordering a gift and need guidance — our client relations team is available Monday through Saturday, 9 am to 6 pm CET.
+            </p>
+            <a href="{% url 'pages:contact' %}" class="sg-advice-cta">Contact Client Relations →</a>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /sg-content -->
+  </div><!-- /sg-layout -->
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  /* ── Tab switching ── */
+  document.querySelectorAll('#bag-tabs .sg-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('#bag-tabs .sg-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.sg-tab-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-' + tab.dataset.panel).classList.add('active');
+    });
+  });
+
+  /* ── Active nav link on scroll ── */
+  const sections = document.querySelectorAll('.sg-section[id]');
+  const navLinks = document.querySelectorAll('.sg-nav-list a');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const active = document.querySelector(`.sg-nav-list a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+{% endblock %}

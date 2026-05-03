@@ -25,28 +25,26 @@
     <div class="footer-links">
       <div class="footer-col">
         <div class="footer-col-title">Collections</div>
-        <a href="#">Women</a>
-        <a href="#">Men</a>
-        <a href="#">Leather Goods</a>
-        <a href="#">Jewellery</a>
-        <a href="#">Watches</a>
-        <a href="#">Fragrances</a>
+        <a href="{% url 'store:product_list' %}?tag=women">Women</a>
+        <a href="{% url 'store:product_list' %}?tag=men">Men</a>
+        <a href="{% url 'store:product_list' %}?tag=leather-goods">Leather Goods</a>
+        <a href="{% url 'store:product_list' %}?tag=jewellery">Jewellery</a>
+        <a href="{% url 'store:product_list' %}?tag=watches">Watches</a>
+        <a href="{% url 'store:product_list' %}?tag=fragrances">Fragrances</a>
       </div>
       <div class="footer-col">
         <div class="footer-col-title">The Maison</div>
-        <a href="#">Our Story</a>
-        <a href="#">Savoir-Faire</a>
-        <a href="#">Sustainability</a>
-        <a href="#">Press</a>
-        <a href="#">Careers</a>
+        <a href="{% url 'pages:our_story' %}">Our Story</a>
+        <a href="{% url 'pages:savoir_faire' %}">Savoir-Faire</a>
+        <a href="{% url 'pages:sustainability' %}">Sustainability</a>
+        <a href="{% url 'pages:size_guide' %}">Size Guide</a>
       </div>
       <div class="footer-col">
         <div class="footer-col-title">Client Services</div>
-        <a href="#">Contact Us</a>
-        <a href="#">Find a Boutique</a>
-        <a href="#">Book an Appointment</a>
-        <a href="#">Shipping & Returns</a>
-        <a href="#">FAQs</a>
+        <a href="{% url 'pages:contact' %}">Contact Us</a>
+        <a href="{% url 'pages:book_appointment' %}">Book an Appointment</a>
+        <a href="{% url 'pages:shipping_returns' %}">Shipping & Returns</a>
+        <a href="{% url 'pages:faqs' %}">FAQs</a>
       </div>
     </div>
   </div>
@@ -57,9 +55,8 @@
         © {% now "Y" %} Kira Maison de Luxe. All rights reserved.
       </div>
       <div class="footer-legal-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Use</a>
-        <a href="#">Cookie Settings</a>
+        <a href="{% url 'pages:privacy_policy' %}">Privacy Policy</a>
+        <a href="{% url 'pages:terms' %}">Terms of Use</a>
       </div>
     </div>
   </div>

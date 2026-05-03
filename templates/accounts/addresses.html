@@ -59,6 +59,10 @@
           </div>
 
           <div class="ac-addr-actions">
+            <form>
+              <a href="{% url 'accounts:address_edit' address.pk %}" class="ac-addr-btn">Edit</button>
+            </a>
+            </form>
             {% if not address.is_default %}
             <form method="POST" action="{% url 'accounts:address_set_default' address.pk %}">
               {% csrf_token %}

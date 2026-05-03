@@ -370,6 +370,38 @@
     letter-spacing: 0.02em;
 }
 
+.ac-addr-actions {
+    display: flex;
+    gap: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-light);
+    margin-top: 4px;
+}
+
+.ac-addr-btn {
+    background: none;
+    border-bottom: 1px solid var(--border-light);
+    cursor: pointer;
+    font-family: 'Jost', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 400;
+    padding: 0;
+    text-decoration: none;
+    display: inline-block;
+    line-height: 1.4;
+    transition: color 0.2s, border-color 0.2s;
+    margin: 0 !important;
+}
+
+.ac-addr-btn:hover         { color: var(--kira-brown); border-color: var(--kira-tan); }
+
+.ac-address-lines {
+    margin-top: 8px;
+}
+
 /* ─── EMPTY ─── */
 .ac-empty {
     padding: 80px 0;

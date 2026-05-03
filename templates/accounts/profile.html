@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Profile — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/account.css' %}">
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <section class="ac-hero">
+    <div class="ac-hero-inner">
+      <div class="section-eyebrow">My Account</div>
+      <h1 class="ac-hero-title">My <em>Profile</em></h1>
+    </div>
+  </section>
+
+  <div class="ac-layout">
+
+    {% include "accounts/partials/_account_nav.html" %}
+
+    <div class="ac-main">
+
+      {% if messages %}
+      {% for message in messages %}
+      <div class="pf-success">{{ message }}</div>
+      {% endfor %}
+      {% endif %}
+
+      <form method="POST" class="pf-form">
+        {% csrf_token %}
+
+        <!-- PERSONAL INFO -->
+        <div class="pf-section">
+          <div class="ac-section-header" style="margin-bottom:28px;">
+            <span class="ac-section-title">Personal Information</span>
+          </div>
+          <div class="pf-fields">
+
+            <div class="pf-field pf-field--half">
+              <label class="pf-label">First Name <span>*</span></label>
+              <input type="text" name="first_name" class="pf-input"
+                value="{{ request.user.first_name }}" required autocomplete="given-name">
+            </div>
+
+            <div class="pf-field pf-field--half">
+              <label class="pf-label">Last Name</label>
+              <input type="text" name="last_name" class="pf-input"
+                value="{{ request.user.last_name }}" autocomplete="family-name">
+            </div>
+
+            <div class="pf-field pf-field--half">
+              <label class="pf-label">Phone Number</label>
+              <input type="tel" name="phone" class="pf-input"
+                value="{{ request.user.phone }}" autocomplete="tel">
+            </div>
+
+            <div class="pf-field pf-field--half">
+              <label class="pf-label">Member Since</label>
+              <input type="text" class="pf-input pf-input--readonly"
+                value="{{ request.user.date_joined|date:'d M Y' }}" readonly>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- EMAIL -->
+        <div class="pf-section">
+          <div class="ac-section-header" style="margin-bottom:28px;">
+            <span class="ac-section-title">Email Address</span>
+          </div>
+          <div class="pf-fields">
+            <div class="pf-field pf-field--full">
+              <label class="pf-label">Email</label>
+              <input type="text" class="pf-input pf-input--readonly"
+                value="{{ request.user.email }}" readonly>
+              <span class="pf-hint">Email address cannot be changed.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHANGE PASSWORD -->
+        <div class="pf-section">
+          <div class="ac-section-header" style="margin-bottom:28px;">
+            <span class="ac-section-title">Change Password</span>
+          </div>
+          <div class="pf-fields">
+
+            <div class="pf-field pf-field--full">
+              <label class="pf-label">Current Password</label>
+              <div class="pf-input-wrap">
+                <input type="password" name="current_password" class="pf-input"
+                  autocomplete="current-password" id="currentPassword">
+                <button type="button" class="pf-eye" data-target="currentPassword">
+                  <svg class="eye-show" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg class="eye-hide" viewBox="0 0 24 24" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="pf-field pf-field--half">
+              <label class="pf-label">New Password</label>
+              <div class="pf-input-wrap">
+                <input type="password" name="new_password1" class="pf-input"
+                  autocomplete="new-password" id="newPassword1">
+                <button type="button" class="pf-eye" data-target="newPassword1">
+                  <svg class="eye-show" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg class="eye-hide" viewBox="0 0 24 24" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                </button>
+              </div>
+              <span class="pf-hint">Minimum 8 characters.</span>
+            </div>
+
+            <div class="pf-field pf-field--half">
+              <label class="pf-label">Confirm New Password</label>
+              <div class="pf-input-wrap">
+                <input type="password" name="new_password2" class="pf-input"
+                  autocomplete="new-password" id="newPassword2">
+                <button type="button" class="pf-eye" data-target="newPassword2">
+                  <svg class="eye-show" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg class="eye-hide" viewBox="0 0 24 24" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="pf-actions">
+          <button type="submit" class="btn-primary">Save Changes</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.querySelectorAll('.pf-eye').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const input = document.getElementById(btn.dataset.target);
+      const isPass = input.type === 'password';
+      input.type = isPass ? 'text' : 'password';
+      btn.querySelector('.eye-show').style.display = isPass ? 'none'  : 'block';
+      btn.querySelector('.eye-hide').style.display = isPass ? 'block' : 'none';
+    });
+  });
+</script>
+{% endblock %}

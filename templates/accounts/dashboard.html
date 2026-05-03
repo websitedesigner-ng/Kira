@@ -104,6 +104,9 @@
               <p>{{ address.city }}{% if address.state %}, {{ address.state }}{% endif %} {{ address.postcode }}</p>
               <p>{{ address.country }}</p>
             </div>
+            <div class="ac-addr-actions" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border-light);">
+              <a href="{% url 'accounts:address_edit' address.pk %}" class="ac-addr-btn">Edit</a>
+            </div>
           </div>
           {% endfor %}
         </div>

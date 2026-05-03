@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Our Story — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/our_story.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <!-- HERO -->
+  <section class="os-hero">
+    <div class="os-hero-inner">
+      <div class="section-eyebrow">Notre Histoire</div>
+      <h1 class="os-hero-title">The Art of <em>Slow</em> Luxury</h1>
+      <p class="os-hero-sub">
+        Born in Paris. Rooted in craft. Built to outlast generations.
+      </p>
+    </div>
+  </section>
+
+  <!-- OPENING PULL QUOTE -->
+  <div class="os-pull-quote">
+    <div class="os-pull-quote-inner">
+      <span class="os-pull-mark">"</span>
+      <blockquote class="os-blockquote">
+        Craftsmanship is not merely a technique — it is a language spoken between the hands of the artisan and the soul of the object.
+      </blockquote>
+      <cite class="os-cite">— Founder, Kira Maison</cite>
+    </div>
+  </div>
+
+  <!-- STORY SECTIONS -->
+  <div class="os-sections">
+
+    <!-- ORIGINS -->
+    <div class="os-section os-section--img-right">
+      <div class="os-section-text">
+        <div class="os-section-eyebrow">Est. 1892</div>
+        <h2 class="os-section-title">Where It <em>Began</em></h2>
+        <p class="os-section-body">
+          Kira was founded in a quiet atelier on the Rue du Faubourg Saint-Honoré, where a single craftsman set out to make objects of enduring beauty. Not fashion — objects. Pieces that would carry the weight of time without flinching.
+        </p>
+        <p class="os-section-body">
+          From the beginning, the philosophy was simple: use only the finest materials, work only with hands that understand patience, and never compromise the integrity of the object for the speed of the season.
+        </p>
+      </div>
+      <div class="os-section-visual">
+        <div class="os-visual-block os-visual-block--dark">
+          <span class="os-visual-monogram">K</span>
+          <div class="os-visual-year">1892</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="os-divider">
+      <div class="os-divider-line"></div>
+      <span class="os-divider-mark">✦</span>
+      <div class="os-divider-line"></div>
+    </div>
+
+    <!-- CRAFT -->
+    <div class="os-section os-section--img-left">
+      <div class="os-section-visual">
+        <div class="os-visual-block os-visual-block--cream">
+          <span class="os-visual-monogram os-visual-monogram--dark">Kr</span>
+          <div class="os-visual-year os-visual-year--dark">Craft</div>
+        </div>
+      </div>
+      <div class="os-section-text">
+        <div class="os-section-eyebrow">The Hands</div>
+        <h2 class="os-section-title">A Devotion to <em>Craft</em></h2>
+        <p class="os-section-body">
+          Every Kira piece passes through a minimum of twelve pairs of hands before it is considered complete. Our master artisans — many of whom have spent decades perfecting a single technique — work without shortcuts.
+        </p>
+        <p class="os-section-body">
+          The leather is selected by touch before it is selected by sight. The stitching is counted, not measured. The finish is applied in silence, because silence is the only condition under which true attention is possible.
+        </p>
+      </div>
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="os-divider">
+      <div class="os-divider-line"></div>
+      <span class="os-divider-mark">✦</span>
+      <div class="os-divider-line"></div>
+    </div>
+
+    <!-- PHILOSOPHY -->
+    <div class="os-section os-section--img-right">
+      <div class="os-section-text">
+        <div class="os-section-eyebrow">La Philosophie</div>
+        <h2 class="os-section-title">Deliberate <em>Scarcity</em></h2>
+        <p class="os-section-body">
+          In an age of abundance, Kira is a study in restraint. We produce fewer pieces than we could. We decline more clients than we accept. We have never held a sale, and we never will.
+        </p>
+        <p class="os-section-body">
+          This is not arrogance. It is a form of respect — for the object, for the craftsman who made it, and for the person who will carry it. A Kira piece is not a purchase. It is a relationship.
+        </p>
+      </div>
+      <div class="os-section-visual">
+        <div class="os-visual-block os-visual-block--gold">
+          <span class="os-visual-monogram os-visual-monogram--dark">Kr</span>
+          <div class="os-visual-year os-visual-year--dark">Rare</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="os-divider">
+      <div class="os-divider-line"></div>
+      <span class="os-divider-mark">✦</span>
+      <div class="os-divider-line"></div>
+    </div>
+
+    <!-- TODAY -->
+    <div class="os-section os-section--img-left">
+      <div class="os-section-visual">
+        <div class="os-visual-block os-visual-block--dark">
+          <span class="os-visual-monogram">K</span>
+          <div class="os-visual-year">Today</div>
+        </div>
+      </div>
+      <div class="os-section-text">
+        <div class="os-section-eyebrow">The Maison Today</div>
+        <h2 class="os-section-title">Rooted in <em>Tradition</em></h2>
+        <p class="os-section-body">
+          More than a century after that first atelier, Kira remains a family house. The same families who stitched the first bags still send their children to learn the craft. The same suppliers who provided the first hides still tan our leather.
+        </p>
+        <p class="os-section-body">
+          The world has changed enormously. Kira has changed only in the ways that matter — learning, refining, deepening — while holding fast to the things that do not need to change at all.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- STATS BAND -->
+  <div class="os-stats-band">
+    <div class="os-stats-inner">
+      <div class="os-stat">
+        <div class="os-stat-num">1892</div>
+        <div class="os-stat-label">Est. Paris</div>
+      </div>
+      <div class="os-stat">
+        <div class="os-stat-num">130+</div>
+        <div class="os-stat-label">Years of Craft</div>
+      </div>
+      <div class="os-stat">
+        <div class="os-stat-num">12</div>
+        <div class="os-stat-label">Pairs of Hands</div>
+      </div>
+      <div class="os-stat">
+        <div class="os-stat-num">100%</div>
+        <div class="os-stat-label">Handcrafted</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <section class="os-cta">
+    <div class="os-cta-inner">
+      <div class="section-eyebrow">The Collection</div>
+      <h2 class="os-cta-title">Wear the <em>Story</em></h2>
+      <p class="os-cta-sub">Every piece carries this history. Every stitch is an act of devotion.</p>
+      <div class="os-cta-actions">
+        <a href="{% url 'store:collection_list' %}" class="btn-primary">Explore Collections</a>
+        <a href="{% url 'pages:savoir_faire' %}" class="btn-outline">Our Savoir-Faire</a>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}

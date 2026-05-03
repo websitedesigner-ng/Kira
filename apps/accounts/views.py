@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 from .models import User
 from apps.orders.models import Order, Address
 from apps.orders.cart import SessionCart
+from .forms import AddressForm
+
 
 def login_view(request):
     if request.user.is_authenticated:
@@ -124,27 +126,38 @@ def addresses(request):
     return render(request, 'accounts/addresses.html', {
         'addresses': request.user.addresses.all(),
     })
-
+  
 
 @login_required
 def address_add(request):
-    if request.method == 'POST':
-        Address.objects.create(
-            user       = request.user,
-            label      = request.POST.get('label', '').strip(),
-            full_name  = request.POST.get('full_name', '').strip(),
-            phone      = request.POST.get('phone', '').strip(),
-            line1      = request.POST.get('line1', '').strip(),
-            line2      = request.POST.get('line2', '').strip(),
-            city       = request.POST.get('city', '').strip(),
-            state      = request.POST.get('state', '').strip(),
-            postcode   = request.POST.get('postcode', '').strip(),
-            country    = request.POST.get('country', '').strip(),
-            is_default = request.POST.get('is_default') == 'on',
-        )
+    form = AddressForm(request.POST or None)
+
+    if request.method == 'POST' and form.is_valid():
+        address            = form.save(commit=False)
+        address.user       = request.user
+        address.save()
         return redirect('accounts:addresses')
 
-    return render(request, 'accounts/address_form.html')
+    return render(request, 'accounts/address_form.html', {
+        'form':    form,
+        'address': None,
+    })
+
+
+@login_required
+def address_edit(request, pk):
+    address = get_object_or_404(Address, pk=pk, user=request.user)
+    form    = AddressForm(request.POST or None, instance=address)
+
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('accounts:addresses')
+
+    return render(request, 'accounts/address_form.html', {
+        'form':    form,
+        'address': address,
+    })
+
 
 
 @login_required
@@ -170,8 +183,27 @@ def profile(request):
         user.first_name = request.POST.get('first_name', '').strip()
         user.last_name  = request.POST.get('last_name', '').strip()
         user.phone      = request.POST.get('phone', '').strip()
+
+        # password change — only if fields are filled
+        current  = request.POST.get('current_password', '')
+        new1     = request.POST.get('new_password1', '')
+        new2     = request.POST.get('new_password2', '')
+
+        if current or new1 or new2:
+            if not user.check_password(current):
+                messages.error(request, 'Current password is incorrect.')
+                return render(request, 'accounts/profile.html')
+            if new1 != new2:
+                messages.error(request, 'New passwords do not match.')
+                return render(request, 'accounts/profile.html')
+            if len(new1) < 8:
+                messages.error(request, 'Password must be at least 8 characters.')
+                return render(request, 'accounts/profile.html')
+            user.set_password(new1)
+            update_session_auth_hash(request, user)
+
         user.save()
-        messages.success(request, 'Profile updated.')
+        messages.success(request, 'Profile updated successfully.')
         return redirect('accounts:profile')
 
     return render(request, 'accounts/profile.html')

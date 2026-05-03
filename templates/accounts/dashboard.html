@@ -34,14 +34,6 @@
           <div class="ac-stat-num">{{ request.user.addresses.count }}</div>
           <div class="ac-stat-label">Saved Addresses</div>
         </div>
-        <div class="ac-stat">
-          <div class="ac-stat-num">
-            {% with request.user.orders.filter as orders %}
-              {{ request.user.orders.all|length }}
-            {% endwith %}
-          </div>
-          <div class="ac-stat-label">Member Since {{ request.user.date_joined|date:"Y" }}</div>
-        </div>
       </div>
 
       <!-- RECENT ORDERS -->

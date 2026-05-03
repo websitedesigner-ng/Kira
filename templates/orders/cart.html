@@ -5,17 +5,23 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+<link rel="stylesheet" href="{% static 'css/account.css' %}">
 {% endblock %}
 
 {% block content %}
 
-  <section class="cart-hero">
-    <div class="cart-hero-inner">
+  <section class="ac-hero">
+    <div class="ac-hero-inner">
       <div class="section-eyebrow">Your Selection</div>
-      <h1 class="cart-title">Your <em>Bag</em></h1>
-      <p class="cart-sub">{{ count }} item{% if count != 1 %}s{% endif %}</p>
+      <h1 class="ac-hero-title">Your <em>Bag</em></h1>
     </div>
   </section>
+
+  {% if request.user.is_authenticated %}
+  <div class="ac-layout">
+    {% include "accounts/partials/_account_nav.html" %}
+    <div class="ac-main">
+  {% endif %}
 
   <div class="cart-layout">
 
@@ -100,10 +106,10 @@
           <span>Total</span>
           <span id="cartTotalFinal">£{{ total }}</span>
         </div>
+
         <a href="{% url 'orders:checkout' %}" class="btn-primary cart-checkout-btn">
           Proceed to Checkout
         </a>
-        
 
         <a href="{% url 'store:product_list' %}" class="cart-continue">
           ← Continue Shopping
@@ -122,6 +128,11 @@
     {% endif %}
 
   </div>
+
+  {% if request.user.is_authenticated %}
+    </div>{# close ac-main #}
+  </div>{# close ac-layout #}
+  {% endif %}
 
 {% endblock %}
 

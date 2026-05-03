@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Addresses — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/account.css' %}">
+<link rel="stylesheet" href="{% static 'css/address.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+  <section class="ac-hero">
+    <div class="ac-hero-inner">
+      <div class="section-eyebrow">My Account</div>
+      <h1 class="ac-hero-title">My <em>Addresses</em></h1>
+    </div>
+  </section>
+
+  <div class="ac-layout">
+
+    {% include "accounts/partials/_account_nav.html" %}
+
+    <div class="ac-main">
+
+      <div class="ac-section-header" style="margin-bottom:32px;">
+        <span class="ac-section-title">Saved Addresses</span>
+        <a href="{% url 'accounts:address_add' %}" class="btn-primary" style="padding:10px 20px;font-size:9px;">
+          + Add New
+        </a>
+      </div>
+
+      {% if addresses %}
+      <div class="ac-addr-grid">
+        {% for address in addresses %}
+        <div class="ac-addr-card {% if address.is_default %}ac-addr-card--default{% endif %}">
+
+          <div class="ac-addr-card-top">
+            {% if address.label %}
+            <span class="ac-addr-label">{{ address.label }}</span>
+            {% endif %}
+            {% if address.is_default %}
+            <span class="ac-addr-default-badge">Default</span>
+            {% endif %}
+          </div>
+
+          <div class="ac-addr-name">{{ address.full_name }}</div>
+
+          <div class="ac-addr-lines">
+            <p>{{ address.line1 }}</p>
+            {% if address.line2 %}<p>{{ address.line2 }}</p>{% endif %}
+            <p>
+              {{ address.city }}{% if address.state %}, {{ address.state }}{% endif %}
+              {% if address.postcode %} {{ address.postcode }}{% endif %}
+            </p>
+            <p>{{ address.country }}</p>
+            {% if address.phone %}<p>{{ address.phone }}</p>{% endif %}
+          </div>
+
+          <div class="ac-addr-actions">
+            {% if not address.is_default %}
+            <form method="POST" action="{% url 'accounts:address_set_default' address.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="ac-addr-btn">Set as Default</button>
+            </form>
+            {% endif %}
+            <form method="POST" action="{% url 'accounts:address_delete' address.pk %}"
+              onsubmit="return confirm('Remove this address?')">
+              {% csrf_token %}
+              <button type="submit" class="ac-addr-btn ac-addr-btn--delete">Remove</button>
+            </form>
+          </div>
+
+        </div>
+        {% endfor %}
+      </div>
+
+      {% else %}
+      <div class="ac-empty">
+        <div class="ac-empty-monogram">K</div>
+        <p class="ac-empty-text">No saved addresses yet.</p>
+        <a href="{% url 'accounts:address_add' %}" class="btn-outline">Add Address</a>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+{% endblock %}

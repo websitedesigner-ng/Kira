@@ -1,0 +1,376 @@
+/* ════════════════════════════════════════
+   ORDER DETAIL
+   ════════════════════════════════════════ */
+
+/* ─── BREADCRUMB ─── */
+.ac-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+}
+
+.ac-breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.ac-breadcrumb a:hover {
+    color: var(--kira-brown);
+}
+
+.ac-breadcrumb span:last-child {
+    color: var(--text-primary);
+}
+
+/* ─── STATUS TRACK ─── */
+.ac-track {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 48px;
+    padding: 32px 40px;
+    border: 1px solid var(--border-light);
+    background: var(--kira-cream);
+}
+
+/* The connecting line sits behind all steps */
+.ac-track-line {
+    position: absolute;
+    top: 43px; /* vertically centered with the dot */
+    left: calc(40px + 10px);  /* align with first dot center */
+    right: calc(40px + 10px); /* align with last dot center */
+    height: 1px;
+    background: var(--border-medium);
+    z-index: 0;
+}
+
+/* Filled progress line — driven by a CSS variable set inline */
+.ac-track-line::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--kira-gold);
+    width: var(--track-progress, 0%);
+    transition: width 0.6s ease;
+}
+
+.ac-track-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    z-index: 1;
+    flex: 1;
+}
+
+/* ── Dot ── */
+.ac-track-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-medium);
+    background: var(--bg-primary);
+    transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+    position: relative;
+}
+
+/* done: filled tan circle with checkmark */
+.ac-track-step.done .ac-track-dot {
+    background: var(--kira-tan);
+    border-color: var(--kira-tan);
+}
+
+/* checkmark inside done dots */
+.ac-track-step.done .ac-track-dot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23fff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='2,6 5,9 10,3'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 10px 10px;
+}
+
+/* active: gold with outer pulse ring */
+.ac-track-step.active .ac-track-dot {
+    background: var(--kira-gold);
+    border-color: var(--kira-gold);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--kira-gold) 20%, transparent);
+}
+
+/* cancelled: muted red */
+.ac-track-step.cancelled .ac-track-dot {
+    background: #c0392b;
+    border-color: #c0392b;
+}
+
+.ac-track-step.cancelled .ac-track-dot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23fff' stroke-width='1.5' stroke-linecap='round'%3E%3Cline x1='3' y1='3' x2='9' y2='9'/%3E%3Cline x1='9' y1='3' x2='3' y2='9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 10px 10px;
+}
+
+/* ── Labels ── */
+.ac-track-label {
+    font-family: "Jost", sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 300;
+    text-align: center;
+    line-height: 1.4;
+    transition: color 0.2s;
+}
+
+.ac-track-step.done .ac-track-label {
+    color: var(--text-secondary);
+}
+
+.ac-track-step.active .ac-track-label {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.ac-track-step.cancelled .ac-track-label {
+    color: #c0392b;
+    font-weight: 500;
+}
+
+/* ─── ORDER DETAIL LAYOUT ─── */
+.ac-od-layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 48px;
+    align-items: start;
+}
+
+/* ─── ITEMS ─── */
+.ac-od-item {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 20px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border-light);
+    align-items: start;
+}
+
+.ac-od-img-wrap {
+    display: block;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: var(--kira-cream);
+}
+
+.ac-od-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.ac-od-img-wrap:hover .ac-od-img {
+    transform: scale(1.04);
+}
+
+.ac-od-collection {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--kira-gold);
+    font-weight: 400;
+    margin-bottom: 4px;
+}
+
+.ac-od-name {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--text-primary);
+    text-decoration: none;
+    display: block;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    transition: color 0.2s;
+}
+
+.ac-od-name:hover {
+    color: var(--kira-brown);
+}
+
+.ac-od-variant,
+.ac-od-qty {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    line-height: 1.8;
+}
+
+.ac-od-price {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+/* ─── TOTALS ─── */
+.ac-od-totals {
+    padding: 24px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 320px;
+    margin-left: auto;
+}
+
+.ac-od-total-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    letter-spacing: 0.04em;
+}
+
+.ac-od-total-row--muted {
+    color: var(--text-muted);
+}
+
+.ac-od-total-row--final {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--text-primary);
+    padding-top: 16px;
+    border-top: 1px solid var(--border-light);
+    margin-top: 4px;
+}
+
+.ac-od-total-row--final span:last-child {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 24px;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    text-transform: none;
+}
+
+/* ─── SIDEBAR META ─── */
+.ac-od-sidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+.ac-od-meta-block {
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.ac-od-meta-block:first-child {
+    padding-top: 0;
+}
+
+.ac-od-meta-title {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    font-weight: 400;
+    margin-bottom: 16px;
+}
+
+.ac-od-meta-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    letter-spacing: 0.03em;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.ac-od-meta-row:last-child {
+    border-bottom: none;
+}
+
+.ac-od-meta-row span:first-child {
+    color: var(--text-muted);
+}
+
+.ac-od-address p {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    line-height: 1.9;
+    letter-spacing: 0.02em;
+}
+
+.ac-od-notes {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    letter-spacing: 0.02em;
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════ */
+
+@media (max-width: 860px) {
+    .ac-od-layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .ac-od-sidebar {
+        order: -1;
+    }
+
+    .ac-od-meta-block:first-child {
+        padding-top: 0;
+    }
+
+    .ac-track {
+        padding: 24px 20px;
+        overflow-x: auto;
+    }
+
+    .ac-track-line {
+        top: 35px;
+        left: calc(20px + 11px);
+        right: calc(20px + 11px);
+    }
+}
+
+@media (max-width: 480px) {
+    .ac-od-item {
+        grid-template-columns: 64px 1fr;
+    }
+
+    .ac-od-price {
+        grid-column: 1 / -1;
+        text-align: right;
+    }
+
+    .ac-track-label {
+        font-size: 8px;
+        letter-spacing: 0.1em;
+    }
+}

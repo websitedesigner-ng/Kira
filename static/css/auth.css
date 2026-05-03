@@ -229,6 +229,7 @@
     }
 }
 
+
 @media (max-width: 480px) {
     .auth-inner { padding: 40px 24px; }
     .auth-row   { grid-template-columns: 1fr; }

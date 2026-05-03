@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Order {{ order.reference }} — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/account.css' %}">
+<link rel="stylesheet" href="{% static 'css/order_detail.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+  <section class="ac-hero">
+    <div class="ac-hero-inner">
+      <div class="section-eyebrow">Order Detail</div>
+      <h1 class="ac-hero-title">Order <em>{{ order.reference }}</em></h1>
+    </div>
+  </section>
+
+  <div class="ac-layout">
+
+    {% include "accounts/partials/_account_nav.html" %}
+
+    <div class="ac-main">
+
+      <!-- BREADCRUMB -->
+      <nav class="ac-breadcrumb">
+        <a href="{% url 'accounts:order_history' %}">Orders</a>
+        <span>／</span>
+        <span>{{ order.reference }}</span>
+      </nav>
+      <!-- STATUS TRACK -->
+      {% with status=order.status %}
+      <div class="ac-track"
+           style="--track-progress: {% if status == 'confirmed' %}33%{% elif status == 'shipped' %}66%{% elif status == 'delivered' %}100%{% else %}0%{% endif %};">
+        <div class="ac-track-line"></div>
+      
+        <div class="ac-track-step
+          {% if status == 'pending' %}active
+          {% elif status == 'cancelled' %}cancelled
+          {% else %}done{% endif %}">
+          <div class="ac-track-dot"></div>
+          <span class="ac-track-label">Pending</span>
+        </div>
+      
+        <div class="ac-track-step
+          {% if status == 'confirmed' %}active
+          {% elif status in 'shipped,delivered' %}done
+          {% elif status == 'cancelled' %}cancelled{% endif %}">
+          <div class="ac-track-dot"></div>
+          <span class="ac-track-label">Confirmed</span>
+        </div>
+      
+        <div class="ac-track-step
+          {% if status == 'shipped' %}active
+          {% elif status == 'delivered' %}done
+          {% elif status == 'cancelled' %}cancelled{% endif %}">
+          <div class="ac-track-dot"></div>
+          <span class="ac-track-label">Shipped</span>
+        </div>
+      
+        <div class="ac-track-step
+          {% if status == 'delivered' %}active
+          {% elif status == 'cancelled' %}cancelled{% endif %}">
+          <div class="ac-track-dot"></div>
+          <span class="ac-track-label">Delivered</span>
+        </div>
+      
+      </div>
+      {% endwith %}
+      
+
+      <div class="ac-od-layout">
+
+        <!-- ITEMS -->
+        <div class="ac-od-items">
+          <div class="ac-section-header">
+            <span class="ac-section-title">Items Ordered</span>
+          </div>
+
+          {% for item in items %}
+          <div class="ac-od-item">
+            <a href="{{ item.product.get_absolute_url }}" class="ac-od-img-wrap">
+              <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="ac-od-img">
+            </a>
+            <div class="ac-od-info">
+              <div class="ac-od-collection">{{ item.product.collection.name|default:"" }}</div>
+              <a href="{{ item.product.get_absolute_url }}" class="ac-od-name">{{ item.product.name }}</a>
+              {% if item.variant %}
+              <div class="ac-od-variant">
+                {% if item.variant.size %}Size: {{ item.variant.size }}{% endif %}
+                {% if item.variant.color %} · {{ item.variant.color }}{% endif %}
+              </div>
+              {% endif %}
+              <div class="ac-od-qty">Qty: {{ item.quantity }}</div>
+            </div>
+            <div class="ac-od-price">£{{ item.price }}</div>
+          </div>
+          {% endfor %}
+
+          <!-- TOTALS -->
+          <div class="ac-od-totals">
+            <div class="ac-od-total-row">
+              <span>Subtotal</span>
+              <span>£{{ order.total }}</span>
+            </div>
+            <div class="ac-od-total-row ac-od-total-row--muted">
+              <span>Shipping</span>
+              <span>Complimentary</span>
+            </div>
+            <div class="ac-od-total-row ac-od-total-row--final">
+              <span>Total</span>
+              <span>£{{ order.total }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SIDEBAR INFO -->
+        <div class="ac-od-sidebar">
+
+          <!-- ORDER INFO -->
+          <div class="ac-od-meta-block">
+            <div class="ac-od-meta-title">Order Information</div>
+            <div class="ac-od-meta-row">
+              <span>Reference</span>
+              <span>{{ order.reference }}</span>
+            </div>
+            <div class="ac-od-meta-row">
+              <span>Date</span>
+              <span>{{ order.created_at|date:"d M Y" }}</span>
+            </div>
+            <div class="ac-od-meta-row">
+              <span>Status</span>
+              <span class="ac-order-status ac-status--{{ order.status }}">{{ order.get_status_display }}</span>
+            </div>
+          </div>
+
+          <!-- SHIPPING -->
+          <div class="ac-od-meta-block">
+            <div class="ac-od-meta-title">Shipping To</div>
+            <div class="ac-od-address">
+              <p>{{ order.shipping_name }}</p>
+              <p>{{ order.shipping_line1 }}</p>
+              {% if order.shipping_line2 %}<p>{{ order.shipping_line2 }}</p>{% endif %}
+              <p>
+                {{ order.shipping_city }}{% if order.shipping_state %}, {{ order.shipping_state }}{% endif %}
+                {% if order.shipping_postcode %} {{ order.shipping_postcode }}{% endif %}
+              </p>
+              <p>{{ order.shipping_country }}</p>
+              {% if order.shipping_phone %}<p>{{ order.shipping_phone }}</p>{% endif %}
+            </div>
+          </div>
+
+          {% if order.notes %}
+          <div class="ac-od-meta-block">
+            <div class="ac-od-meta-title">Notes</div>
+            <p class="ac-od-notes">{{ order.notes }}</p>
+          </div>
+          {% endif %}
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+{% endblock %}

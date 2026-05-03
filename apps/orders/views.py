@@ -8,7 +8,7 @@ from django.conf import settings
 from django.urls import reverse
 from apps.store.models import Product, ProductVariant
 from .cart import SessionCart
-from .models import Order, OrderItem
+from .models import Order, OrderItem, Address
 from . import paystack
 
 
@@ -67,6 +67,8 @@ def cart_remove(request, item_id):
 
     return redirect('orders:cart_detail')
 
+
+
 def checkout(request):
     cart         = SessionCart(request)
     express      = request.session.get('express_order')
@@ -101,87 +103,140 @@ def checkout(request):
 
     if not items:
         return redirect('orders:cart_detail')
-
+        
+    user_addresses = []
+    if request.user.is_authenticated:
+        user_addresses = list(request.user.addresses.order_by('-is_default', '-created_at'))
+    
     if request.method == 'POST':
-        name     = request.POST.get('name', '').strip()
-        email    = request.POST.get('email', '').strip()
-        phone    = request.POST.get('phone', '').strip()
-        address  = request.POST.get('address', '').strip()
-        address2 = request.POST.get('address2', '').strip()
-        city     = request.POST.get('city', '').strip()
-        state    = request.POST.get('state', '').strip()
-        postcode = request.POST.get('postcode', '').strip()
-        country  = request.POST.get('country', '').strip()
-        notes    = request.POST.get('notes', '').strip()
-
-        if not all([name, email, address, city, country]):
-            return render(request, 'orders/checkout.html', {
-                'items':        items,
-                'total':        total,
-                'express_item': express_item,
-                'error':        'Please fill in all required fields.',
-                'post':         request.POST,
-            })
-
-        order = Order.objects.create(
-            user = request.user if request.user.is_authenticated else None,
-            reference         = uuid.uuid4().hex[:12].upper(),
-            customer_name     = name,
-            customer_email    = email,
-            customer_phone    = phone,
-            shipping_name     = name,
-            shipping_phone    = phone,
-            shipping_line1    = address,
-            shipping_line2    = address2,
-            shipping_city     = city,
-            shipping_state    = state,
-            shipping_postcode = postcode,
-            shipping_country  = country,
-            notes             = notes,
-            total             = total,
-            status            = 'pending',
-        )
-
-        for item in items:
-            OrderItem.objects.create(
-                order    = order,
-                product  = item.product,
-                variant  = item.variant,
-                quantity = item.quantity,
-                price    = item.variant.final_price if item.variant else item.product.price,
-            )
-
-        request.session['pending_order_ref'] = order.reference
-
-        # Clear express order from session
-        request.session.pop('express_order', None)
-
-        callback_url = request.build_absolute_uri(
-            reverse('orders:payment_callback')
-        )
-        try:
-            authorization_url = paystack.initialize_payment(
-                email        = email,
-                amount_naira = order.total,
-                reference    = order.reference,
-                callback_url = callback_url,
-                metadata     = {'order_reference': order.reference, 'customer_name': name},
-            )
-            return redirect(authorization_url)
-        except Exception:
-            order.delete()
-            return render(request, 'orders/checkout.html', {
-                'items':        items,
-                'total':        total,
-                'express_item': express_item,
-                'error':        'Payment initialisation failed. Please try again.',
-                'post':         request.POST,
-            })
-
+      email = (
+          request.user.email
+          if request.user.is_authenticated
+          else request.POST.get('email', '').strip()
+      )
+      notes               = request.POST.get('notes', '').strip()
+      selected_address_id = request.POST.get('selected_address', 'custom')
+      saved_address_obj   = None
+  
+      if (request.user.is_authenticated
+              and user_addresses
+              and selected_address_id != 'custom'):
+          # ── Saved address path ──
+          try:
+              saved_address_obj = request.user.addresses.get(id=selected_address_id)
+              snap     = saved_address_obj.as_snapshot()
+              name     = snap['full_name']
+              phone    = snap['phone']
+              address  = snap['line1']
+              address2 = snap['line2']
+              city     = snap['city']
+              state    = snap['state']
+              postcode = snap['postcode']
+              country  = snap['country']
+          except Address.DoesNotExist:
+              saved_address_obj   = None
+              selected_address_id = 'custom'
+  
+      if selected_address_id == 'custom' or not saved_address_obj:
+          # ── Custom / guest path ──
+          name     = request.POST.get('name', '').strip()
+          phone    = request.POST.get('phone', '').strip()
+          address  = request.POST.get('address', '').strip()
+          address2 = request.POST.get('address2', '').strip()
+          city     = request.POST.get('city', '').strip()
+          state    = request.POST.get('state', '').strip()
+          postcode = request.POST.get('postcode', '').strip()
+          country  = request.POST.get('country', '').strip()
+  
+      # ── Validation ──
+      if not all([name, email, phone, address, city, state, postcode, country]):
+          return render(request, 'orders/checkout.html', {
+              'items':          items,
+              'total':          total,
+              'express_item':   express_item,
+              'user_addresses': user_addresses,
+              'error':          'Please fill in all required fields.',
+              'post':           request.POST,
+          })
+  
+      # ── Save new address if requested ──
+      if (selected_address_id == 'custom'
+              and request.user.is_authenticated
+              and request.POST.get('save_address')):
+          Address.objects.create(
+              user       = request.user,
+              full_name  = name,
+              phone      = phone,
+              line1      = address,
+              line2      = address2,
+              city       = city,
+              state      = state,
+              postcode   = postcode,
+              country    = country,
+              is_default = not user_addresses,
+          )
+  
+      # ── Create order ──
+      order = Order.objects.create(
+          user              = request.user if request.user.is_authenticated else None,
+          shipping_address  = saved_address_obj,
+          reference         = uuid.uuid4().hex[:12].upper(),
+          customer_name     = name,
+          customer_email    = email,
+          customer_phone    = phone,
+          shipping_name     = name,
+          shipping_phone    = phone,
+          shipping_line1    = address,
+          shipping_line2    = address2,
+          shipping_city     = city,
+          shipping_state    = state,
+          shipping_postcode = postcode,
+          shipping_country  = country,
+          notes             = notes,
+          total             = total,
+          status            = 'pending',
+      )
+  
+      for item in items:
+          OrderItem.objects.create(
+              order    = order,
+              product  = item.product,
+              variant  = item.variant,
+              quantity = item.quantity,
+              price    = item.variant.final_price if item.variant else item.product.price,
+          )
+  
+      request.session['pending_order_ref'] = order.reference
+      request.session.pop('express_order', None)
+  
+      callback_url = request.build_absolute_uri(
+          reverse('orders:payment_callback')
+      )
+      try:
+          authorization_url = paystack.initialize_payment(
+              email        = email,
+              amount_naira = order.total,
+              reference    = order.reference,
+              callback_url = callback_url,
+              metadata     = {'order_reference': order.reference, 'customer_name': name},
+          )
+          return redirect(authorization_url)
+      except Exception:
+          order.delete()
+          return render(request, 'orders/checkout.html', {
+              'items':          items,
+              'total':          total,
+              'express_item':   express_item,
+              'user_addresses': user_addresses,
+              'error':          'Payment initialisation failed. Please try again.',
+              'post':           request.POST,
+          })
+    
     return render(request, 'orders/checkout.html', {
         'items':        items,
         'total':        total,
         'express_item': express_item,
+        'user_addresses': user_addresses,
     })
 
 
@@ -257,6 +312,7 @@ def order_confirmed(request, reference):
         'order': order,
         'items': order.items.select_related('product', 'variant').all(),
     })
+
 
 def order_now(request, product_id):
     product    = get_object_or_404(Product, id=product_id, is_active=True)

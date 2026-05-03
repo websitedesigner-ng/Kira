@@ -17,71 +17,240 @@
   </section>
 
   <div class="co-layout">
-
     <!-- FORM -->
     <div class="co-form-col">
-
+    
       {% if error %}
       <div class="co-error">{{ error }}</div>
       {% endif %}
-
+    
       <form method="POST" id="checkoutForm">
         {% csrf_token %}
-
+    
+        <!-- ─── CONTACT ─── -->
         <div class="co-section">
           <div class="co-section-title">Contact Information</div>
           <div class="co-fields">
-            <div class="co-field co-field--full">
-              <label class="co-label">Full Name <span>*</span></label>
-              <input type="text" name="name" class="co-input"
-                value="{{ post.name|default:'' }}" required autocomplete="name">
-            </div>
-            <div class="co-field">
-              <label class="co-label">Email Address <span>*</span></label>
-              <input type="email" name="email" class="co-input"
-                value="{{ post.email|default:'' }}" required autocomplete="email">
-            </div>
-            <div class="co-field">
-              <label class="co-label">Phone Number</label>
-              <input type="tel" name="phone" class="co-input"
-                value="{{ post.phone|default:'' }}" autocomplete="tel">
-            </div>
+        
+            {% if not request.user.is_authenticated %}
+              <div class="co-field co-field--full">
+                <label class="co-label">Full Name <span>*</span></label>
+                <input type="text" name="name" class="co-input"
+                  value="{{ post.name|default:'' }}"
+                  required autocomplete="name">
+              </div>
+              <div class="co-field">
+                <label class="co-label">Email Address <span>*</span></label>
+                <input type="email" name="email" class="co-input"
+                  value="{{ post.email|default:'' }}"
+                  required autocomplete="email">
+              </div>
+              <div class="co-field">
+                <label class="co-label">Phone Number <span>*</span></label>
+                <input type="tel" name="phone" class="co-input"
+                  value="{{ post.phone|default:'' }}"
+                  required autocomplete="tel">
+              </div>
+        
+            {% elif not user_addresses %}
+              <div class="co-field co-field--full">
+                <label class="co-label">Full Name <span>*</span></label>
+                <input type="text" name="name" class="co-input"
+                  value="{{ post.name|default:'' }}"
+                  required autocomplete="name">
+              </div>
+              <div class="co-field co-field--full">
+                <label class="co-label">Phone Number <span>*</span></label>
+                <input type="tel" name="phone" class="co-input"
+                  value="{{ post.phone|default:'' }}"
+                  required autocomplete="tel">
+              </div>
+        
+            {% else %}
+              <p class="co-auth-email">
+                Ordering as <strong>{{ request.user.email }}</strong>
+              </p>
+        
+            {% endif %}
+        
           </div>
         </div>
-
+        
+        <!-- ─── SHIPPING ADDRESS ─── -->
         <div class="co-section">
           <div class="co-section-title">Shipping Address</div>
-          <div class="co-fields">
-            <div class="co-field co-field--full">
-              <label class="co-label">Street Address <span>*</span></label>
-              <input type="text" name="address" class="co-input"
-                value="{{ post.address|default:'' }}" required autocomplete="street-address">
+        
+          {% if request.user.is_authenticated and user_addresses %}
+        
+            <!-- SAVED ADDRESS CARDS -->
+            <div class="co-addr-selector" id="addrSelector">
+              {% for addr in user_addresses %}
+              <label class="co-addr-card {% if addr.is_default %}co-addr-card--default{% endif %}">
+                <input type="radio" name="selected_address" value="{{ addr.id }}"
+                  {% if addr.is_default and not post %}checked{% endif %}>
+                <div class="co-addr-card-inner">
+                  <div class="co-addr-card-top">
+                    {% if addr.label %}<span class="co-addr-label">{{ addr.label }}</span>{% endif %}
+                    {% if addr.is_default %}<span class="co-addr-default-badge">Default</span>{% endif %}
+                  </div>
+                  <div class="co-addr-name">{{ addr.full_name }}</div>
+                  <div class="co-addr-lines">
+                    <p>{{ addr.line1 }}{% if addr.line2 %}, {{ addr.line2 }}{% endif %}</p>
+                    <p>
+                      {{ addr.country }}{% if addr.state %}, {{ addr.state }}{% endif %},
+                      {{ addr.city }}{% if addr.postcode %} {{ addr.postcode }}{% endif %}
+                    </p>
+                    {% if addr.phone %}<p>{{ addr.phone }}</p>{% endif %}
+                  </div>
+                </div>
+              </label>
+              {% endfor %}
+        
+              <label class="co-addr-card co-addr-card--new">
+                <input type="radio" name="selected_address" value="custom"
+                  {% if post.selected_address == 'custom' %}checked{% endif %}>
+                <div class="co-addr-card-inner co-addr-card-inner--new">
+                  <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+                  <span>Use a different address</span>
+                </div>
+              </label>
             </div>
-            <div class="co-field">
-              <label class="co-label">City <span>*</span></label>
-              <input type="text" name="city" class="co-input"
-                value="{{ post.city|default:'' }}" required autocomplete="address-level2">
+        
+            <!-- CUSTOM ADDRESS FIELDS -->
+            <div class="co-custom-fields" id="customFields"
+              style="{% if post.selected_address == 'custom' %}display:block{% else %}display:none{% endif %}">
+              <div class="co-fields">
+        
+                <div class="co-field">
+                  <label class="co-label">Full Name <span>*</span></label>
+                  <input type="text" name="name" class="co-input" required
+                    data-required="true"
+                    value="{{ post.name|default:'' }}"
+                    autocomplete="name">
+                </div>
+                <div class="co-field">
+                  <label class="co-label">Phone Number <span>*</span></label>
+                  <input type="tel" name="phone" class="co-input"
+                    data-required="true"
+                    required
+                    value="{{ post.phone|default:'' }}"
+                    autocomplete="tel">
+                </div>
+                <div class="co-field co-field--full">
+                  <label class="co-label">Address Line 1 <span>*</span></label>
+                  <input type="text" name="address" class="co-input"
+                    data-required="true"
+                    required
+                    value="{{ post.address|default:'' }}"
+                    autocomplete="address-line1">
+                </div>
+                <div class="co-field co-field--full">
+                  <label class="co-label">Address Line 2</label>
+                  <input type="text" name="address2" class="co-input"
+                    value="{{ post.address2|default:'' }}"
+                    autocomplete="address-line2">
+                </div>
+                <div class="co-field">
+                  <label class="co-label">Country <span>*</span></label>
+                  <input type="text" name="country" class="co-input"
+                    data-required="true"
+                    required
+                    value="{{ post.country|default:'' }}"
+                    autocomplete="country-name">
+                </div>
+                <div class="co-field">
+                  <label class="co-label">State / Region <span>*</span></label>
+                  <input type="text" name="state" class="co-input" data-required="true" required
+                    value="{{ post.state|default:'' }}"
+                    autocomplete="address-level1">
+                </div>
+                <div class="co-field">
+                  <label class="co-label">City <span>*</span></label>
+                  <input type="text" name="city" class="co-input"
+                    data-required="true" required
+                    value="{{ post.city|default:'' }}"
+                    autocomplete="address-level2">
+                </div>
+                <div class="co-field">
+                  <label class="co-label">Postcode <span>*</span></label>
+                  <input type="text" name="postcode" class="co-input" data-required="true" required
+                    value="{{ post.postcode|default:'' }}"
+                    autocomplete="postal-code">
+                </div>
+        
+              </div>
+        
+              <label class="co-save-address">
+                <input type="checkbox" name="save_address"
+                  {% if post.save_address %}checked{% endif %}>
+                <span class="co-save-address-box"></span>
+                <span class="co-save-address-text">Save this address to my account</span>
+              </label>
             </div>
-            <div class="co-field">
-              <label class="co-label">Country <span>*</span></label>
-              <input type="text" name="country" class="co-input"
-                value="{{ post.country|default:'' }}" required autocomplete="country-name">
+        
+          {% else %}
+        
+            <!-- GUEST / NO SAVED ADDRESSES -->
+            <div class="co-fields">
+              <div class="co-field co-field--full">
+                <label class="co-label">Address Line 1 <span>*</span></label>
+                <input type="text" name="address" class="co-input"
+                  value="{{ post.address|default:'' }}"
+                  required autocomplete="address-line1">
+              </div>
+              <div class="co-field co-field--full">
+                <label class="co-label">Address Line 2</label>
+                <input type="text" name="address2" class="co-input"
+                  value="{{ post.address2|default:'' }}"
+                  autocomplete="address-line2">
+              </div>
+              <div class="co-field">
+                <label class="co-label">Country <span>*</span></label>
+                <input type="text" name="country" class="co-input"
+                  value="{{ post.country|default:'' }}"
+                  required autocomplete="country-name">
+              </div>
+              <div class="co-field">
+                <label class="co-label">State / Region <span>*</span></label>
+                <input type="text" name="state" class="co-input"
+                  value="{{ post.state|default:'' }}"
+                  autocomplete="address-level1">
+              </div>
+              <div class="co-field">
+                <label class="co-label">City <span>*</span></label>
+                <input type="text" name="city" class="co-input"
+                  value="{{ post.city|default:'' }}"
+                  required autocomplete="address-level2">
+              </div>
+              <div class="co-field">
+                <label class="co-label">Postcode <span>*</span></label>
+                <input type="text" name="postcode" class="co-input"
+                  value="{{ post.postcode|default:'' }}"
+                  autocomplete="postal-code">
+              </div>
             </div>
+        
+          {% endif %}
+        
+          <!-- NOTES — always shown -->
+          <div class="co-fields" style="margin-top: 24px;">
             <div class="co-field co-field--full">
               <label class="co-label">Order Notes</label>
               <textarea name="notes" class="co-input co-textarea"
-                rows="3" placeholder="Any special requests or instructions…">{{ post.notes|default:'' }}</textarea>
+                rows="3"
+                placeholder="Any special requests or instructions…">{{ post.notes|default:'' }}</textarea>
             </div>
           </div>
+        
         </div>
-
+            
         <button type="submit" class="btn-primary co-submit">
           Place Order
         </button>
-
+    
       </form>
     </div>
-
+    
     <!-- ORDER SUMMARY -->
     <div class="co-summary-col">
       <div class="co-summary">
@@ -132,4 +301,28 @@
 
   </div>
 
+{% endblock %}
+{% block extra_js %}
+<script>
+  // Show/hide custom address fields based on radio selection
+  const radios   = document.querySelectorAll('input[name="selected_address"]');
+  const custom   = document.getElementById('customFields');
+  const inputs   = custom ? custom.querySelectorAll('input, textarea') : [];
+
+  function syncCustomFields() {
+    const selected = document.querySelector('input[name="selected_address"]:checked');
+    const isCustom = selected && selected.value === 'custom';
+    if (!custom) return;
+
+    custom.style.display = isCustom ? 'block' : 'none';
+
+    // Toggle required on address fields only when custom is visible
+    inputs.forEach(el => {
+      if (el.dataset.required === 'true') el.required = isCustom;
+    });
+  }
+
+  radios.forEach(r => r.addEventListener('change', syncCustomFields));
+  syncCustomFields(); // run on load in case of POST re-render
+</script>
 {% endblock %}

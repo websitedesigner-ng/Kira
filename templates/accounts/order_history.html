@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Order History — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/account.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <section class="ac-hero">
+    <div class="ac-hero-inner">
+      <div class="section-eyebrow">My Account</div>
+      <h1 class="ac-hero-title">Order <em>History</em></h1>
+    </div>
+  </section>
+
+  <div class="ac-layout">
+
+    {% include "accounts/partials/_account_nav.html" %}
+
+    <div class="ac-main">
+
+      {% if orders %}
+
+      <!-- TOOLBAR -->
+      <div class="ac-section-header" style="margin-bottom:0;">
+        <span class="ac-section-title">{{ orders|length }} Order{% if orders|length != 1 %}s{% endif %}</span>
+      </div>
+
+      <div class="ac-orders">
+        {% for order in orders %}
+        <a href="{% url 'accounts:order_detail' order.reference %}" class="ac-order-row">
+          <div class="ac-order-ref">
+            <span class="ac-order-ref-num">{{ order.reference }}</span>
+            <span class="ac-order-date">{{ order.created_at|date:"d M Y" }}</span>
+          </div>
+          <div class="ac-order-items-preview">
+            {% for item in order.items.all|slice:":3" %}
+            <div class="ac-order-thumb">
+              {% if item.product.image %}
+              <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+              {% endif %}
+            </div>
+            {% endfor %}
+            {% if order.items.count > 3 %}
+            <div class="ac-order-thumb ac-order-thumb--more">+{{ order.items.count|add:"-3" }}</div>
+            {% endif %}
+          </div>
+          <div class="ac-order-meta">
+            <span class="ac-order-total">£{{ order.total }}</span>
+            <span class="ac-order-status ac-status--{{ order.status }}">{{ order.get_status_display }}</span>
+          </div>
+          <svg class="ac-order-arrow" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+        {% endfor %}
+      </div>
+
+      {% else %}
+      <div class="ac-empty" style="padding:80px 0;">
+        <div class="ac-empty-monogram">K</div>
+        <p class="ac-empty-text">You have no orders yet.</p>
+        <a href="{% url 'store:product_list' %}" class="btn-outline">Start Shopping</a>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+{% endblock %}

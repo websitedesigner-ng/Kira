@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Add Address — KIRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/account.css' %}">
+<link rel="stylesheet" href="{% static 'css/address.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <section class="ac-hero">
+    <div class="ac-hero-inner">
+      <div class="section-eyebrow">My Account</div>
+      <h1 class="ac-hero-title">Add <em>Address</em></h1>
+    </div>
+  </section>
+
+  <div class="ac-layout">
+
+    {% include "accounts/partials/_account_nav.html" %}
+
+    <div class="ac-main">
+
+      <nav class="ac-breadcrumb">
+        <a href="{% url 'accounts:addresses' %}">Addresses</a>
+        <span>／</span>
+        <span>New Address</span>
+      </nav>
+
+      {% if error %}
+      <div class="auth-error" style="margin-bottom:24px;">{{ error }}</div>
+      {% endif %}
+
+      <form method="POST" class="ac-addr-form">
+        {% csrf_token %}
+
+        <div class="ac-addr-form-section">
+          <div class="ac-section-header" style="margin-bottom:28px;">
+            <span class="ac-section-title">Address Details</span>
+          </div>
+
+          <div class="ac-addr-fields">
+
+            <div class="ac-addr-field ac-addr-field--half">
+              <label class="ac-addr-label-field">
+                Label
+                <span class="ac-addr-label-hint">e.g. Home, Office</span>
+              </label>
+              <input type="text" name="label" class="ac-addr-input"
+                placeholder="Home" value="{{ post.label|default:'' }}">
+            </div>
+
+            <div class="ac-addr-field ac-addr-field--half">
+              <label class="ac-addr-label-field">Full Name <span>*</span></label>
+              <input type="text" name="full_name" class="ac-addr-input"
+                required autocomplete="name" value="{{ post.full_name|default:'' }}">
+            </div>
+
+            <div class="ac-addr-field ac-addr-field--half">
+              <label class="ac-addr-label-field">Phone Number<span>*</span></label>
+              <input type="tel" name="phone" class="ac-addr-input" required
+                autocomplete="tel" value="{{ post.phone|default:'' }}">
+            </div>
+
+            <div class="ac-addr-field ac-addr-field--full">
+              <label class="ac-addr-label-field">Address Line 1 <span>*</span></label>
+              <input type="text" name="line1" class="ac-addr-input"
+                required autocomplete="address-line1" value="{{ post.line1|default:'' }}">
+            </div>
+
+            <div class="ac-addr-field ac-addr-field--full">
+              <label class="ac-addr-label-field">Address Line 2</label>
+              <input type="text" name="line2" class="ac-addr-input"
+                autocomplete="address-line2" value="{{ post.line2|default:'' }}">
+            </div>
+
+            <div class="ac-addr-field ac-addr-field--half">
+              <label class="ac-addr-label-field">Country <span>*</span></label>
+              <input type="text" name="country" class="ac-addr-input"
+                required autocomplete="country-name" value="{{ post.country|default:'' }}">
+            </div>
+
+            <div class="ac-addr-field ac-addr-field--half">
+              <label class="ac-addr-label-field">State / Region <span>*</span></label>
+              <input type="text" name="state" class="ac-addr-input" required
+                autocomplete="address-level1" value="{{ post.state|default:'' }}">
+            </div>
+            
+            <div class="ac-addr-field ac-addr-field--half">
+              <label class="ac-addr-label-field">City <span>*</span></label>
+              <input type="text" name="city" class="ac-addr-input"
+                required autocomplete="address-level2" value="{{ post.city|default:'' }}">
+            </div>
+
+            <div class="ac-addr-field ac-addr-field--half">
+              <label class="ac-addr-label-field">Postcode <span>*</span></label>
+              <input type="text" name="postcode" class="ac-addr-input" required
+                autocomplete="postal-code" value="{{ post.postcode|default:'' }}">
+            </div>
+
+            <div class="ac-addr-field ac-addr-field--full">
+              <label class="ac-addr-check-label">
+                <input type="checkbox" name="is_default"
+                  {% if post.is_default %}checked{% endif %}>
+                <span class="ac-addr-checkbox"></span>
+                Set as my default address
+              </label>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="ac-addr-form-actions">
+          <button type="submit" class="btn-primary">Save Address</button>
+          <a href="{% url 'accounts:addresses' %}" class="btn-outline">Cancel</a>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

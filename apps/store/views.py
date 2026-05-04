@@ -53,12 +53,16 @@ def product_list(request):
     paginator = Paginator(qs, 9)
     page      = request.GET.get('page')
     products  = paginator.get_page(page)
-
+    
     return render(request, 'store/product_list.html', {
-        'filter':          f,
-        'products':        products,
-        'active_category': f.form.cleaned_data.get('category') if f.form.is_valid() else None,
+        'filter':            f,
+        'products':          products,
+        'active_category':   f.form.cleaned_data.get('category') if f.form.is_valid() else None,
+        'active_collection': f.form.cleaned_data.get('collection') if f.form.is_valid() else None,
+        'active_tags':       request.GET.getlist('tag'),
     })
+    
+    
 
 
 

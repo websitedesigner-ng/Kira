@@ -57,6 +57,12 @@
               <svg class="pl-toggle-arrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </button>
             <div class="pl-filter-body open" id="filter-category">
+              <label class="pl-check-label">
+                <input type="radio" name="category" value=""
+                  {% if not filter.form.category.value %}checked{% endif %}>
+                <span class="pl-check-custom"></span>
+                All Categories
+              </label>
               {% for choice in filter.form.category.field.queryset %}
               <label class="pl-check-label">
                 <input type="radio" name="category" value="{{ choice.slug }}"
@@ -67,7 +73,7 @@
               {% endfor %}
             </div>
           </div>
-
+          
           <!-- COLLECTION -->
           <div class="pl-filter-group">
             <button type="button" class="pl-filter-toggle" data-target="filter-collection">
@@ -75,6 +81,12 @@
               <svg class="pl-toggle-arrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </button>
             <div class="pl-filter-body open" id="filter-collection">
+              <label class="pl-check-label">
+                <input type="radio" name="collection" value=""
+                  {% if not filter.form.collection.value %}checked{% endif %}>
+                <span class="pl-check-custom"></span>
+                All Collections
+              </label>
               {% for choice in filter.form.collection.field.queryset %}
               <label class="pl-check-label">
                 <input type="radio" name="collection" value="{{ choice.slug }}"
@@ -85,7 +97,33 @@
               {% endfor %}
             </div>
           </div>
-
+          
+          <!-- BADGE -->
+          <div class="pl-filter-group">
+            <button type="button" class="pl-filter-toggle" data-target="filter-badge">
+              Label
+              <svg class="pl-toggle-arrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="pl-filter-body open" id="filter-badge">
+              <label class="pl-check-label">
+                <input type="radio" name="badge" value=""
+                  {% if not filter.form.badge.value %}checked{% endif %}>
+                <span class="pl-check-custom"></span>
+                All Labels
+              </label>
+              {% for value, label in filter.form.badge.field.choices %}
+              {% if value %}
+              <label class="pl-check-label">
+                <input type="radio" name="badge" value="{{ value }}"
+                  {% if filter.form.badge.value == value %}checked{% endif %}>
+                <span class="pl-check-custom"></span>
+                {{ label }}
+              </label>
+              {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+          
           <!-- PRICE -->
           <div class="pl-filter-group">
             <button type="button" class="pl-filter-toggle" data-target="filter-price">
@@ -106,26 +144,6 @@
                     value="{{ filter.form.max_price.value|default:'' }}" class="pl-price-input">
                 </div>
               </div>
-            </div>
-          </div>
-
-          <!-- BADGE -->
-          <div class="pl-filter-group">
-            <button type="button" class="pl-filter-toggle" data-target="filter-badge">
-              Label
-              <svg class="pl-toggle-arrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-            </button>
-            <div class="pl-filter-body open" id="filter-badge">
-              {% for value, label in filter.form.badge.field.choices %}
-              {% if value %}
-              <label class="pl-check-label">
-                <input type="radio" name="badge" value="{{ value }}"
-                  {% if filter.form.badge.value == value %}checked{% endif %}>
-                <span class="pl-check-custom"></span>
-                {{ label }}
-              </label>
-              {% endif %}
-              {% endfor %}
             </div>
           </div>
 
@@ -168,12 +186,35 @@
             <a href="?{% for k,v in request.GET.items %}{% if k != 'q' %}{{ k }}={{ v }}&{% endif %}{% endfor %}" class="pl-tag-remove">×</a>
           </span>
         {% endif %}
+      
         {% if request.GET.category %}
           <span class="pl-filter-tag">
             {{ active_category.name }}
             <a href="?{% for k,v in request.GET.items %}{% if k != 'category' %}{{ k }}={{ v }}&{% endif %}{% endfor %}" class="pl-tag-remove">×</a>
           </span>
         {% endif %}
+      
+        {% if request.GET.collection %}
+          <span class="pl-filter-tag">
+            {{ request.GET.collection }}
+            <a href="?{% for k,v in request.GET.items %}{% if k != 'collection' %}{{ k }}={{ v }}&{% endif %}{% endfor %}" class="pl-tag-remove">×</a>
+          </span>
+        {% endif %}
+      
+        {% if request.GET.badge %}
+          <span class="pl-filter-tag">
+            {{ request.GET.badge }}
+            <a href="?{% for k,v in request.GET.items %}{% if k != 'badge' %}{{ k }}={{ v }}&{% endif %}{% endfor %}" class="pl-tag-remove">×</a>
+          </span>
+        {% endif %}
+      
+        {% for tag in active_tags %}
+          <span class="pl-filter-tag">
+            {{ tag }}
+            <a href="?{% for k,v in request.GET.items %}{% if k != 'tag' or v != tag %}{{ k }}={{ v }}&{% endif %}{% endfor %}" class="pl-tag-remove">×</a>
+          </span>
+        {% endfor %}
+      
         {% if request.GET.min_price or request.GET.max_price %}
           <span class="pl-filter-tag">
             £{{ request.GET.min_price|default:'0' }} — £{{ request.GET.max_price|default:'∞' }}
@@ -182,7 +223,7 @@
         {% endif %}
       </div>
       {% endif %}
-
+      
       <!-- GRID -->
       {% if products %}
       <div class="pl-grid">

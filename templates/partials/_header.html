@@ -10,53 +10,53 @@
 
     <nav class="nav-left">
 
-      <!-- WOMEN -->
       <div class="nav-item">
         <a href="{% url 'store:product_list' %}?tag=women">Women</a>
         <div class="mega-menu">
           <div class="mega-col">
-            <div class="mega-col-title">New Arrivals</div>
-            <a href="{% url 'store:product_list' %}?tag=women&new_arrival=true">View All New</a>
+            <div class="mega-col-title">Shop</div>
+            <a href="{% url 'store:product_list' %}?tag=women">All Women</a>
+            <a href="{% url 'store:product_list' %}?tag=women&new_arrival=true">New Arrivals</a>
             <a href="{% url 'store:collection_list' %}">Collections</a>
             <a href="{% url 'store:lookbook_list' %}">Lookbooks</a>
           </div>
           <div class="mega-col">
             <div class="mega-col-title">Bags</div>
-            <a href="{% url 'store:product_list' %}?tag=women&tag=evening-bags">Evening Bags</a>
-            <a href="{% url 'store:product_list' %}?tag=women&tag=totes">Totes</a>
-            <a href="{% url 'store:product_list' %}?tag=women&tag=clutches">Clutches</a>
-            <a href="{% url 'store:product_list' %}?tag=women&tag=shoulder-bags">Shoulder Bags</a>
+            <a href="{% url 'store:product_list' %}?tag=evening-bags">Evening Bags</a>
+            <a href="{% url 'store:product_list' %}?tag=totes">Totes</a>
+            <a href="{% url 'store:product_list' %}?tag=clutches">Clutches</a>
+            <a href="{% url 'store:product_list' %}?tag=shoulder-bags">Shoulder Bags</a>
           </div>
           <div class="mega-col">
             <div class="mega-col-title">Ready-to-Wear</div>
-            <a href="{% url 'store:product_list' %}?tag=women&tag=dresses">Dresses</a>
-            <a href="{% url 'store:product_list' %}?tag=women&tag=coats">Coats</a>
-            <a href="{% url 'store:product_list' %}?tag=women&tag=knitwear">Knitwear</a>
-            <a href="{% url 'store:product_list' %}?tag=women&tag=trousers">Trousers</a>
+            <a href="{% url 'store:product_list' %}?tag=dresses">Dresses</a>
+            <a href="{% url 'store:product_list' %}?tag=coats">Coats</a>
+            <a href="{% url 'store:product_list' %}?tag=knitwear">Knitwear</a>
+            <a href="{% url 'store:product_list' %}?tag=trousers">Trousers</a>
           </div>
         </div>
       </div>
 
-      <!-- MEN -->
       <div class="nav-item">
         <a href="{% url 'store:product_list' %}?tag=men">Men</a>
         <div class="mega-menu">
           <div class="mega-col">
-            <div class="mega-col-title">New Arrivals</div>
-            <a href="{% url 'store:product_list' %}?tag=men&new_arrival=true">View All New</a>
+            <div class="mega-col-title">Shop</div>
+            <a href="{% url 'store:product_list' %}?tag=men">All Men</a>
+            <a href="{% url 'store:product_list' %}?tag=men&new_arrival=true">New Arrivals</a>
             <a href="{% url 'store:collection_list' %}">Collections</a>
           </div>
           <div class="mega-col">
             <div class="mega-col-title">Bags</div>
-            <a href="{% url 'store:product_list' %}?tag=men&tag=briefcases">Briefcases</a>
-            <a href="{% url 'store:product_list' %}?tag=men&tag=backpacks">Backpacks</a>
-            <a href="{% url 'store:product_list' %}?tag=men&tag=cardholders">Cardholders</a>
+            <a href="{% url 'store:product_list' %}?tag=briefcases">Briefcases</a>
+            <a href="{% url 'store:product_list' %}?tag=backpacks">Backpacks</a>
+            <a href="{% url 'store:product_list' %}?tag=cardholders">Cardholders</a>
           </div>
           <div class="mega-col">
             <div class="mega-col-title">Ready-to-Wear</div>
-            <a href="{% url 'store:product_list' %}?tag=men&tag=suits">Suits</a>
-            <a href="{% url 'store:product_list' %}?tag=men&tag=outerwear">Outerwear</a>
-            <a href="{% url 'store:product_list' %}?tag=men&tag=shirts">Shirts</a>
+            <a href="{% url 'store:product_list' %}?tag=suits">Suits</a>
+            <a href="{% url 'store:product_list' %}?tag=outerwear">Outerwear</a>
+            <a href="{% url 'store:product_list' %}?tag=shirts">Shirts</a>
           </div>
         </div>
       </div>
@@ -67,43 +67,39 @@
 
     </nav>
 
-    <!-- LOGO -->
     <a href="{% url 'store:home' %}" class="logo">
       <span class="logo-text">KIRA</span>
       <span class="logo-sub">Maison de Luxe</span>
     </a>
 
-    <!-- RIGHT ICONS -->
     <div class="nav-right">
 
-      <!-- SEARCH -->
       <button class="icon-btn search-toggle" id="searchToggle" aria-label="Search" aria-expanded="false">
         <svg class="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
         <svg class="icon-close" viewBox="0 0 24 24" style="display:none;"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </button>
 
-      <!-- ACCOUNT -->
-      {% if user.is_authenticated %}
       <div class="nav-item nav-account-item">
         <button class="icon-btn nav-right-account" aria-label="Account">
           <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </button>
+        {% if user.is_authenticated %}
         <div class="mega-menu account-dropdown">
           <div class="mega-col account-col">
-            <div class="mega-col-title">My Account</div>
+            <div class="mega-col-title">{{ user.first_name|default:user.email }}</div>
             <a href="{% url 'accounts:dashboard' %}">Dashboard</a>
-            <a href="{% url 'accounts:profile' %}">Profile</a>
-            <a href="{% url 'accounts:order_history' %}">Order History</a>
+            <a href="{% url 'accounts:order_history' %}">Orders</a>
+            <a href="{% url 'orders:cart_detail' %}">My Bag</a>
             <a href="{% url 'accounts:addresses' %}">Addresses</a>
-            <a href="{% url 'accounts:logout' %}">Sign Out</a>
+            <a href="{% url 'accounts:profile' %}">Profile</a>
+            <div style="height:1px;background:var(--border-light);margin:10px 0;"></div>
+            <form method="POST" action="{% url 'accounts:logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="mega-logout-btn">Sign Out</button>
+            </form>
           </div>
         </div>
-      </div>
-      {% else %}
-      <div class="nav-item nav-account-item">
-        <button class="icon-btn nav-right-account" aria-label="Account">
-          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        </button>
+        {% else %}
         <div class="mega-menu account-dropdown">
           <div class="mega-col account-col">
             <div class="mega-col-title">Account</div>
@@ -111,10 +107,9 @@
             <a href="{% url 'accounts:signup' %}">Create Account</a>
           </div>
         </div>
+        {% endif %}
       </div>
-      {% endif %}
 
-      <!-- CART -->
       <div class="cart-wrapper">
         <a href="{% url 'orders:cart_detail' %}" class="icon-btn" aria-label="Shopping bag">
           <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
@@ -141,6 +136,7 @@
           autocomplete="off"
           aria-label="Search"
         >
+        <!-- ↓ This button was missing — its absence caused a JS error that broke the sidebar -->
         <button type="button" class="search-clear" id="searchClear" aria-label="Clear search">
           <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
@@ -166,7 +162,6 @@
 
   <div class="sidebar-body">
 
-    <!-- MOBILE SEARCH -->
     <div class="sidebar-search">
       <form action="{% url 'store:product_list' %}" method="GET" role="search">
         <div class="sidebar-search-wrap">
@@ -178,7 +173,6 @@
 
     <div class="sidebar-section">
 
-      <!-- WOMEN -->
       <div class="sidebar-nav-item">
         <button class="sidebar-nav-toggle" data-target="sidebar-women">
           Women
@@ -186,29 +180,29 @@
         </button>
         <div class="sidebar-sub" id="sidebar-women">
           <div class="sidebar-sub-group">
-            <div class="sidebar-sub-title">New Arrivals</div>
-            <a href="{% url 'store:product_list' %}?tag=women&new_arrival=true">View All New</a>
+            <div class="sidebar-sub-title">Shop</div>
+            <a href="{% url 'store:product_list' %}?tag=women">All Women</a>
+            <a href="{% url 'store:product_list' %}?tag=women&new_arrival=true">New Arrivals</a>
             <a href="{% url 'store:collection_list' %}">Collections</a>
             <a href="{% url 'store:lookbook_list' %}">Lookbooks</a>
           </div>
           <div class="sidebar-sub-group">
             <div class="sidebar-sub-title">Bags</div>
-            <a href="{% url 'store:product_list' %}?tag=women&tag=evening-bags">Evening Bags</a>
-            <a href="{% url 'store:product_list' %}?tag=women&tag=totes">Totes</a>
-            <a href="{% url 'store:product_list' %}?tag=women&tag=clutches">Clutches</a>
-            <a href="{% url 'store:product_list' %}?tag=women&tag=shoulder-bags">Shoulder Bags</a>
+            <a href="{% url 'store:product_list' %}?tag=evening-bags">Evening Bags</a>
+            <a href="{% url 'store:product_list' %}?tag=totes">Totes</a>
+            <a href="{% url 'store:product_list' %}?tag=clutches">Clutches</a>
+            <a href="{% url 'store:product_list' %}?tag=shoulder-bags">Shoulder Bags</a>
           </div>
           <div class="sidebar-sub-group">
             <div class="sidebar-sub-title">Ready-to-Wear</div>
-            <a href="{% url 'store:product_list' %}?tag=women&tag=dresses">Dresses</a>
-            <a href="{% url 'store:product_list' %}?tag=women&tag=coats">Coats</a>
-            <a href="{% url 'store:product_list' %}?tag=women&tag=knitwear">Knitwear</a>
-            <a href="{% url 'store:product_list' %}?tag=women&tag=trousers">Trousers</a>
+            <a href="{% url 'store:product_list' %}?tag=dresses">Dresses</a>
+            <a href="{% url 'store:product_list' %}?tag=coats">Coats</a>
+            <a href="{% url 'store:product_list' %}?tag=knitwear">Knitwear</a>
+            <a href="{% url 'store:product_list' %}?tag=trousers">Trousers</a>
           </div>
         </div>
       </div>
 
-      <!-- MEN -->
       <div class="sidebar-nav-item">
         <button class="sidebar-nav-toggle" data-target="sidebar-men">
           Men
@@ -216,21 +210,22 @@
         </button>
         <div class="sidebar-sub" id="sidebar-men">
           <div class="sidebar-sub-group">
-            <div class="sidebar-sub-title">New Arrivals</div>
-            <a href="{% url 'store:product_list' %}?tag=men&new_arrival=true">View All New</a>
+            <div class="sidebar-sub-title">Shop</div>
+            <a href="{% url 'store:product_list' %}?tag=men">All Men</a>
+            <a href="{% url 'store:product_list' %}?tag=men&new_arrival=true">New Arrivals</a>
             <a href="{% url 'store:collection_list' %}">Collections</a>
           </div>
           <div class="sidebar-sub-group">
             <div class="sidebar-sub-title">Bags</div>
-            <a href="{% url 'store:product_list' %}?tag=men&tag=briefcases">Briefcases</a>
-            <a href="{% url 'store:product_list' %}?tag=men&tag=backpacks">Backpacks</a>
-            <a href="{% url 'store:product_list' %}?tag=men&tag=cardholders">Cardholders</a>
+            <a href="{% url 'store:product_list' %}?tag=briefcases">Briefcases</a>
+            <a href="{% url 'store:product_list' %}?tag=backpacks">Backpacks</a>
+            <a href="{% url 'store:product_list' %}?tag=cardholders">Cardholders</a>
           </div>
           <div class="sidebar-sub-group">
             <div class="sidebar-sub-title">Ready-to-Wear</div>
-            <a href="{% url 'store:product_list' %}?tag=men&tag=suits">Suits</a>
-            <a href="{% url 'store:product_list' %}?tag=men&tag=outerwear">Outerwear</a>
-            <a href="{% url 'store:product_list' %}?tag=men&tag=shirts">Shirts</a>
+            <a href="{% url 'store:product_list' %}?tag=suits">Suits</a>
+            <a href="{% url 'store:product_list' %}?tag=outerwear">Outerwear</a>
+            <a href="{% url 'store:product_list' %}?tag=shirts">Shirts</a>
           </div>
         </div>
       </div>
@@ -242,14 +237,17 @@
 
     <div class="sidebar-divider"></div>
 
-    <!-- ACCOUNT SECTION -->
     <div class="sidebar-section">
       {% if user.is_authenticated %}
         <a href="{% url 'accounts:dashboard' %}" class="sidebar-link sidebar-link-sm">My Dashboard</a>
-        <a href="{% url 'accounts:profile' %}" class="sidebar-link sidebar-link-sm">My Profile</a>
-        <a href="{% url 'accounts:order_history' %}" class="sidebar-link sidebar-link-sm">Order History</a>
+        <a href="{% url 'accounts:order_history' %}" class="sidebar-link sidebar-link-sm">Orders</a>
+        <a href="{% url 'orders:cart_detail' %}" class="sidebar-link sidebar-link-sm">My Bag</a>
         <a href="{% url 'accounts:addresses' %}" class="sidebar-link sidebar-link-sm">Addresses</a>
-        <a href="{% url 'accounts:logout' %}" class="sidebar-link sidebar-link-sm">Sign Out</a>
+        <a href="{% url 'accounts:profile' %}" class="sidebar-link sidebar-link-sm">Profile</a>
+        <form method="POST" action="{% url 'accounts:logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="sidebar-link sidebar-link-sm sidebar-logout-btn">Sign Out</button>
+        </form>
       {% else %}
         <a href="{% url 'accounts:login' %}" class="sidebar-link sidebar-link-sm">Sign In</a>
         <a href="{% url 'accounts:signup' %}" class="sidebar-link sidebar-link-sm">Create Account</a>
@@ -258,7 +256,6 @@
 
     <div class="sidebar-divider"></div>
 
-    <!-- SECONDARY LINKS -->
     <div class="sidebar-section">
       <a href="{% url 'pages:our_story' %}" class="sidebar-link sidebar-link-sm">Our Story</a>
       <a href="{% url 'pages:savoir_faire' %}" class="sidebar-link sidebar-link-sm">Savoir-Faire</a>

@@ -8,7 +8,8 @@ load_dotenv(BASE_DIR / '.env')
 
 # ─── CORE ───
 SECRET_KEY = os.environ['SECRET_KEY']
-DEBUG      = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 

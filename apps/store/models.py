@@ -132,48 +132,69 @@ class Product(models.Model):
 
 
 class ProductVariant(models.Model):
-    SIZE_CHOICES = [
-        ("XS", "XS"),
-        ("S", "S"),
-        ("M", "M"),
-        ("L", "L"),
-        ("XL", "XL"),
-        ("XXL", "XXL"),
-        ("One Size", "One Size"),
-    ]
-
+    """
+    A named variant of a product — e.g. 'Black', 'White / Oversized'.
+    The user defines the name freely; no forced color field.
+    """
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
-        related_name="variants"
+        related_name='variants'
     )
-
-    size = models.CharField(max_length=20, choices=SIZE_CHOICES)
-    color = models.CharField(max_length=50, blank=True, null=True)
-
-    sku = models.CharField(max_length=100, unique=True)
-
-    stock = models.PositiveIntegerField(default=0)
-
-    price_override = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        blank=True,
-        null=True,
-        help_text="Leave empty to use product price"
+    name = models.CharField(
+        max_length=100,
+        help_text="e.g. Black, White, Navy / Relaxed Fit"
     )
-
+    image = models.ImageField(
+        upload_to='products/variants/',
+        blank=True, null=True,
+        help_text="Optional — overrides main product image when selected"
+    )
     is_active = models.BooleanField(default=True)
 
     class Meta:
-        unique_together = ("product", "size", "color")
+        unique_together = ('product', 'name')
+        ordering = ['name']
 
     def __str__(self):
-        return f"{self.product.name} ({self.size} - {self.color})"
+        return f"{self.product.name} — {self.name}"
+
+
+class ProductVariantSize(models.Model):
+    """
+    A specific size within a variant, with its own stock and optional price.
+    """
+    SIZE_CHOICES = [
+        ("XS", "XS"), ("S", "S"), ("M", "M"),
+        ("L", "L"), ("XL", "XL"), ("XXL", "XXL"),
+        ("One Size", "One Size"),
+    ]
+
+    variant = models.ForeignKey(
+        ProductVariant,
+        on_delete=models.CASCADE,
+        related_name='sizes'
+    )
+    size = models.CharField(max_length=20, choices=SIZE_CHOICES)
+    sku = models.CharField(max_length=100, unique=True)
+    stock = models.PositiveIntegerField(default=0)
+    price_override = models.DecimalField(
+        max_digits=10, decimal_places=2,
+        blank=True, null=True,
+        help_text="Leave empty to use product price"
+    )
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ('variant', 'size')
+        ordering = ['size']
+
+    def __str__(self):
+        return f"{self.variant} / {self.size}"
 
     @property
     def final_price(self):
-        return self.price_override if self.price_override else self.product.price
+        return self.price_override if self.price_override else self.variant.product.price
 
 
 class ProductDimension(models.Model):

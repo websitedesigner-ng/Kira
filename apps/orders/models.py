@@ -1,17 +1,15 @@
+import uuid
 from django.db import models
-from apps.store.models import Product, ProductVariant
 from django.conf import settings
-from django.db import models
-from apps.store.models import Product, ProductVariant
+from apps.store.models import Product, ProductVariantSize   # ← updated import
 
 
 class Address(models.Model):
     """
     Reusable saved address — belongs to a user account.
-    Created when a user saves an address during checkout or in their profile.
     """
     user       = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='addresses')
-    label      = models.CharField(max_length=60, blank=True)  # e.g. "Home", "Office"
+    label      = models.CharField(max_length=60, blank=True)
     full_name  = models.CharField(max_length=200)
     phone      = models.CharField(max_length=30)
     line1      = models.CharField(max_length=255)
@@ -31,7 +29,6 @@ class Address(models.Model):
         return f'{self.label or "Address"} — {self.full_name}, {self.city}'
 
     def save(self, *args, **kwargs):
-        # enforce one default per user
         if self.is_default:
             Address.objects.filter(
                 user=self.user, is_default=True
@@ -39,7 +36,6 @@ class Address(models.Model):
         super().save(*args, **kwargs)
 
     def as_snapshot(self):
-        """Returns a dict for snapshotting onto an order."""
         return {
             'full_name': self.full_name,
             'phone':     self.phone,
@@ -62,8 +58,6 @@ class Order(models.Model):
         ('refunded',  'Refunded'),
     ]
 
-    # ─── WHO ───
-    # nullable so guest orders work; filled when user is logged in
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
         null=True, blank=True, related_name='orders'
@@ -72,15 +66,10 @@ class Order(models.Model):
     customer_email = models.EmailField()
     customer_phone = models.CharField(max_length=30, blank=True)
 
-    # ─── WHERE ───
-    # snapshot of the address at time of order — never changes even if user
-    # edits their saved address later
     shipping_address = models.ForeignKey(
         Address, on_delete=models.SET_NULL,
-        null=True, blank=True, related_name='orders',
-        help_text='Linked saved address, if any'
+        null=True, blank=True, related_name='orders'
     )
-    # denormalized snapshot fields — always populated
     shipping_name     = models.CharField(max_length=200)
     shipping_phone    = models.CharField(max_length=30, blank=True)
     shipping_line1    = models.CharField(max_length=255)
@@ -90,7 +79,6 @@ class Order(models.Model):
     shipping_postcode = models.CharField(max_length=20, blank=True)
     shipping_country  = models.CharField(max_length=100)
 
-    # ─── ORDER ───
     reference  = models.CharField(max_length=32, unique=True)
     status     = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     notes      = models.TextField(blank=True)
@@ -119,18 +107,45 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    order    = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
-    product  = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, related_name='order_items')
-    variant  = models.ForeignKey(ProductVariant, on_delete=models.SET_NULL, null=True, blank=True)
+    order        = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    product      = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, related_name='order_items')
+
+    # ← Now points to ProductVariantSize (carries variant name + size + price)
+    variant_size = models.ForeignKey(
+        ProductVariantSize, on_delete=models.SET_NULL,
+        null=True, blank=True,
+        related_name='order_items'
+    )
+
     quantity = models.PositiveIntegerField(default=1)
     price    = models.DecimalField(max_digits=10, decimal_places=2)
 
+    # Snapshot fields — frozen at time of purchase so the line item
+    # is always readable even if the variant/size is later deleted.
+    snapshot_variant_name = models.CharField(max_length=100, blank=True)  # e.g. "Black"
+    snapshot_size         = models.CharField(max_length=20, blank=True)   # e.g. "M"
+    snapshot_sku          = models.CharField(max_length=100, blank=True)
+
     def __str__(self):
-        return f'{self.quantity}x {self.product.name} (Order {self.order.reference})'
+        variant_label = ''
+        if self.snapshot_variant_name:
+            variant_label = f' ({self.snapshot_variant_name} / {self.snapshot_size})'
+        return f'{self.quantity}x {self.product.name}{variant_label} — Order {self.order.reference}'
 
     @property
     def subtotal(self):
         return self.price * self.quantity
+
+    @property
+    def variant_display(self):
+        """Human-readable label for templates — uses snapshot so always safe."""
+        if self.snapshot_variant_name and self.snapshot_size:
+            return f'{self.snapshot_variant_name} / {self.snapshot_size}'
+        if self.snapshot_variant_name:
+            return self.snapshot_variant_name
+        if self.snapshot_size:
+            return self.snapshot_size
+        return '—'
 
 
 class Cart(models.Model):
@@ -140,11 +155,11 @@ class Cart(models.Model):
         null=True, blank=True,
         related_name='cart'
     )
-    session_key  = models.CharField(max_length=40, unique=True)
+    session_key    = models.CharField(max_length=40, unique=True)
     customer_email = models.EmailField(blank=True, null=True)
-    created_at   = models.DateTimeField(auto_now_add=True)
-    updated_at   = models.DateTimeField(auto_now=True)
-    is_abandoned = models.BooleanField(default=False)  # set via management command
+    created_at     = models.DateTimeField(auto_now_add=True)
+    updated_at     = models.DateTimeField(auto_now=True)
+    is_abandoned   = models.BooleanField(default=False)
 
     def __str__(self):
         return f'Cart {self.session_key}'
@@ -153,18 +168,34 @@ class Cart(models.Model):
 class CartItem(models.Model):
     cart     = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
     product  = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
-    variant  = models.ForeignKey(ProductVariant, on_delete=models.SET_NULL, null=True, blank=True)
+
+    # ← Now points to ProductVariantSize
+    variant_size = models.ForeignKey(
+        ProductVariantSize, on_delete=models.SET_NULL,
+        null=True, blank=True,
+        related_name='cart_items'
+    )
+
     quantity = models.PositiveIntegerField(default=1)
     added_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.quantity}x {self.product.name}'
+        label = f' ({self.variant_size})' if self.variant_size else ''
+        return f'{self.quantity}x {self.product.name}{label}'
+
+    @property
+    def unit_price(self):
+        return self.variant_size.final_price if self.variant_size else self.product.price
+
+    @property
+    def subtotal(self):
+        return self.unit_price * self.quantity
 
 
 class ProductView(models.Model):
-    product    = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='views')
+    product     = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='views')
     session_key = models.CharField(max_length=40)
-    viewed_at  = models.DateTimeField(auto_now_add=True)
+    viewed_at   = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         indexes = [

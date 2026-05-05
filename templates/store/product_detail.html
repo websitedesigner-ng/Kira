@@ -36,7 +36,7 @@
       </div>
 
       {% if product.gallery.exists %}
-      <div class="pd-thumbs">
+      <div class="pd-thumbs" id="pdThumbs">
         <button class="pd-thumb active" data-img="{{ product.image.url }}">
           <img src="{{ product.image.url }}" alt="{{ product.name }}">
         </button>
@@ -74,57 +74,41 @@
       <div class="pd-divider"></div>
 
       <!-- VARIANTS -->
-      {% with variants=product.variants.filter %}
       {% if product.variants.exists %}
 
-        <!-- COLORS -->
-        {% regroup product.variants.all by color as color_groups %}
-        {% if color_groups|length > 1 or color_groups.0.grouper %}
+        <!-- VARIANT SELECTOR -->
         <div class="pd-option-group">
           <div class="pd-option-label">
-            Colour
-            <span class="pd-option-selected" id="selectedColor">
-              {{ product.variants.first.color|default:'' }}
-            </span>
+            Style
+            <span class="pd-option-selected" id="selectedVariant">— Select —</span>
           </div>
-          <div class="pd-swatches">
-            {% for group in color_groups %}
-            {% if group.grouper %}
-            <button class="pd-swatch {% if forloop.first %}active{% endif %}"
-              data-color="{{ group.grouper }}"
-              title="{{ group.grouper }}"
-              style="background: {{ group.grouper|lower }};">
+          <div class="pd-variant-btns" id="variantBtns">
+            {% for variant in product.variants.all %}
+            {% if variant.is_active %}
+            <button
+              class="pd-variant-btn"
+              data-variant-id="{{ variant.id }}"
+              data-variant-name="{{ variant.name }}"
+              data-variant-img="{% if variant.image %}{{ variant.image.url }}{% endif %}">
+              {{ variant.name }}
             </button>
             {% endif %}
             {% endfor %}
           </div>
         </div>
-        {% endif %}
 
-        <!-- SIZES -->
-        <div class="pd-option-group">
+        <!-- SIZE SELECTOR — populated by JS based on selected variant -->
+        <div class="pd-option-group" id="sizeGroup" style="display:none;">
           <div class="pd-option-label">
             Size
             <span class="pd-option-selected" id="selectedSize">— Select —</span>
           </div>
           <div class="pd-sizes" id="sizeGrid">
-            {% for variant in product.variants.all %}
-            {% if variant.is_active %}
-            <button
-              class="pd-size-btn {% if variant.stock == 0 %}out-of-stock{% endif %}"
-              data-size="{{ variant.size }}"
-              data-variant="{{ variant.id }}"
-              data-stock="{{ variant.stock }}"
-              {% if variant.stock == 0 %}disabled{% endif %}>
-              {{ variant.size }}
-            </button>
-            {% endif %}
-            {% endfor %}
+            <!-- Rendered dynamically by JS -->
           </div>
         </div>
 
       {% endif %}
-      {% endwith %}
 
       <!-- STOCK STATUS -->
       <div class="pd-stock" id="pdStock"></div>
@@ -133,16 +117,16 @@
       <div class="pd-actions">
         <form method="POST" action="{% url 'orders:cart_add' product.id %}" id="addToCartForm" style="flex:1;">
           {% csrf_token %}
-          <input type="hidden" name="variant_id" id="cartVariantId" value="">
+          <input type="hidden" name="variant_size_id" id="cartVariantSizeId" value="">
           <input type="hidden" name="quantity" value="1">
           <button type="submit" class="btn-primary pd-add-btn" id="pdAddBtn" disabled style="width:100%;">
             Add to Bag
           </button>
         </form>
-      
+
         <form method="POST" action="{% url 'orders:order_now' product.id %}" id="orderNowForm">
           {% csrf_token %}
-          <input type="hidden" name="variant_id" id="orderNowVariantId" value="">
+          <input type="hidden" name="variant_size_id" id="orderNowVariantSizeId" value="">
           <input type="hidden" name="quantity" value="1">
           <button type="submit" class="pd-order-now-btn" id="pdOrderNowBtn" disabled>
             Order Now
@@ -156,9 +140,9 @@
 
         {% if product.details.exists %}
         <div class="pd-acc-item">
-          <button class="pd-acc-toggle" data-target="acc-details">
+          <button class="pd-acc-toggle active" data-target="acc-details">
             Product Details
-            <svg class="pd-acc-arrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <svg class="pd-acc-arrow" style="transform:rotate(180deg);" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
           </button>
           <div class="pd-acc-body open" id="acc-details">
             <dl class="pd-details-list">
@@ -245,87 +229,155 @@
 
 {% block extra_js %}
 <script>
-  // ─── GALLERY ───
-  const thumbs   = document.querySelectorAll('.pd-thumb');
-  const mainImg  = document.getElementById('pdMainImg');
+  // ═══════════════════════════════════════════
+// GALLERY + VARIANT + SIZE
+// ═══════════════════════════════════════════
 
-  thumbs.forEach(thumb => {
-    thumb.addEventListener('click', () => {
-      mainImg.src = thumb.dataset.img;
-      thumbs.forEach(t => t.classList.remove('active'));
-      thumb.classList.add('active');
+const originalProductImg = '{{ product.image.url }}';
+const mainImg            = document.getElementById('pdMainImg');
+const thumbsContainer    = document.getElementById('pdThumbs');
+
+// ─── GALLERY THUMBNAILS ───
+function setActiveThumb(imgUrl) {
+    if (!thumbsContainer) return;
+    document.querySelectorAll('.pd-thumb').forEach(t => {
+        t.classList.toggle('active', t.dataset.img === imgUrl);
     });
-  });
+}
 
-  // ─── SIZE SELECTION ───
-  const sizeBtns     = document.querySelectorAll('.pd-size-btn');
-  const selectedSize = document.getElementById('selectedSize');
-  const pdAddBtn     = document.getElementById('pdAddBtn');
-  const pdStock      = document.getElementById('pdStock');
-  sizeBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-          sizeBtns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-  
-          const stock = parseInt(btn.dataset.stock);
-          selectedSize.textContent = btn.dataset.size;
-  
-          // set variant for both forms
-          const cartVariantInput    = document.getElementById('cartVariantId');
-          const orderNowVariantInput = document.getElementById('orderNowVariantId');
-          if (cartVariantInput)     cartVariantInput.value     = btn.dataset.variant;
-          if (orderNowVariantInput) orderNowVariantInput.value = btn.dataset.variant;
-  
-          if (stock > 0) {
-              pdAddBtn.disabled      = false;
-              pdOrderNowBtn.disabled = false;
-              pdAddBtn.textContent   = 'Add to Bag';
-              pdStock.textContent    = stock <= 3 ? `Only ${stock} left` : 'In Stock';
-              pdStock.className      = stock <= 3 ? 'pd-stock low' : 'pd-stock in';
-          } else {
-              pdAddBtn.disabled      = true;
-              pdOrderNowBtn.disabled = true;
-              pdAddBtn.textContent   = 'Out of Stock';
-              pdStock.textContent    = 'Out of Stock';
-              pdStock.className      = 'pd-stock out';
-          }
-      });
-  });
-  
+function switchMainImage(url) {
+    mainImg.src = url;
+    setActiveThumb(url);
+}
 
-  // ─── COLOUR SWATCHES ───
-  const swatches      = document.querySelectorAll('.pd-swatch');
-  const selectedColor = document.getElementById('selectedColor');
-
-  swatches.forEach(swatch => {
-    swatch.addEventListener('click', () => {
-      swatches.forEach(s => s.classList.remove('active'));
-      swatch.classList.add('active');
-      if (selectedColor) selectedColor.textContent = swatch.dataset.color;
-
-      // reset size selection when colour changes
-      sizeBtns.forEach(b => b.classList.remove('active'));
-      if (selectedSize) selectedSize.textContent = '— Select —';
-      pdAddBtn.disabled = true;
-      pdStock.textContent = '';
-      pdStock.className = 'pd-stock';
+if (thumbsContainer) {
+    thumbsContainer.querySelectorAll('.pd-thumb').forEach(thumb => {
+        thumb.addEventListener('click', () => {
+            switchMainImage(thumb.dataset.img);
+        });
     });
-  });
+}
 
-  // ─── ACCORDION ───
-  document.querySelectorAll('.pd-acc-toggle').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const body   = document.getElementById(btn.dataset.target);
-      const isOpen = body.classList.toggle('open');
-      btn.querySelector('.pd-acc-arrow').style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
-      btn.classList.toggle('active', isOpen);
+// ─── VARIANT DATA ───
+const variantData = {
+    {% for variant in product.variants.all %}
+    {% if variant.is_active %}
+    "{{ variant.id }}": {
+        name:  "{{ variant.name }}",
+        image: "{% if variant.image %}{{ variant.image.url }}{% endif %}",
+        sizes: [
+            {% for size in variant.sizes.all %}
+            {% if size.is_active %}
+            { id: {{ size.id }}, size: "{{ size.size }}", stock: {{ size.stock }} },
+            {% endif %}
+            {% endfor %}
+        ]
+    },
+    {% endif %}
+    {% endfor %}
+};
+
+// ─── ELEMENT REFS ───
+const variantBtns           = document.querySelectorAll('.pd-variant-btn');
+const selectedVariantEl     = document.getElementById('selectedVariant');
+const sizeGrid              = document.getElementById('sizeGrid');
+const selectedSizeEl        = document.getElementById('selectedSize');
+const pdAddBtn              = document.getElementById('pdAddBtn');
+const pdOrderNowBtn         = document.getElementById('pdOrderNowBtn');
+const pdStock               = document.getElementById('pdStock');
+const cartVariantSizeId     = document.getElementById('cartVariantSizeId');
+const orderNowVariantSizeId = document.getElementById('orderNowVariantSizeId');
+
+// ─── RESET SIZE STATE ───
+function resetSizeState() {
+    if (selectedSizeEl)      selectedSizeEl.textContent  = '— Select —';
+    if (pdAddBtn)            { pdAddBtn.disabled = true; pdAddBtn.textContent = 'Add to Bag'; }
+    if (pdOrderNowBtn)       pdOrderNowBtn.disabled      = true;
+    if (pdStock)             { pdStock.textContent = ''; pdStock.className = 'pd-stock'; }
+    if (cartVariantSizeId)   cartVariantSizeId.value     = '';
+    if (orderNowVariantSizeId) orderNowVariantSizeId.value = '';
+}
+
+// ─── SELECT SIZE ───
+function selectSize(sizeObj, btn) {
+    document.querySelectorAll('.pd-size-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    selectedSizeEl.textContent        = sizeObj.size;
+    cartVariantSizeId.value           = sizeObj.id;
+    orderNowVariantSizeId.value       = sizeObj.id;
+
+    if (sizeObj.stock > 0) {
+        pdAddBtn.disabled      = false;
+        pdOrderNowBtn.disabled = false;
+        pdAddBtn.textContent   = 'Add to Bag';
+        pdStock.textContent    = sizeObj.stock <= 3 ? `Only ${sizeObj.stock} left` : 'In Stock';
+        pdStock.className      = sizeObj.stock <= 3 ? 'pd-stock low' : 'pd-stock in';
+    } else {
+        pdAddBtn.disabled      = true;
+        pdOrderNowBtn.disabled = true;
+        pdAddBtn.textContent   = 'Out of Stock';
+        pdStock.textContent    = 'Out of Stock';
+        pdStock.className      = 'pd-stock out';
+    }
+}
+
+// ─── RENDER SIZES ───
+function renderSizes(sizes) {
+    resetSizeState();
+    sizeGrid.innerHTML = '';
+
+    if (!sizes || sizes.length === 0) {
+        sizeGrid.innerHTML = '<span class="pd-no-sizes">No sizes available</span>';
+        return;
+    }
+
+    sizes.forEach(s => {
+        const btn       = document.createElement('button');
+        btn.type        = 'button';
+        btn.className   = 'pd-size-btn' + (s.stock === 0 ? ' out-of-stock' : '');
+        btn.textContent = s.size;
+        if (s.stock === 0) btn.disabled = true;
+        btn.addEventListener('click', () => selectSize(s, btn));
+        sizeGrid.appendChild(btn);
     });
-  });
+}
 
-  // ─── WISHLIST ───
-  const wishlistBtn = document.querySelector('.pd-wishlist-btn');
-  wishlistBtn.addEventListener('click', () => {
-    wishlistBtn.classList.toggle('saved');
-  });
+// ─── SELECT VARIANT ───
+function selectVariant(btn) {
+    variantBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const sizeGroupEl = document.getElementById('sizeGroup');
+    if (sizeGroupEl) sizeGroupEl.style.display = 'block';
+
+    const data = variantData[btn.dataset.variantId];
+    if (!data) return;
+
+    selectedVariantEl.textContent = data.name;
+
+    // Swap image only if variant has its own image
+    if (data.image && data.image.trim() !== '') {
+        switchMainImage(data.image);
+    } else {
+        // Revert to product main image
+        switchMainImage(originalProductImg);
+    }
+
+    renderSizes(data.sizes);
+}
+
+// ─── BIND VARIANT CLICKS ───
+variantBtns.forEach(btn => {
+    btn.addEventListener('click', () => selectVariant(btn));
+});
+
+// ─── ON LOAD: show product images, no variant pre-selected ───
+// Ensure main image thumb is active
+setActiveThumb(originalProductImg);
+// Reset variant labels
+if (selectedVariantEl) selectedVariantEl.textContent = '— Select —';
+// Render empty size grid until a variant is picked
+resetSizeState();
+if (sizeGrid) sizeGrid.innerHTML = '';
 </script>
 {% endblock %}

@@ -189,7 +189,20 @@
 
 /* ─── OPTIONS ─── */
 .pd-option-group {
-    margin-bottom: 24px;
+    margin-bottom: 28px;
+}
+
+/* Variant selector group sits directly below the divider */
+.pd-option-group:first-of-type {
+    margin-top: 4px;
+}
+
+/* Size group gets a touch more breathing room above */
+#sizeGroup {
+    margin-top: 4px;
+    margin-bottom: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-light);
 }
 
 .pd-option-label {
@@ -201,7 +214,7 @@
     text-transform: uppercase;
     color: var(--text-primary);
     font-weight: 400;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 }
 
 .pd-option-selected {
@@ -239,7 +252,42 @@
     outline-color: var(--kira-gold);
 }
 
-/* Size grid */
+/* ─── VARIANT BUTTONS ─── */
+.pd-variant-btns {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.pd-variant-btn {
+    height: 36px;
+    padding: 0 16px;
+    background: none;
+    border: 1px solid var(--border-medium);
+    font-family: "Jost", sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition:
+        border-color 0.2s,
+        color 0.2s;
+    font-weight: 300;
+}
+
+.pd-variant-btn:hover {
+    border-color: var(--kira-brown);
+    color: var(--kira-brown);
+}
+
+.pd-variant-btn.active {
+    border-color: var(--kira-gold);
+    color: var(--text-primary);
+    background: none;
+    font-weight: 400;
+}
+
+/* ─── SIZE GRID ─── */
 .pd-sizes {
     display: flex;
     gap: 8px;
@@ -277,13 +325,21 @@
     text-decoration: line-through;
 }
 
+.pd-no-sizes {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    font-style: italic;
+}
+
 /* ─── STOCK STATUS ─── */
 .pd-stock {
     font-size: 10px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     font-weight: 400;
-    margin-bottom: 20px;
+    margin-top: 4px;
+    margin-bottom: 24px;
     min-height: 16px;
 }
 

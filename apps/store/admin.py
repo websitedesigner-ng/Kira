@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from .models import (
     Announcement, Category, Collection, Tag,
-    Product, ProductVariant, ProductDimension, ProductDetail, ProductImage,
+    Product, ProductVariant, ProductVariantSize, ProductDimension, ProductDetail, ProductImage,
     LookBook, LookBookImage,
 )
 
@@ -43,16 +43,24 @@ class TagAdmin(admin.ModelAdmin):
 
 
 # ─── PRODUCT INLINES ───
+
+class ProductVariantSizeInline(admin.TabularInline):
+    model   = ProductVariantSize
+    extra   = 1
+    fields  = ('size', 'sku', 'stock', 'price_override', 'is_active')
+
+
 class ProductVariantInline(admin.TabularInline):
-    model  = ProductVariant
-    extra  = 1
-    fields = ('size', 'color', 'sku', 'stock', 'price_override', 'is_active')
+    model       = ProductVariant
+    extra       = 1
+    fields      = ('name', 'image', 'is_active')
+    show_change_link = True  # links to full variant page where sizes are managed
 
 
 class ProductImageInline(admin.TabularInline):
-    model          = ProductImage
-    extra          = 1
-    fields         = ('image', 'alt_text', 'position', 'image_preview')
+    model           = ProductImage
+    extra           = 1
+    fields          = ('image', 'alt_text', 'position', 'image_preview')
     readonly_fields = ('image_preview',)
 
     def image_preview(self, obj):
@@ -76,6 +84,21 @@ class ProductDimensionInline(admin.StackedInline):
     extra = 0
 
 
+# ─── PRODUCT VARIANT (standalone — manages sizes inline) ───
+
+@admin.register(ProductVariant)
+class ProductVariantAdmin(admin.ModelAdmin):
+    list_display  = ('name', 'product', 'is_active', 'size_count')
+    list_filter   = ('is_active', 'product__collection')
+    search_fields = ('name', 'product__name')
+    raw_id_fields = ('product',)
+    inlines       = [ProductVariantSizeInline]
+
+    def size_count(self, obj):
+        return obj.sizes.count()
+    size_count.short_description = 'Sizes'
+
+
 # ─── PRODUCT ───
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -89,10 +112,10 @@ class ProductAdmin(admin.ModelAdmin):
         'is_active', 'is_featured', 'is_new_arrival', 'is_trending',
         'category', 'collection', 'badge',
     )
-    search_fields   = ('name', 'description', 'collection__name', 'tags__name')
+    search_fields       = ('name', 'description', 'collection__name', 'tags__name')
     prepopulated_fields = {'slug': ('name',)}
-    readonly_fields = ('image_preview', 'created_at', 'updated_at')
-    filter_horizontal = ('tags',)
+    readonly_fields     = ('image_preview', 'created_at', 'updated_at')
+    filter_horizontal   = ('tags',)
 
     fieldsets = (
         ('Core Info', {
@@ -117,6 +140,8 @@ class ProductAdmin(admin.ModelAdmin):
         }),
     )
 
+    # Variants shown here as a top-level list with a link to manage sizes
+    # on the ProductVariant page (to avoid deeply nested inlines)
     inlines = [ProductVariantInline, ProductImageInline, ProductDetailInline, ProductDimensionInline]
 
     def image_preview(self, obj):

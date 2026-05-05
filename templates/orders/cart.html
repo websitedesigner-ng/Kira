@@ -39,15 +39,15 @@
           <div class="cart-item-collection">{{ item.product.collection.name|default:"" }}</div>
           <a href="{{ item.product.get_absolute_url }}" class="cart-item-name">{{ item.product.name }}</a>
 
-          {% if item.variant %}
-          <div class="cart-item-variant">
-            {% if item.variant.size %}Size: {{ item.variant.size }}{% endif %}
-            {% if item.variant.color %} / {{ item.variant.color }}{% endif %}
-          </div>
+          {% if item.variant_size %}
+            <div class="cart-item-variant">
+            {% if item.variant_size.variant.name %}{{ item.variant_size.variant.name }}{% endif %}
+            {% if item.variant_size.size %} / {{ item.variant_size.size }}{% endif %}
+            </div>
           {% endif %}
 
           <div class="cart-item-price">
-            £{% if item.variant %}{{ item.variant.final_price }}{% else %}{{ item.product.price }}{% endif %}
+            £{% if item.variant_size %}{{ item.variant_size.final_price }}{% else %}{{ item.product.price }}{% endif %}
           </div>
         </div>
 
@@ -67,13 +67,12 @@
 
           <!-- SUBTOTAL -->
           <div class="cart-item-subtotal" id="subtotal-{{ item.id }}">
-            £{% if item.variant %}
-              {{ item.variant.final_price|floatformat:2 }}
+            £{% if item.variant_size %}
+              {{ item.variant_size.final_price|floatformat:2 }}
             {% else %}
               {{ item.product.price|floatformat:2 }}
             {% endif %}
           </div>
-
           <!-- REMOVE -->
           <button class="cart-remove-btn"
             data-action="remove"

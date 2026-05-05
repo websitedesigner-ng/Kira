@@ -264,16 +264,16 @@
           </div>
           <div class="co-summary-info">
             <div class="co-summary-name">{{ item.product.name }}</div>
-            {% if item.variant %}
+            {% if item.variant_size %}
             <div class="co-summary-variant">
-              {% if item.variant.size %}{{ item.variant.size }}{% endif %}
-              {% if item.variant.color %} · {{ item.variant.color }}{% endif %}
+              {% if item.variant_size.variant.name %}{{ item.variant_size.variant.name }}{% endif %}
+              {% if item.variant_size.size %} · {{ item.variant_size.size }}{% endif %}
             </div>
             {% endif %}
-          </div>
-          <div class="co-summary-price">
-            £{% if item.variant %}{{ item.variant.final_price }}{% else %}{{ item.product.price }}{% endif %}
-          </div>
+            </div>
+            <div class="co-summary-price">
+              £{% if item.variant_size %}{{ item.variant_size.final_price }}{% else %}{{ item.product.price }}{% endif %}
+            </div>
         </div>
         {% endfor %}
 

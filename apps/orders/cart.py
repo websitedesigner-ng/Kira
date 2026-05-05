@@ -1,3 +1,4 @@
+from apps.store.models import ProductVariantSize
 from .models import Cart, CartItem
 
 
@@ -11,7 +12,6 @@ class SessionCart:
         self.user        = request.user if request.user.is_authenticated else None
 
         if self.user:
-            # logged-in: get or create a cart for this user
             self.cart, created = Cart.objects.get_or_create(
                 user=self.user,
                 defaults={
@@ -19,15 +19,12 @@ class SessionCart:
                     'is_abandoned': False,
                 }
             )
-            # merge any guest session cart into the user cart on first login
             if created:
                 self._merge_session_cart()
             else:
-                # update session key to current in case they logged in on a new device
                 if self.cart.session_key != self.session_key:
                     self._merge_session_cart()
         else:
-            # guest: use session key
             self.cart, _ = Cart.objects.get_or_create(
                 session_key=self.session_key,
                 user=None,
@@ -40,18 +37,15 @@ class SessionCart:
         into their user cart, then delete the guest cart.
         """
         try:
-            guest_cart = Cart.objects.get(
-                session_key=self.session_key,
-                user=None,
-            )
+            guest_cart = Cart.objects.get(session_key=self.session_key, user=None)
         except Cart.DoesNotExist:
             return
 
-        for guest_item in guest_cart.items.select_related('product', 'variant').all():
+        for guest_item in guest_cart.items.select_related('product', 'variant_size').all():
             existing = CartItem.objects.filter(
                 cart=self.cart,
                 product=guest_item.product,
-                variant=guest_item.variant,
+                variant_size=guest_item.variant_size,   # ← was variant
             ).first()
 
             if existing:
@@ -67,25 +61,25 @@ class SessionCart:
 
     def get_items(self):
         return self.cart.items.select_related(
-            'product', 'variant', 'product__collection'
+            'product',
+            'variant_size',
+            'variant_size__variant',        # ← gives access to variant name
+            'product__collection',
         ).filter(product__is_active=True)
 
     def get_total(self):
-        return sum(
-            (item.variant.final_price if item.variant else item.product.price) * item.quantity
-            for item in self.get_items()
-        )
+        return sum(item.unit_price * item.quantity for item in self.get_items())
 
     def get_count(self):
         return sum(item.quantity for item in self.get_items())
 
     # ─── WRITE ───
 
-    def add(self, product, variant=None, quantity=1):
+    def add(self, product, variant_size=None, quantity=1):   # ← was variant=None
         item, created = CartItem.objects.get_or_create(
             cart=self.cart,
             product=product,
-            variant=variant,
+            variant_size=variant_size,                       # ← was variant
             defaults={'quantity': 0}
         )
         item.quantity += quantity

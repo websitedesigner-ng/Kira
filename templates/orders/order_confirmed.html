@@ -36,10 +36,10 @@
       <div class="oc-item-info">
         <div class="oc-item-collection">{{ item.product.collection.name|default:"" }}</div>
         <div class="oc-item-name">{{ item.product.name }}</div>
-        {% if item.variant %}
+        {% if item.variant_size %}
         <div class="oc-item-variant">
-          {% if item.variant.size %}{{ item.variant.size }}{% endif %}
-          {% if item.variant.color %} · {{ item.variant.color }}{% endif %}
+          {% if item.snapshot_variant_name %}{{ item.snapshot_variant_name }}{% endif %}
+          {% if item.snapshot_size %} · {{ item.snapshot_size }}{% endif %}
         </div>
         {% endif %}
         <div class="oc-item-qty">Qty: {{ item.quantity }}</div>

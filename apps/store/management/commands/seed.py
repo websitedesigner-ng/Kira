@@ -5,7 +5,8 @@ from django.utils.text import slugify
 from django.conf import settings
 from apps.store.models import (
     Announcement, Category, Collection, Tag,
-    Product, ProductVariant, ProductDetail, ProductDimension,
+    Product, ProductVariant, ProductVariantSize,
+    ProductDetail, ProductDimension,
     LookBook, LookBookImage,
 )
 
@@ -16,6 +17,32 @@ def copy_placeholder(src, dest_relative):
     os.makedirs(os.path.dirname(dest), exist_ok=True)
     shutil.copy2(src, dest)
     return dest_relative
+
+
+def make_variant(product, variant_name, sizes, sku_counter):
+    """
+    Create a ProductVariant + one ProductVariantSize per size entry.
+
+    sizes: list of (size_str, stock_int) tuples
+           e.g. [('S', 10), ('M', 10), ('L', 5)]
+
+    Returns the updated sku_counter.
+    """
+    variant = ProductVariant.objects.create(
+        product=product,
+        name=variant_name,
+        is_active=True,
+    )
+    for size_str, stock in sizes:
+        ProductVariantSize.objects.create(
+            variant=variant,
+            size=size_str,
+            sku=f'KR-{sku_counter:04d}',
+            stock=stock,
+            is_active=True,
+        )
+        sku_counter += 1
+    return sku_counter
 
 
 class Command(BaseCommand):
@@ -242,38 +269,40 @@ class Command(BaseCommand):
 
         self.stdout.write('  Products done')
 
-        # ─── VARIANTS ───
+        # ─── VARIANTS + SIZES ───
+        #
+        # Structure:
+        #   ProductVariant  → a named style, e.g. "Black", "Ivory", "EU 38"
+        #   ProductVariantSize → a size within that style, e.g. S / M / L
+        #
+        # Ready-to-wear: two colourways (Black, Ivory), each with XS–XL
+        # Footwear: one variant per EU size (no further size split)
+        # Accessories / Jewellery: single "One Size" variant
+
         sku_counter = 1
+        apparel_sizes = [('XS', 8), ('S', 10), ('M', 10), ('L', 8), ('XL', 5)]
+
         for product in Product.objects.filter(category__name='Ready to Wear'):
-            for size in ['XS', 'S', 'M', 'L', 'XL']:
-                ProductVariant.objects.create(
-                    product=product,
-                    size=size,
-                    color='Black',
-                    sku=f'KR-{sku_counter:04d}',
-                    stock=10,
-                )
-                sku_counter += 1
+            sku_counter = make_variant(product, 'Black', apparel_sizes, sku_counter)
+            sku_counter = make_variant(product, 'Ivory', apparel_sizes, sku_counter)
 
         for product in Product.objects.filter(category__name='Footwear'):
-            for eu_size in ['36', '37', '38', '39', '40', '41']:
-                ProductVariant.objects.create(
-                    product=product,
-                    size='One Size',
-                    color=f'EU {eu_size}',
-                    sku=f'KR-{sku_counter:04d}',
-                    stock=5,
+            for eu in ['36', '37', '38', '39', '40', '41']:
+                # Each EU size is its own named variant with a single "One Size" size entry
+                sku_counter = make_variant(
+                    product,
+                    f'EU {eu}',
+                    [('One Size', 5)],
+                    sku_counter,
                 )
-                sku_counter += 1
 
         for product in Product.objects.filter(category__name__in=['Accessories', 'Jewellery']):
-            ProductVariant.objects.create(
-                product=product,
-                size='One Size',
-                sku=f'KR-{sku_counter:04d}',
-                stock=8,
+            sku_counter = make_variant(
+                product,
+                'One Size',
+                [('One Size', 8)],
+                sku_counter,
             )
-            sku_counter += 1
 
         self.stdout.write('  Variants done')
 
@@ -314,9 +343,9 @@ class Command(BaseCommand):
         # ─── LOOKBOOKS ───
         LookBook.objects.all().delete()
         lookbook_data = [
-            ('Wear the Silence',     'wear-the-silence',     'SS 2025 — A collection built on restraint.',          'SS 2025'),
-            ('L\'Heure Dorée',       'l-heure-doree',        'AW 2024 — Gold hour. When daylight turns to amber.',  'AW 2024'),
-            ('La Nuit Étoilée',      'la-nuit-etoilee',      'Resort 2025 — Dressed for the night sky.',            'Resort 2025'),
+            ('Wear the Silence',  'wear-the-silence', 'SS 2025 — A collection built on restraint.',         'SS 2025'),
+            ("L'Heure Dorée",     'l-heure-doree',    'AW 2024 — Gold hour. When daylight turns to amber.', 'AW 2024'),
+            ('La Nuit Étoilée',   'la-nuit-etoilee',  'Resort 2025 — Dressed for the night sky.',           'Resort 2025'),
         ]
         for title, slug, desc, season in lookbook_data:
             cover_path = copy_placeholder(placeholder, f'lookbooks/covers/{slug}.jpg')

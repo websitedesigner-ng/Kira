@@ -2,7 +2,9 @@
 {% load static %}
 
 {% block title %}{{ collection.name }} — KIRA{% endblock %}
-
+{% block og_title %}{{ collection.name }} — KIRA{% endblock %}
+{% block og_description %}{{ collection.description|default:"Explore the"|add:" "|add:collection.name|add:" collection." }}{% endblock %}
+{% block og_image %}{{ collection.image.url }}{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/collection_detail.css' %}">
 <link rel="stylesheet" href="{% static 'css/products.css' %}">

@@ -2,8 +2,16 @@
 {% load static %}
 
 {% block title %}{{ product.name }} — KIRA{% endblock %}
-
+{% block meta_description %}{{ product.description|truncatewords:25 }}{% endblock %}
+{% block og_type %}product{% endblock %}
+{% block og_title %}{{ product.name }} — KIRA{% endblock %}
+{% block og_description %}{{ product.description|truncatewords:25 }}{% endblock %}
+{% block og_image %}{{ product.image.url }}{% endblock %}
+{% block twitter_title %}{{ product.name }} — KIRA{% endblock %}
+{% block twitter_description %}{{ product.description|truncatewords:25 }}{% endblock %}
+{% block twitter_image %}{{ product.image.url }}{% endblock %}
 {% block extra_css %}
+
 <link rel="stylesheet" href="{% static 'css/product_detail.css' %}">
 <link rel="stylesheet" href="{% static 'css/products.css' %}">
 {% endblock %}

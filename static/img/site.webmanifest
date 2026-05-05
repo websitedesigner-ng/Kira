@@ -1,0 +1,11 @@
+{
+  "name": "KIRA — Maison de Luxe",
+  "short_name": "KIRA",
+  "icons": [
+    { "src": "/static/img/favicon-32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "/static/img/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ],
+  "theme_color": "#3e2c1c",
+  "background_color": "#f8f5f0",
+  "display": "standalone"
+}

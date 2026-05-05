@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}403 — Access Forbidden | KIRA Maison de Luxe{% endblock %}
+{% block meta_description %}This space is reserved for invited guests only. Return to KIRA and discover our world.{% endblock %}
+
+{% block extra_css %}
+<style>
+  .error-page {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--kira-cream);
+  }
+
+  .error-visual {
+    background: linear-gradient(160deg, #0d0906 0%, #1e1209 35%, #2c1a0e 65%, #1a1208 100%);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+
+  .error-visual-inner {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+  }
+
+  .error-code {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(120px, 16vw, 200px);
+    font-weight: 300;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(200, 169, 106, 0.25);
+    letter-spacing: 0.08em;
+    line-height: 1;
+    user-select: none;
+    display: block;
+  }
+
+  .error-code-label {
+    font-size: 9px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(200, 169, 106, 0.4);
+    font-weight: 300;
+    font-family: 'Jost', sans-serif;
+    margin-top: 8px;
+  }
+
+  .error-ornament {
+    position: absolute;
+    inset: 40px;
+    border: 1px solid rgba(200, 169, 106, 0.1);
+    pointer-events: none;
+  }
+
+  .error-ornament::before {
+    content: '';
+    position: absolute;
+    inset: 14px;
+    border: 1px solid rgba(200, 169, 106, 0.06);
+  }
+
+  .corner { position: absolute; width: 22px; height: 22px; }
+  .corner-tl { top: -1px;  left: -1px;  border-top: 1px solid rgba(200,169,106,0.5); border-left: 1px solid rgba(200,169,106,0.5); }
+  .corner-tr { top: -1px;  right: -1px; border-top: 1px solid rgba(200,169,106,0.5); border-right: 1px solid rgba(200,169,106,0.5); }
+  .corner-bl { bottom: -1px; left: -1px;  border-bottom: 1px solid rgba(200,169,106,0.5); border-left: 1px solid rgba(200,169,106,0.5); }
+  .corner-br { bottom: -1px; right: -1px; border-bottom: 1px solid rgba(200,169,106,0.5); border-right: 1px solid rgba(200,169,106,0.5); }
+
+  .error-monogram-bg {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .error-monogram-bg span {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 560px;
+    font-weight: 300;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(200, 169, 106, 0.04);
+    font-style: italic;
+    line-height: 1;
+    user-select: none;
+    letter-spacing: -0.06em;
+  }
+
+  .error-season {
+    position: absolute;
+    top: 28px;
+    left: 28px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: rgba(200, 169, 106, 0.35);
+    text-transform: uppercase;
+    font-weight: 300;
+  }
+
+  .error-ref {
+    position: absolute;
+    bottom: 28px;
+    right: 28px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: rgba(200, 169, 106, 0.35);
+    text-transform: uppercase;
+    font-weight: 300;
+  }
+
+  .error-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 64px 72px;
+    position: relative;
+  }
+
+  .error-eyebrow {
+    font-size: 9px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--kira-gold);
+    font-weight: 400;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .error-eyebrow::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--kira-gold);
+  }
+
+  .error-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4vw, 54px);
+    font-weight: 300;
+    color: var(--kira-dark-brown);
+    line-height: 1.05;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+
+  .error-heading em {
+    font-style: italic;
+    color: var(--kira-brown);
+    display: block;
+  }
+
+  .error-divider {
+    width: 48px;
+    height: 1px;
+    background: var(--kira-tan);
+    margin: 28px 0;
+  }
+
+  .error-body {
+    font-size: 13px;
+    line-height: 1.9;
+    color: var(--text-secondary);
+    font-weight: 300;
+    max-width: 340px;
+    margin-bottom: 40px;
+    letter-spacing: 0.03em;
+  }
+
+  .error-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+  }
+
+  /* private client note */
+  .error-private-note {
+    border-top: 1px solid var(--border-light);
+    padding-top: 28px;
+    max-width: 340px;
+  }
+
+  .error-private-note-label {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    font-weight: 400;
+  }
+
+  .error-private-note p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  .error-private-note a {
+    color: var(--kira-gold);
+    text-decoration: none;
+  }
+
+  @media (max-width: 860px) {
+    .error-page { grid-template-columns: 1fr; }
+    .error-visual { min-height: 320px; }
+    .error-ornament { inset: 20px; }
+    .error-content { padding: 44px 28px; }
+  }
+
+  @media (max-width: 600px) {
+    .error-visual { min-height: 260px; }
+    .error-content { padding: 36px 20px; }
+    .error-actions { flex-direction: column; }
+    .error-actions .btn-primary,
+    .error-actions .btn-outline { width: 100%; text-align: center; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="error-page">
+
+  <div class="error-visual">
+    <div class="error-monogram-bg"><span>K</span></div>
+    <div class="error-ornament">
+      <div class="corner corner-tl"></div>
+      <div class="corner corner-tr"></div>
+      <div class="corner corner-bl"></div>
+      <div class="corner corner-br"></div>
+    </div>
+    <div class="error-visual-inner">
+      <span class="error-code">403</span>
+      <div class="error-code-label">Accès Réservé</div>
+    </div>
+    <div class="error-season">Kira · Maison de Luxe</div>
+    <div class="error-ref">Ref. E-403</div>
+  </div>
+
+  <div class="error-content">
+    <div class="error-eyebrow">Reserved for invited guests</div>
+    <h1 class="error-heading">
+      By Invitation<br>
+      <em>Only</em>
+    </h1>
+    <div class="error-divider"></div>
+    <p class="error-body">
+      This space within our maison is reserved. Like the private salons of our Paris atelier, entry here requires the proper introduction. If you believe this is an error, our advisors are at your service.
+    </p>
+    <div class="error-actions">
+      <a href="{% url 'store:home' %}" class="btn-primary">Return Home</a>
+      {% if not request.user.is_authenticated %}
+        <a href="{% url 'account_login' %}" class="btn-outline">Sign In</a>
+      {% endif %}
+    </div>
+    <div class="error-private-note">
+      <div class="error-private-note-label">Private Client Services</div>
+      <p>For exclusive access and private collection enquiries, contact your dedicated advisor at <a href="mailto:private@kira.com">private@kira.com</a></p>
+    </div>
+  </div>
+
+</main>
+{% endblock %}

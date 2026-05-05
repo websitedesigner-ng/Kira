@@ -1,0 +1,32 @@
+User-agent: *
+
+# ── Public pages: allowed ──────────────────────────────
+Allow: /$
+Allow: /products/
+Allow: /collections/
+Allow: /lookbooks/
+Allow: /our-story/
+Allow: /savoir-faire/
+Allow: /sustainability/
+Allow: /contact/
+Allow: /faqs/
+Allow: /book-appointment/
+Allow: /size-guide/
+Allow: /shipping-returns/
+Allow: /privacy-policy/
+Allow: /terms/
+
+# ── Private / functional: disallowed ──────────────────
+Disallow: /account/
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /order/
+Disallow: /order-now/
+Disallow: /payment/
+Disallow: /media/
+Disallow: /contact/submit/
+Disallow: /book-appointment/submit/
+Disallow: /admin/
+
+# ── Sitemap ───────────────────────────────────────────
+Sitemap: {{ request.scheme }}://{{ request.get_host }}/sitemap.xml

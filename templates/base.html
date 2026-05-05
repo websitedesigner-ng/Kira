@@ -1,170 +1,188 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>{% block title %}KIRA — Maison de Luxe{% endblock %}</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap"
-            rel="stylesheet"
-        />
-        <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
-        />
-        {% load static %}
-        <link rel="stylesheet" href="{% static 'css/base.css' %}" />
-        <link rel="stylesheet" href="{% static 'css/header.css' %}" />
-        <link rel="stylesheet" href="{% static 'css/footer.css' %}" />
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ GA4_MEASUREMENT_ID }}"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){ dataLayer.push(arguments); }
-          gtag('js', new Date());
-          gtag('config', '{{ GA4_MEASUREMENT_ID }}');
-        </script>
-        {% block extra_css %}{% endblock %}
-    </head>
-    <body>
-        {% include "partials/_announcement.html" %} 
-        {% include "partials/_header.html" %} 
-        {% block content %}{% endblock %} 
-        {% include "partials/_footer.html" %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- ─── PRIMARY META ─── -->
+    <title>{% block title %}KIRA — Maison de Luxe{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Since 1892, Kira has defined the art of French luxury — where heritage craft meets the demands of a discerning modernity.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}Kira, luxury fashion, leather goods, haute couture, maison de luxe, handcrafted{% endblock %}">
+    <meta name="author" content="Kira Maison de Luxe">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
 
-        <script>
-            const searchToggle = document.getElementById('searchToggle');
-            const searchBar    = document.getElementById('searchBar');
-            const searchInput  = document.getElementById('searchInput');
-            const searchClear  = document.getElementById('searchClear');
-          
-            searchToggle.addEventListener('click', () => {
-              const isOpen = searchBar.classList.toggle('open');
-              searchToggle.classList.toggle('active', isOpen);
-              searchToggle.setAttribute('aria-expanded', isOpen);
-              searchBar.setAttribute('aria-hidden', !isOpen);
-              if (isOpen) {
-                setTimeout(() => searchInput.focus(), 50);
-              } else {
-                searchInput.value = '';
-                searchClear.classList.remove('visible');
-              }
-            });
-          
-            searchInput.addEventListener('input', () => {
-              searchClear.classList.toggle('visible', searchInput.value.length > 0);
-            });
-          
-            searchClear.addEventListener('click', () => {
-              searchInput.value = '';
-              searchClear.classList.remove('visible');
-              searchInput.focus();
-            });
-          
-            document.addEventListener('keydown', (e) => {
-              if (e.key === 'Escape' && searchBar.classList.contains('open')) {
-                searchBar.classList.remove('open');
-                searchToggle.classList.remove('active');
-                searchToggle.setAttribute('aria-expanded', false);
-                searchBar.setAttribute('aria-hidden', true);
-                searchInput.value = '';
-                searchClear.classList.remove('visible');
-              }
-            });
-            // ─── MOBILE SIDEBAR ───
-            const hamburgerBtn = document.getElementById("hamburgerBtn");
-            const mobileSidebar = document.getElementById("mobileSidebar");
-            const sidebarOverlay = document.getElementById("sidebarOverlay");
-            const sidebarClose = document.getElementById("sidebarClose");
+    <!-- ─── OPEN GRAPH (Facebook, WhatsApp, LinkedIn) ─── -->
+    <meta property="og:type"        content="{% block og_type %}website{% endblock %}">
+    <meta property="og:site_name"   content="KIRA — Maison de Luxe">
+    <meta property="og:title"       content="{% block og_title %}KIRA — Maison de Luxe{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Since 1892, Kira has defined the art of French luxury — where heritage craft meets the demands of a discerning modernity.{% endblock %}">
+    <meta property="og:url"         content="{{ request.build_absolute_uri }}">
+    <meta property="og:image"       content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{% load static %}{% static 'img/og-default.png' %}{% endblock %}">
+    <meta property="og:image:width"  content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale"      content="en_GB">
 
-            function openSidebar() {
-                mobileSidebar.classList.add("open");
-                sidebarOverlay.classList.add("visible");
-                hamburgerBtn.setAttribute("aria-expanded", "true");
-                hamburgerBtn.classList.add("active");
-                document.body.style.overflow = "hidden";
-            }
+    <!-- ─── TWITTER / X CARD ─── -->
+    <meta name="twitter:card"        content="summary_large_image">
+    <meta name="twitter:site"        content="@KiraMaison">
+    <meta name="twitter:title"       content="{% block twitter_title %}KIRA — Maison de Luxe{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Since 1892, Kira has defined the art of French luxury — where heritage craft meets the demands of a discerning modernity.{% endblock %}">
+    <meta name="twitter:image"       content="{% block twitter_image %}{{ request.scheme }}://{{ request.get_host }}{% load static %}{% static 'img/og-default.png' %}{% endblock %}">
 
-            function closeSidebar() {
-                mobileSidebar.classList.remove("open");
-                sidebarOverlay.classList.remove("visible");
-                hamburgerBtn.setAttribute("aria-expanded", "false");
-                hamburgerBtn.classList.remove("active");
-                document.body.style.overflow = "";
-            }
+    <!-- ─── FAVICON ─── -->
+    {% load static %}
+    <link rel="icon"             type="image/x-icon"  href="{% static 'img/favicon.ico' %}">
+    <link rel="icon"             type="image/png"     href="{% static 'img/favicon-32x32.png' %}" sizes="32x32">
+    <link rel="icon"             type="image/png"     href="{% static 'img/favicon-16x16.png' %}" sizes="16x16">
+    <link rel="apple-touch-icon"                      href="{% static 'img/apple-touch-icon.png' %}">
+    <link rel="manifest"                              href="{% static 'img/site.webmanifest' %}">
+    <meta name="theme-color" content="#3e2c1c">
 
-            hamburgerBtn.addEventListener("click", openSidebar);
-            sidebarClose.addEventListener("click", closeSidebar);
-            sidebarOverlay.addEventListener("click", closeSidebar);
-            document.addEventListener("keydown", e => {
-                if (e.key === "Escape") closeSidebar();
-            });
+    <!-- ─── FONTS ─── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
 
-            // ─── SIDEBAR ACCORDION ───
-            document.querySelectorAll(".sidebar-nav-toggle").forEach(btn => {
-                btn.addEventListener("click", () => {
-                    const targetId = btn.getAttribute("data-target");
-                    const sub = document.getElementById(targetId);
-                    const isOpen = sub.classList.contains("open");
-                    document
-                        .querySelectorAll(".sidebar-sub.open")
-                        .forEach(s => s.classList.remove("open"));
-                    document
-                        .querySelectorAll(".sidebar-nav-toggle.expanded")
-                        .forEach(b => b.classList.remove("expanded"));
-                    if (!isOpen) {
-                        sub.classList.add("open");
-                        btn.classList.add("expanded");
-                    }
-                });
-            });
+    <!-- ─── SWIPER ─── -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-            // ─── SCROLL REVEAL ───
-            const revealObserver = new IntersectionObserver(
-                entries => {
-                    entries.forEach(el => {
-                        if (el.isIntersecting) {
-                            el.target.style.opacity = "1";
-                            el.target.style.transform = "translateY(0)";
-                        }
-                    });
-                },
-                { threshold: 0.08 }
-            );
+    <!-- ─── STYLES ─── -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/header.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}" />
 
-            function attachRevealObserver() {
-                document
-                    .querySelectorAll(
-                        ".section-header, .product-card, .look-card, .service-icon"
-                    )
-                    .forEach(el => {
-                        if (!el.dataset.revealed) {
-                            el.style.opacity = "0";
-                            el.style.transform = "translateY(24px)";
-                            el.style.transition =
-                                "opacity 0.8s ease, transform 0.8s ease";
-                            el.dataset.revealed = "1";
-                            revealObserver.observe(el);
-                        }
-                    });
-            }
-            attachRevealObserver();
+    <!-- ─── GA4 ─── -->
+    {% if GA4_MEASUREMENT_ID %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ GA4_MEASUREMENT_ID }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', '{{ GA4_MEASUREMENT_ID }}');
+    </script>
+    {% endif %}
 
-            // ─── CATEGORY TABS ───
-            document.querySelectorAll(".cat-tab").forEach(tab => {
-                tab.addEventListener("click", e => {
-                    e.preventDefault();
-                    document
-                        .querySelectorAll(".cat-tab")
-                        .forEach(t => t.classList.remove("active"));
-                    tab.classList.add("active");
-                });
-            });
-        </script>
+    {% block extra_css %}{% endblock %}
+  </head>
+  <body>
+    {% include "partials/_announcement.html" %}
+    {% include "partials/_header.html" %}
+    {% block content %}{% endblock %}
+    {% include "partials/_footer.html" %}
 
-        {% block extra_js %}{% endblock %}
-    </body>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script>
+      // ─── SEARCH ───
+      const searchToggle = document.getElementById('searchToggle');
+      const searchBar    = document.getElementById('searchBar');
+      const searchInput  = document.getElementById('searchInput');
+      const searchClear  = document.getElementById('searchClear');
+
+      searchToggle.addEventListener('click', () => {
+        const isOpen = searchBar.classList.toggle('open');
+        searchToggle.classList.toggle('active', isOpen);
+        searchToggle.setAttribute('aria-expanded', isOpen);
+        searchBar.setAttribute('aria-hidden', !isOpen);
+        if (isOpen) {
+          setTimeout(() => searchInput.focus(), 50);
+        } else {
+          searchInput.value = '';
+          if (searchClear) searchClear.classList.remove('visible');
+        }
+      });
+
+      if (searchClear) {
+        searchInput.addEventListener('input', () => {
+          searchClear.classList.toggle('visible', searchInput.value.length > 0);
+        });
+        searchClear.addEventListener('click', () => {
+          searchInput.value = '';
+          searchClear.classList.remove('visible');
+          searchInput.focus();
+        });
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && searchBar.classList.contains('open')) {
+          searchBar.classList.remove('open');
+          searchToggle.classList.remove('active');
+          searchToggle.setAttribute('aria-expanded', false);
+          searchBar.setAttribute('aria-hidden', true);
+          searchInput.value = '';
+          if (searchClear) searchClear.classList.remove('visible');
+        }
+      });
+
+      // ─── MOBILE SIDEBAR ───
+      const hamburgerBtn   = document.getElementById('hamburgerBtn');
+      const mobileSidebar  = document.getElementById('mobileSidebar');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+      const sidebarClose   = document.getElementById('sidebarClose');
+
+      function openSidebar() {
+        mobileSidebar.classList.add('open');
+        sidebarOverlay.classList.add('visible');
+        hamburgerBtn.setAttribute('aria-expanded', 'true');
+        hamburgerBtn.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeSidebar() {
+        mobileSidebar.classList.remove('open');
+        sidebarOverlay.classList.remove('visible');
+        hamburgerBtn.setAttribute('aria-expanded', 'false');
+        hamburgerBtn.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      hamburgerBtn.addEventListener('click', openSidebar);
+      sidebarClose.addEventListener('click', closeSidebar);
+      sidebarOverlay.addEventListener('click', closeSidebar);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+      // ─── SIDEBAR ACCORDION ───
+      document.querySelectorAll('.sidebar-nav-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const sub    = document.getElementById(btn.getAttribute('data-target'));
+          const isOpen = sub.classList.contains('open');
+          document.querySelectorAll('.sidebar-sub.open').forEach(s => s.classList.remove('open'));
+          document.querySelectorAll('.sidebar-nav-toggle.expanded').forEach(b => b.classList.remove('expanded'));
+          if (!isOpen) { sub.classList.add('open'); btn.classList.add('expanded'); }
+        });
+      });
+
+      // ─── SCROLL REVEAL ───
+      const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(el => {
+          if (el.isIntersecting) {
+            el.target.style.opacity   = '1';
+            el.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, { threshold: 0.08 });
+
+      document.querySelectorAll('.section-header, .product-card, .look-card, .service-icon').forEach(el => {
+        if (!el.dataset.revealed) {
+          el.style.opacity    = '0';
+          el.style.transform  = 'translateY(24px)';
+          el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+          el.dataset.revealed = '1';
+          revealObserver.observe(el);
+        }
+      });
+
+      // ─── CATEGORY TABS ───
+      document.querySelectorAll('.cat-tab').forEach(tab => {
+        tab.addEventListener('click', e => {
+          e.preventDefault();
+          document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+        });
+      });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+  </body>
 </html>

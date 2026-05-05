@@ -122,10 +122,11 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # ─── SECURITY (production only) ───
 if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_BROWSER_XSS_FILTER        = True
     SECURE_CONTENT_TYPE_NOSNIFF      = True
     X_FRAME_OPTIONS                  = 'DENY'
-    SECURE_SSL_REDIRECT              = True
+    SECURE_SSL_REDIRECT              = False
     SESSION_COOKIE_SECURE            = True
     CSRF_COOKIE_SECURE               = True
     SECURE_HSTS_SECONDS              = 31536000

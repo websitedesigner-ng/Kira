@@ -1,41 +1,27 @@
 /* ════════════════════════════════════════
-   HEADER.CSS
-   Announcement Bar · Header · Mega Menu
-   Mobile Sidebar · Category Strip
+   HEADER.CSS  — KIRA Maison de Luxe
    ════════════════════════════════════════
 
    TABLE OF CONTENTS
    ─────────────────
-   1. Announcement Bar
-   2. Header & Layout
-      2a. Header Shell
-      2b. Logo
-      2c. Navigation
-      2d. Icon Buttons & Cart
-   3. Mega Menu
-      3a. Base Styles
-      3b. Positioning Variants
-      3c. Menu Content
-   4. Search Bar
-      4a. Desktop Search
-      4b. Mobile Sidebar Search
-   5. Mobile Sidebar
-      5a. Overlay & Shell
-      5b. Sidebar Header
-      5c. Sidebar Body & Nav
-      5d. Sidebar Footer & Social
-   6. Category Strip
-   7. Responsive
-      7a. ≤ 860px
-      7b. ≤ 600px
-      7c. ≤ 420px
+   1.  Announcement Bar
+   2.  Header Shell
+   3.  Logo
+   4.  Nav Left & Right
+   5.  Icon Buttons & Cart
+   6.  Hamburger
+   7.  Mega Menu
+   8.  Search Bar
+   9.  Subnav Strip
+   10. Mobile Sidebar
+   11. Category Strip
+   12. Responsive
    ════════════════════════════════════════ */
 
 
 /* ─────────────────────────────────────────
    1. ANNOUNCEMENT BAR
    ───────────────────────────────────────── */
-
 .announcement-bar {
     background: var(--kira-black);
     color: var(--kira-white);
@@ -48,7 +34,6 @@
     text-align: center;
     text-transform: uppercase;
 }
-
 .announcement-bar a {
     color: var(--kira-gold);
     margin-left: 6px;
@@ -58,10 +43,8 @@
 
 
 /* ─────────────────────────────────────────
-   2. HEADER & LAYOUT
+   2. HEADER SHELL
    ───────────────────────────────────────── */
-
-/* 2a. Header Shell */
 header {
     background: var(--bg-primary);
     position: sticky;
@@ -70,9 +53,21 @@ header {
     border-bottom: 1px solid var(--border-light);
 }
 
+/*
+   THE FIX: logo lives in the middle `auto` column.
+   Left and right columns are both `1fr` but capped at
+   a concrete max so neither can grow wide enough to
+   squeeze or displace the logo.
+   --logo-col is the pixel budget each side gets.
+*/
+:root {
+    --logo-col: 280px;
+    --sidebar-width: 360px;
+}
+
 .header-inner {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: minmax(0, var(--logo-col)) auto minmax(0, var(--logo-col));
     align-items: center;
     max-width: 1600px;
     margin: 0 auto;
@@ -80,13 +75,18 @@ header {
     height: 72px;
 }
 
-/* 2b. Logo */
+
+/* ─────────────────────────────────────────
+   3. LOGO
+   ───────────────────────────────────────── */
 .logo {
     display: block;
     text-align: center;
     text-decoration: none;
+    white-space: nowrap;
+    /* prevents any flex/grid shrink on the auto column */
+    flex-shrink: 0;
 }
-
 .logo-text {
     font-family: "Cormorant Garamond", serif;
     font-size: 32px;
@@ -96,7 +96,6 @@ header {
     text-transform: uppercase;
     line-height: 1;
 }
-
 .logo-sub {
     display: block;
     margin-top: 3px;
@@ -108,25 +107,30 @@ header {
     text-transform: uppercase;
 }
 
-/* 2c. Navigation */
+
+/* ─────────────────────────────────────────
+   4. NAV LEFT & RIGHT
+   ───────────────────────────────────────── */
 .nav-left {
     display: flex;
     align-items: center;
-    gap: 32px;
+    gap: 24px;
+    min-width: 0;
+    justify-content: flex-start;
 }
-
 .nav-right {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     gap: 20px;
+    min-width: 0;
 }
 
 nav a {
     font-family: "Jost", sans-serif;
     font-size: 11px;
     font-weight: 400;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.13em;
     color: var(--text-primary);
     text-transform: uppercase;
     text-decoration: none;
@@ -135,13 +139,15 @@ nav a {
     border-bottom: 1px solid transparent;
     transition: border-color 0.2s, color 0.2s;
 }
-
 nav a:hover {
     color: var(--kira-brown);
     border-bottom-color: var(--kira-gold);
 }
 
-/* 2d. Icon Buttons & Cart */
+
+/* ─────────────────────────────────────────
+   5. ICON BUTTONS & CART
+   ───────────────────────────────────────── */
 .icon-btn {
     display: flex;
     align-items: center;
@@ -152,11 +158,7 @@ nav a:hover {
     color: var(--text-primary);
     transition: color 0.2s;
 }
-
-.icon-btn:hover {
-    color: var(--kira-gold);
-}
-
+.icon-btn:hover { color: var(--kira-gold); }
 .icon-btn svg {
     width: 20px;
     height: 20px;
@@ -165,10 +167,7 @@ nav a:hover {
     stroke-width: 1.5;
 }
 
-.cart-wrapper {
-    position: relative;
-}
-
+.cart-wrapper { position: relative; }
 .cart-count {
     position: absolute;
     top: 0;
@@ -182,11 +181,13 @@ nav a:hover {
     color: var(--kira-black);
     font-size: 9px;
     font-weight: 500;
-    letter-spacing: 0;
     border-radius: 50%;
 }
 
-/* Hamburger (mobile only — visible via responsive rules) */
+
+/* ─────────────────────────────────────────
+   6. HAMBURGER
+   ───────────────────────────────────────── */
 .hamburger {
     display: none;
     flex-direction: column;
@@ -199,7 +200,6 @@ nav a:hover {
     width: 36px;
     height: 36px;
 }
-
 .hamburger span {
     display: block;
     width: 22px;
@@ -208,24 +208,19 @@ nav a:hover {
     transform-origin: center;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
-
 .hamburger.active span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
 .hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
 .hamburger.active span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
 
 /* ─────────────────────────────────────────
-   3. MEGA MENU
+   7. MEGA MENU
    ───────────────────────────────────────── */
-
-/* 3a. Base Styles */
-.nav-item {
-    position: relative;
-}
+.nav-item { position: relative; }
 
 .mega-menu {
     position: absolute;
-    top: calc(100% + 1px); /* flush under header border */
+    top: calc(100% + 1px);
     z-index: 300;
     display: none;
     background: var(--bg-primary);
@@ -234,14 +229,9 @@ nav a:hover {
     padding: 32px 40px;
     box-shadow: var(--shadow-medium);
 }
+.nav-item:hover .mega-menu { display: grid; }
 
-.nav-item:hover .mega-menu {
-    display: grid;
-}
-
-/* 3b. Positioning Variants */
-
-/* Women / Men — centred under trigger */
+/* Default: 3-col, centred under trigger */
 .nav-left .mega-menu {
     left: 50%;
     transform: translateX(-50%);
@@ -250,13 +240,20 @@ nav a:hover {
     gap: 32px;
 }
 
-/* Clamp first item so it never escapes viewport left */
+/* First item — anchor left so it never bleeds off viewport */
 .nav-left .nav-item:first-child .mega-menu {
     left: 0;
     transform: none;
 }
 
-/* Account dropdown — right-aligned, never overflows right edge */
+/* Last mega item — anchor right */
+.nav-left .nav-item:last-of-type .mega-menu {
+    left: auto;
+    right: 0;
+    transform: none;
+}
+
+/* Account dropdown */
 .nav-account-item .mega-menu.account-dropdown {
     left: auto;
     right: 0;
@@ -266,12 +263,8 @@ nav a:hover {
     grid-template-columns: 1fr;
     gap: 0;
 }
+.account-col { min-width: 0; }
 
-.account-col {
-    min-width: 0;
-}
-
-/* 3c. Menu Content */
 .mega-col-title {
     margin-bottom: 14px;
     padding-bottom: 10px;
@@ -282,7 +275,6 @@ nav a:hover {
     text-transform: uppercase;
     border-bottom: 1px solid var(--border-light);
 }
-
 .mega-col a,
 .mega-logout-btn {
     display: block;
@@ -302,7 +294,6 @@ nav a:hover {
     font-family: "Jost", sans-serif;
     transition: color 0.2s;
 }
-
 .mega-col a:hover,
 .mega-logout-btn:hover {
     color: var(--kira-gold);
@@ -311,23 +302,19 @@ nav a:hover {
 
 
 /* ─────────────────────────────────────────
-   4. SEARCH BAR
+   8. SEARCH BAR
    ───────────────────────────────────────── */
-
-/* 4a. Desktop Search */
 .search-bar {
     height: 0;
     overflow: hidden;
     background: var(--bg-primary);
     border-bottom: 1px solid transparent;
-    transition: height 0.32s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.32s ease;
+    transition: height 0.32s cubic-bezier(0.4,0,0.2,1), border-color 0.32s ease;
 }
-
 .search-bar.open {
     height: 64px;
     border-bottom-color: var(--border-light);
 }
-
 .search-bar-inner {
     display: flex;
     align-items: center;
@@ -336,7 +323,6 @@ nav a:hover {
     padding: 0 40px;
     height: 100%;
 }
-
 .search-form {
     display: flex;
     align-items: center;
@@ -346,20 +332,15 @@ nav a:hover {
     border-bottom: 1px solid var(--border-light);
     transition: border-color 0.2s;
 }
-
-.search-form:focus-within {
-    border-bottom-color: var(--kira-gold);
-}
+.search-form:focus-within { border-bottom-color: var(--kira-gold); }
 
 .search-form-icon {
     flex-shrink: 0;
-    width: 16px;
-    height: 16px;
+    width: 16px; height: 16px;
     stroke: var(--text-muted);
     fill: none;
     stroke-width: 1.5;
 }
-
 .search-input {
     flex: 1;
     background: none;
@@ -373,15 +354,8 @@ nav a:hover {
     letter-spacing: 0.04em;
     color: var(--text-primary);
 }
-
-.search-input::placeholder {
-    color: var(--text-muted);
-    font-style: italic;
-}
-
-.search-input::-webkit-search-cancel-button {
-    display: none;
-}
+.search-input::placeholder { color: var(--text-muted); font-style: italic; }
+.search-input::-webkit-search-cancel-button { display: none; }
 
 .search-clear {
     display: none;
@@ -393,30 +367,24 @@ nav a:hover {
     color: var(--text-muted);
     transition: color 0.2s;
 }
-
 .search-clear.visible { display: flex; }
-
-.search-clear:hover { color: var(--kira-brown); }
-
+.search-clear:hover   { color: var(--kira-brown); }
 .search-clear svg {
-    width: 16px;
-    height: 16px;
+    width: 16px; height: 16px;
     stroke: currentColor;
     fill: none;
     stroke-width: 1.5;
 }
 
-/* Toggle icon swap */
-.search-toggle .icon-close          { display: none; }
-.search-toggle.active .icon-search  { display: none !important; }
-.search-toggle.active .icon-close   { display: block !important; }
+.search-toggle .icon-close         { display: none; }
+.search-toggle.active .icon-search { display: none !important; }
+.search-toggle.active .icon-close  { display: block !important; }
 
-/* 4b. Mobile Sidebar Search */
+/* Sidebar search */
 .sidebar-search {
     padding: 16px 24px;
     border-bottom: 1px solid var(--border-light);
 }
-
 .sidebar-search-wrap {
     display: flex;
     align-items: center;
@@ -426,20 +394,14 @@ nav a:hover {
     border: 1px solid var(--border-light);
     transition: border-color 0.2s;
 }
-
-.sidebar-search-wrap:focus-within {
-    border-color: var(--kira-gold);
-}
-
+.sidebar-search-wrap:focus-within { border-color: var(--kira-gold); }
 .sidebar-search-wrap svg {
     flex-shrink: 0;
-    width: 15px;
-    height: 15px;
+    width: 15px; height: 15px;
     stroke: var(--text-muted);
     fill: none;
     stroke-width: 1.5;
 }
-
 .sidebar-search-wrap input {
     flex: 1;
     background: none;
@@ -451,36 +413,88 @@ nav a:hover {
     letter-spacing: 0.08em;
     color: var(--text-primary);
 }
-
 .sidebar-search-wrap input::placeholder { color: var(--text-muted); }
-
 .sidebar-search-wrap input::-webkit-search-cancel-button { display: none; }
 
 
 /* ─────────────────────────────────────────
-   5. MOBILE SIDEBAR
+   9. SUBNAV STRIP
+   Sits flush below the header. Shows quick
+   links to Products, Collections, Lookbooks
+   + category shortcuts. Hidden on mobile
+   (sidebar covers all of these).
+   ───────────────────────────────────────── */
+.subnav-strip {
+    background: var(--kira-cream);
+    border-bottom: 1px solid var(--border-light);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.subnav-strip::-webkit-scrollbar { display: none; }
+
+.subnav-inner {
+    display: flex;
+    align-items: center;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 40px;
+    gap: 0;
+}
+
+.subnav-link {
+    padding: 11px 18px;
+    font-family: "Jost", sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    color: var(--text-secondary);
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+}
+.subnav-link:hover,
+.subnav-link.active {
+    color: var(--kira-black);
+    border-bottom-color: var(--kira-gold);
+}
+
+/* Thin vertical rule separating quick-links from categories */
+.subnav-sep {
+    display: block;
+    width: 1px;
+    height: 14px;
+    background: var(--border-light);
+    margin: 0 8px;
+    flex-shrink: 0;
+}
+
+
+/* ─────────────────────────────────────────
+   10. MOBILE SIDEBAR
    ───────────────────────────────────────── */
 
-/* 5a. Overlay & Shell */
+/* Overlay */
 .sidebar-overlay {
     position: fixed;
     inset: 0;
     z-index: 399;
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(0,0,0,0.45);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.35s ease;
 }
-
 .sidebar-overlay.visible {
     opacity: 1;
     pointer-events: all;
 }
 
+/* Shell */
 .mobile-sidebar {
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 0; left: 0;
     z-index: 400;
     display: flex;
     flex-direction: column;
@@ -489,14 +503,11 @@ nav a:hover {
     height: 100%;
     background: var(--kira-white);
     transform: translateX(-100%);
-    transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.38s cubic-bezier(0.4,0,0.2,1);
 }
+.mobile-sidebar.open { transform: translateX(0); }
 
-.mobile-sidebar.open {
-    transform: translateX(0);
-}
-
-/* 5b. Sidebar Header */
+/* Sidebar header */
 .sidebar-header {
     display: flex;
     align-items: center;
@@ -505,12 +516,7 @@ nav a:hover {
     padding: 20px 24px;
     border-bottom: 1px solid var(--border-light);
 }
-
-.sidebar-logo {
-    display: block;
-    text-decoration: none;
-}
-
+.sidebar-logo { display: block; text-decoration: none; }
 .sidebar-close {
     display: flex;
     align-items: center;
@@ -522,32 +528,23 @@ nav a:hover {
     color: var(--text-secondary);
     transition: color 0.2s;
 }
-
 .sidebar-close:hover { color: var(--kira-gold); }
-
 .sidebar-close svg {
-    width: 20px;
-    height: 20px;
+    width: 20px; height: 20px;
     stroke: currentColor;
     fill: none;
     stroke-width: 1.5;
 }
 
-/* 5c. Sidebar Body & Nav */
+/* Sidebar body */
 .sidebar-body {
     flex: 1;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     padding: 8px 0 24px;
 }
-
-.sidebar-section {
-    padding: 8px 0;
-}
-
-.sidebar-nav-item {
-    border-bottom: 1px solid var(--border-light);
-}
+.sidebar-section { padding: 8px 0; }
+.sidebar-nav-item { border-bottom: 1px solid var(--border-light); }
 
 .sidebar-nav-toggle {
     display: flex;
@@ -567,7 +564,6 @@ nav a:hover {
     text-transform: uppercase;
     transition: color 0.2s, background 0.2s;
 }
-
 .sidebar-nav-toggle:hover {
     color: var(--kira-brown);
     background: var(--kira-cream);
@@ -575,33 +571,23 @@ nav a:hover {
 
 .toggle-arrow {
     flex-shrink: 0;
-    width: 16px;
-    height: 16px;
+    width: 16px; height: 16px;
     stroke: currentColor;
     fill: none;
     stroke-width: 1.5;
     transition: transform 0.28s ease;
 }
-
-.sidebar-nav-toggle.expanded .toggle-arrow {
-    transform: rotate(180deg);
-}
+.sidebar-nav-toggle.expanded .toggle-arrow { transform: rotate(180deg); }
 
 .sidebar-sub {
     max-height: 0;
     overflow: hidden;
     background: var(--kira-cream);
-    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1);
 }
+.sidebar-sub.open { max-height: 700px; }
 
-.sidebar-sub.open {
-    max-height: 600px;
-}
-
-.sidebar-sub-group {
-    padding: 16px 24px 8px;
-}
-
+.sidebar-sub-group { padding: 16px 24px 8px; }
 .sidebar-sub-title {
     margin-bottom: 10px;
     font-size: 9px;
@@ -610,7 +596,6 @@ nav a:hover {
     color: var(--kira-gold);
     text-transform: uppercase;
 }
-
 .sidebar-sub a {
     display: block;
     padding: 7px 0;
@@ -623,7 +608,6 @@ nav a:hover {
     border-bottom: none;
     transition: color 0.2s;
 }
-
 .sidebar-sub a:hover { color: var(--kira-brown); }
 
 .sidebar-link,
@@ -646,20 +630,17 @@ nav a:hover {
     box-sizing: border-box;
     transition: color 0.2s, background 0.2s;
 }
-
 .sidebar-link:hover,
 .sidebar-logout-btn:hover {
     color: var(--kira-brown);
     background: var(--kira-cream);
 }
-
 .sidebar-link-sm,
 .sidebar-logout-btn.sidebar-link-sm {
     font-size: 10px;
     color: var(--text-muted);
     padding: 12px 24px;
 }
-
 .sidebar-link-sm:hover,
 .sidebar-logout-btn.sidebar-link-sm:hover { color: var(--kira-brown); }
 
@@ -669,13 +650,12 @@ nav a:hover {
     background: var(--border-light);
 }
 
-/* 5d. Sidebar Footer & Social */
+/* Sidebar footer */
 .sidebar-footer {
     flex-shrink: 0;
     padding: 20px 24px;
     border-top: 1px solid var(--border-light);
 }
-
 .sidebar-footer-label {
     margin-bottom: 14px;
     font-size: 9px;
@@ -684,24 +664,20 @@ nav a:hover {
     color: var(--text-muted);
     text-transform: uppercase;
 }
-
-/* Override .social-btn defaults inside the white sidebar */
 .mobile-sidebar .social-btn {
     border-color: var(--border-light);
     color: var(--text-muted);
 }
-
 .mobile-sidebar .social-btn:hover {
     border-color: var(--kira-gold);
     color: var(--kira-gold);
-    background: rgba(200, 169, 106, 0.06);
+    background: rgba(200,169,106,0.06);
 }
 
 
 /* ─────────────────────────────────────────
-   6. CATEGORY STRIP
+   11. CATEGORY STRIP (page-level, optional)
    ───────────────────────────────────────── */
-
 .category-strip {
     background: var(--kira-cream);
     border-top: 1px solid var(--border-light);
@@ -710,18 +686,14 @@ nav a:hover {
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
-
 .category-strip::-webkit-scrollbar { display: none; }
-
 .category-strip-inner {
     display: flex;
     align-items: stretch;
-    justify-content: flex-start;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 40px;
 }
-
 .cat-tab {
     padding: 16px 24px;
     font-size: 11px;
@@ -735,7 +707,6 @@ nav a:hover {
     cursor: pointer;
     transition: color 0.2s, border-color 0.2s;
 }
-
 .cat-tab:hover,
 .cat-tab.active {
     color: var(--kira-black);
@@ -744,48 +715,61 @@ nav a:hover {
 
 
 /* ─────────────────────────────────────────
-   7. RESPONSIVE
+   12. RESPONSIVE
    ───────────────────────────────────────── */
 
-/* 7a. ≤ 860px */
-@media (max-width: 860px) {
-    .hamburger          { display: flex; }
-    .nav-left           { display: none; }
-    .nav-account-item   { display: none; } /* handled in sidebar */
-    .nav-right-account  { display: none; }
+/* ≤ 1100px — tighten spacing before hamburger kicks in */
+@media (max-width: 1100px) {
+    :root { --logo-col: 220px; }
+    .header-inner { padding: 0 28px; }
+    .nav-left { gap: 20px; }
+    nav a { font-size: 10px; letter-spacing: 0.1em; }
+    .subnav-inner { padding: 0 28px; }
+}
 
+/* ≤ 860px — collapse to hamburger */
+@media (max-width: 860px) {
+    .hamburger         { display: flex; }
+    .nav-left          { display: none; }
+    .nav-account-item  { display: none; }
+    .nav-right-account { display: none; }
+
+    /*
+       Mobile grid: fixed 44px outer columns so logo is
+       always mathematically centred no matter how many
+       icons are in nav-right.
+    */
     .header-inner {
         grid-template-columns: 44px 1fr 44px;
         gap: 0;
         padding: 0 18px;
         height: 64px;
     }
-
+    .logo { text-align: center; }
     .logo-text { font-size: 26px; letter-spacing: 0.28em; }
     .nav-right { gap: 12px; }
 
-    .search-bar.open { height: 56px; }
+    .search-bar.open  { height: 56px; }
     .search-bar-inner { padding: 0 18px; }
-    .search-input { font-size: 16px; }
+    .search-input     { font-size: 16px; }
+
+    /* subnav hides — sidebar has all the same links */
+    .subnav-strip { display: none; }
 }
 
-/* 7b. ≤ 600px */
+/* ≤ 600px */
 @media (max-width: 600px) {
     .announcement-bar { font-size: 10px; padding: 9px 12px; }
-
-    .header-inner { padding: 0 14px; height: 58px; }
-
+    .header-inner  { padding: 0 14px; height: 58px; }
     .logo-text { font-size: 22px; letter-spacing: 0.24em; }
     .logo-sub  { font-size: 7px;  letter-spacing: 0.2em; }
-
+    .search-bar.open  { height: 52px; }
+    .search-bar-inner { padding: 0 14px; }
     .category-strip-inner { padding: 0 24px; }
     .cat-tab { padding: 13px 16px; font-size: 10px; }
-
-    .search-bar.open { height: 52px; }
-    .search-bar-inner { padding: 0 14px; }
 }
 
-/* 7c. ≤ 420px */
+/* ≤ 420px */
 @media (max-width: 420px) {
     :root { --sidebar-width: 100vw; }
     .header-inner { padding: 0 12px; }

@@ -122,7 +122,19 @@ if not DEBUG:
 # ─── MEDIA — Cloudinary ───
 MEDIA_URL    = '/media/'
 MEDIA_ROOT   = BASE_DIR / 'media'
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+
+if not DEBUG:
+    STORAGES = {
+        "default": {
+            "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage"
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"
+        }
+    }
+    
+    
 
 # ─── SECURITY (production only) ───
 if not DEBUG:

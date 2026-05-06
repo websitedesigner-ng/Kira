@@ -1,4 +1,4 @@
-<!-- HEADER — KIRA Maison de Luxe (Tailoring) -->
+<!-- HEADER — KIRA Maison de Luxe (Fixed Nav) -->
 <header>
   <div class="header-inner">
 
@@ -8,7 +8,10 @@
 
     <nav class="nav-left">
 
-      <!-- SUITING -->
+      <!-- SHOP (direct link) -->
+      <a href="{% url 'store:product_list' %}">Shop</a>
+
+      <!-- SUITING dropdown -->
       <div class="nav-item">
         <a href="{% url 'store:product_list' %}?category=suits">Suiting</a>
         <div class="mega-menu">
@@ -16,13 +19,11 @@
             <div class="mega-col-title">Shop</div>
             <a href="{% url 'store:product_list' %}?category=suits">All Suits</a>
             <a href="{% url 'store:product_list' %}?tag=new-arrival">New Arrivals</a>
-            <a href="{% url 'store:collection_list' %}">Collections</a>
-            <a href="{% url 'store:lookbook_list' %}">Lookbooks</a>
           </div>
           <div class="mega-col">
             <div class="mega-col-title">By Style</div>
-            <a href="{% url 'store:product_list' %}?tag=suits&q=two-piece">Two-Piece Suits</a>
-            <a href="{% url 'store:product_list' %}?tag=suits&q=three-piece">Three-Piece Suits</a>
+            <a href="{% url 'store:product_list' %}?tag=suits&q=two-piece">Two-Piece</a>
+            <a href="{% url 'store:product_list' %}?tag=suits&q=three-piece">Three-Piece</a>
             <a href="{% url 'store:product_list' %}?tag=suits&q=double-breasted">Double-Breasted</a>
             <a href="{% url 'store:product_list' %}?tag=evening">Evening &amp; Dinner</a>
           </div>
@@ -36,7 +37,7 @@
         </div>
       </div>
 
-      <!-- READY-TO-WEAR -->
+      <!-- READY-TO-WEAR dropdown -->
       <div class="nav-item">
         <a href="{% url 'store:product_list' %}?category=blazers-jackets">Ready-to-Wear</a>
         <div class="mega-menu">
@@ -54,12 +55,13 @@
           <div class="mega-col">
             <div class="mega-col-title">Outerwear</div>
             <a href="{% url 'store:product_list' %}?category=outerwear">All Outerwear</a>
-            <a href="{% url 'store:collection_detail' slug='outerwear-house' %}">Outerwear House</a>
+            <a href="{% url 'store:product_list' %}?category=accessories">Accessories</a>
+            <a href="{% url 'store:product_list' %}?category=shoes">Shoes</a>
           </div>
         </div>
       </div>
 
-      <!-- COLLECTIONS -->
+      <!-- COLLECTIONS dropdown -->
       <div class="nav-item">
         <a href="{% url 'store:collection_list' %}">Collections</a>
         <div class="mega-menu">
@@ -87,14 +89,12 @@
         </div>
       </div>
 
-      <!-- STANDALONE LINKS -->
-      <a href="{% url 'store:product_list' %}?category=accessories">Accessories</a>
-      <a href="{% url 'store:product_list' %}?category=shoes">Shoes</a>
-      <a href="{% url 'store:product_list' %}?tag=leather-goods">Leather Goods</a>
+      <!-- LOOKBOOK (direct link) -->
+      <a href="{% url 'store:lookbook_list' %}">Lookbook</a>
 
     </nav>
 
-    <!-- LOGO -->
+    <!-- LOGO (centre column) -->
     <a href="{% url 'store:home' %}" class="logo">
       <span class="logo-text">KIRA</span>
       <span class="logo-sub">Maison de Luxe</span>
@@ -174,7 +174,7 @@
 <!-- MOBILE SIDEBAR OVERLAY -->
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<!-- MOBILE SIDEBAR -->
+<!-- MOBILE SIDEBAR — unchanged structure, just updated links to match above -->
 <nav class="mobile-sidebar" id="mobileSidebar" aria-label="Mobile navigation">
   <div class="sidebar-header">
     <a href="{% url 'store:home' %}" class="sidebar-logo">
@@ -199,6 +199,9 @@
 
     <div class="sidebar-section">
 
+      <!-- SHOP direct -->
+      <a href="{% url 'store:product_list' %}" class="sidebar-link">Shop All</a>
+
       <!-- SUITING -->
       <div class="sidebar-nav-item">
         <button class="sidebar-nav-toggle" data-target="sidebar-suiting">
@@ -210,8 +213,6 @@
             <div class="sidebar-sub-title">Shop</div>
             <a href="{% url 'store:product_list' %}?category=suits">All Suits</a>
             <a href="{% url 'store:product_list' %}?tag=new-arrival">New Arrivals</a>
-            <a href="{% url 'store:collection_list' %}">Collections</a>
-            <a href="{% url 'store:lookbook_list' %}">Lookbooks</a>
           </div>
           <div class="sidebar-sub-group">
             <div class="sidebar-sub-title">By Style</div>
@@ -249,9 +250,10 @@
             <a href="{% url 'store:product_list' %}?category=knitwear">Cashmere &amp; Merino</a>
           </div>
           <div class="sidebar-sub-group">
-            <div class="sidebar-sub-title">Outerwear</div>
-            <a href="{% url 'store:product_list' %}?category=outerwear">All Outerwear</a>
-            <a href="{% url 'store:collection_detail' slug='outerwear-house' %}">Outerwear House</a>
+            <div class="sidebar-sub-title">More</div>
+            <a href="{% url 'store:product_list' %}?category=accessories">Accessories</a>
+            <a href="{% url 'store:product_list' %}?category=shoes">Shoes</a>
+            <a href="{% url 'store:product_list' %}?tag=leather-goods">Leather Goods</a>
           </div>
         </div>
       </div>
@@ -287,10 +289,8 @@
         </div>
       </div>
 
-      <!-- STANDALONE LINKS -->
-      <a href="{% url 'store:product_list' %}?category=accessories" class="sidebar-link">Accessories</a>
-      <a href="{% url 'store:product_list' %}?category=shoes" class="sidebar-link">Shoes</a>
-      <a href="{% url 'store:product_list' %}?tag=leather-goods" class="sidebar-link">Leather Goods</a>
+      <!-- LOOKBOOK direct -->
+      <a href="{% url 'store:lookbook_list' %}" class="sidebar-link">Lookbook</a>
 
     </div>
 

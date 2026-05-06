@@ -1,4 +1,4 @@
-<!-- HEADER — KIRA Maison de Luxe (updated for tailoring brand) -->
+<!-- HEADER — KIRA Maison de Luxe (Tailoring) -->
 <header>
   <div class="header-inner">
 
@@ -24,7 +24,7 @@
             <a href="{% url 'store:product_list' %}?tag=suits&q=two-piece">Two-Piece Suits</a>
             <a href="{% url 'store:product_list' %}?tag=suits&q=three-piece">Three-Piece Suits</a>
             <a href="{% url 'store:product_list' %}?tag=suits&q=double-breasted">Double-Breasted</a>
-            <a href="{% url 'store:product_list' %}?tag=evening">Evening & Dinner</a>
+            <a href="{% url 'store:product_list' %}?tag=evening">Evening &amp; Dinner</a>
           </div>
           <div class="mega-col">
             <div class="mega-col-title">Collections</div>
@@ -100,8 +100,9 @@
       <span class="logo-sub">Maison de Luxe</span>
     </a>
 
-    <!-- NAV RIGHT — unchanged from original -->
+    <!-- NAV RIGHT -->
     <div class="nav-right">
+
       <button class="icon-btn search-toggle" id="searchToggle" aria-label="Search" aria-expanded="false">
         <svg class="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
         <svg class="icon-close" viewBox="0 0 24 24" style="display:none;"><path d="M18 6L6 18M6 6l12 12"/></svg>
@@ -144,17 +145,24 @@
         </a>
         {% if cart_count %}<span class="cart-count">{{ cart_count }}</span>{% endif %}
       </div>
-    </div>
 
+    </div>
   </div>
 
-  <!-- SEARCH BAR — unchanged -->
+  <!-- SEARCH BAR -->
   <div class="search-bar" id="searchBar" aria-hidden="true">
     <div class="search-bar-inner">
       <form class="search-form" action="{% url 'store:product_list' %}" method="GET" role="search">
         <svg class="search-form-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
-        <input type="search" name="q" id="searchInput" class="search-input"
-          placeholder="Search for suits, collections…" autocomplete="off" aria-label="Search">
+        <input
+          type="search"
+          name="q"
+          id="searchInput"
+          class="search-input"
+          placeholder="Search for suits, collections…"
+          autocomplete="off"
+          aria-label="Search"
+        >
         <button type="button" class="search-clear" id="searchClear" aria-label="Clear search">
           <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
@@ -162,3 +170,175 @@
     </div>
   </div>
 </header>
+
+<!-- MOBILE SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- MOBILE SIDEBAR -->
+<nav class="mobile-sidebar" id="mobileSidebar" aria-label="Mobile navigation">
+  <div class="sidebar-header">
+    <a href="{% url 'store:home' %}" class="sidebar-logo">
+      <span class="logo-text" style="font-size:22px;letter-spacing:0.32em;">KIRA</span>
+      <span class="logo-sub">Maison de Luxe</span>
+    </a>
+    <button class="sidebar-close" id="sidebarClose" aria-label="Close navigation">
+      <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <div class="sidebar-body">
+
+    <div class="sidebar-search">
+      <form action="{% url 'store:product_list' %}" method="GET" role="search">
+        <div class="sidebar-search-wrap">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="search" name="q" placeholder="Search…" autocomplete="off" aria-label="Search">
+        </div>
+      </form>
+    </div>
+
+    <div class="sidebar-section">
+
+      <!-- SUITING -->
+      <div class="sidebar-nav-item">
+        <button class="sidebar-nav-toggle" data-target="sidebar-suiting">
+          Suiting
+          <svg class="toggle-arrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="sidebar-sub" id="sidebar-suiting">
+          <div class="sidebar-sub-group">
+            <div class="sidebar-sub-title">Shop</div>
+            <a href="{% url 'store:product_list' %}?category=suits">All Suits</a>
+            <a href="{% url 'store:product_list' %}?tag=new-arrival">New Arrivals</a>
+            <a href="{% url 'store:collection_list' %}">Collections</a>
+            <a href="{% url 'store:lookbook_list' %}">Lookbooks</a>
+          </div>
+          <div class="sidebar-sub-group">
+            <div class="sidebar-sub-title">By Style</div>
+            <a href="{% url 'store:product_list' %}?tag=suits&q=two-piece">Two-Piece Suits</a>
+            <a href="{% url 'store:product_list' %}?tag=suits&q=three-piece">Three-Piece Suits</a>
+            <a href="{% url 'store:product_list' %}?tag=suits&q=double-breasted">Double-Breasted</a>
+            <a href="{% url 'store:product_list' %}?tag=evening">Evening &amp; Dinner</a>
+          </div>
+          <div class="sidebar-sub-group">
+            <div class="sidebar-sub-title">Collections</div>
+            <a href="{% url 'store:collection_detail' slug='founding-edit' %}">The Founding Edit</a>
+            <a href="{% url 'store:collection_detail' slug='milano-canvassed' %}">Milano Canvassed</a>
+            <a href="{% url 'store:collection_detail' slug='black-label' %}">Black Label</a>
+            <a href="{% url 'store:collection_detail' slug='chalk-bone' %}">Chalk &amp; Bone</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- READY-TO-WEAR -->
+      <div class="sidebar-nav-item">
+        <button class="sidebar-nav-toggle" data-target="sidebar-rtw">
+          Ready-to-Wear
+          <svg class="toggle-arrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="sidebar-sub" id="sidebar-rtw">
+          <div class="sidebar-sub-group">
+            <div class="sidebar-sub-title">Tailoring</div>
+            <a href="{% url 'store:product_list' %}?category=blazers-jackets">Blazers &amp; Jackets</a>
+            <a href="{% url 'store:product_list' %}?category=trousers">Trousers</a>
+            <a href="{% url 'store:product_list' %}?category=waistcoats">Waistcoats</a>
+          </div>
+          <div class="sidebar-sub-group">
+            <div class="sidebar-sub-title">Shirts &amp; Knitwear</div>
+            <a href="{% url 'store:product_list' %}?category=dress-shirts">Dress Shirts</a>
+            <a href="{% url 'store:product_list' %}?category=knitwear">Cashmere &amp; Merino</a>
+          </div>
+          <div class="sidebar-sub-group">
+            <div class="sidebar-sub-title">Outerwear</div>
+            <a href="{% url 'store:product_list' %}?category=outerwear">All Outerwear</a>
+            <a href="{% url 'store:collection_detail' slug='outerwear-house' %}">Outerwear House</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLLECTIONS -->
+      <div class="sidebar-nav-item">
+        <button class="sidebar-nav-toggle" data-target="sidebar-collections">
+          Collections
+          <svg class="toggle-arrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="sidebar-sub" id="sidebar-collections">
+          <div class="sidebar-sub-group">
+            <div class="sidebar-sub-title">Current Season</div>
+            <a href="{% url 'store:collection_detail' slug='founding-edit' %}">The Founding Edit</a>
+            <a href="{% url 'store:collection_detail' slug='milano-canvassed' %}">Milano Canvassed</a>
+            <a href="{% url 'store:collection_detail' slug='chalk-bone' %}">Chalk &amp; Bone</a>
+            <a href="{% url 'store:collection_detail' slug='black-label' %}">Black Label</a>
+          </div>
+          <div class="sidebar-sub-group">
+            <div class="sidebar-sub-title">Wardrobe</div>
+            <a href="{% url 'store:collection_detail' slug='atelier-separates' %}">Atelier Separates</a>
+            <a href="{% url 'store:collection_detail' slug='soft-tailoring' %}">Soft Tailoring</a>
+            <a href="{% url 'store:collection_detail' slug='savile-heritage' %}">Savile Heritage</a>
+            <a href="{% url 'store:collection_detail' slug='shirt-room' %}">The Shirt Room</a>
+          </div>
+          <div class="sidebar-sub-group">
+            <div class="sidebar-sub-title">Lifestyle</div>
+            <a href="{% url 'store:collection_detail' slug='cashmere-merino' %}">Cashmere &amp; Merino</a>
+            <a href="{% url 'store:collection_detail' slug='outerwear-house' %}">Outerwear House</a>
+            <a href="{% url 'store:collection_detail' slug='accessories-room' %}">The Accessories Room</a>
+            <a href="{% url 'store:collection_detail' slug='kira-bottega-pelle' %}">KIRA × Bottega Pelle</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- STANDALONE LINKS -->
+      <a href="{% url 'store:product_list' %}?category=accessories" class="sidebar-link">Accessories</a>
+      <a href="{% url 'store:product_list' %}?category=shoes" class="sidebar-link">Shoes</a>
+      <a href="{% url 'store:product_list' %}?tag=leather-goods" class="sidebar-link">Leather Goods</a>
+
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <!-- ACCOUNT LINKS -->
+    <div class="sidebar-section">
+      {% if user.is_authenticated %}
+        <a href="{% url 'accounts:dashboard' %}" class="sidebar-link sidebar-link-sm">My Dashboard</a>
+        <a href="{% url 'accounts:order_history' %}" class="sidebar-link sidebar-link-sm">Orders</a>
+        <a href="{% url 'orders:cart_detail' %}" class="sidebar-link sidebar-link-sm">My Bag</a>
+        <a href="{% url 'accounts:addresses' %}" class="sidebar-link sidebar-link-sm">Addresses</a>
+        <a href="{% url 'accounts:profile' %}" class="sidebar-link sidebar-link-sm">Profile</a>
+        <form method="POST" action="{% url 'accounts:logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="sidebar-link sidebar-link-sm sidebar-logout-btn">Sign Out</button>
+        </form>
+      {% else %}
+        <a href="{% url 'accounts:login' %}" class="sidebar-link sidebar-link-sm">Sign In</a>
+        <a href="{% url 'accounts:signup' %}" class="sidebar-link sidebar-link-sm">Create Account</a>
+      {% endif %}
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <!-- SECONDARY LINKS -->
+    <div class="sidebar-section">
+      <a href="{% url 'pages:our_story' %}" class="sidebar-link sidebar-link-sm">Our Story</a>
+      <a href="{% url 'pages:savoir_faire' %}" class="sidebar-link sidebar-link-sm">Savoir-Faire</a>
+      <a href="{% url 'pages:sustainability' %}" class="sidebar-link sidebar-link-sm">Sustainability</a>
+      <a href="{% url 'pages:book_appointment' %}" class="sidebar-link sidebar-link-sm">Book an Appointment</a>
+      <a href="{% url 'pages:contact' %}" class="sidebar-link sidebar-link-sm">Contact Us</a>
+    </div>
+
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-footer-label">Follow the Maison</div>
+    <div class="footer-social" style="justify-content:flex-start;gap:12px;">
+      <div class="social-btn">
+        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+      </div>
+      <div class="social-btn">
+        <svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+      </div>
+      <div class="social-btn">
+        <svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+      </div>
+    </div>
+  </div>
+</nav>

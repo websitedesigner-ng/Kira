@@ -61,7 +61,7 @@ header {
    --logo-col is the pixel budget each side gets.
 */
 :root {
-    --logo-col: 340px;
+    --logo-col: 280px;
     --sidebar-width: 360px;
 }
 
@@ -114,7 +114,7 @@ header {
 .nav-left {
     display: flex;
     align-items: center;
-    gap: 32px;
+    gap: 24px;
     min-width: 0;
     justify-content: flex-start;
 }
@@ -720,7 +720,7 @@ nav a:hover {
 
 /* ≤ 1100px — tighten spacing before hamburger kicks in */
 @media (max-width: 1100px) {
-    :root { --logo-col: 260px; }
+    :root { --logo-col: 220px; }
     .header-inner { padding: 0 28px; }
     .nav-left { gap: 20px; }
     nav a { font-size: 10px; letter-spacing: 0.1em; }

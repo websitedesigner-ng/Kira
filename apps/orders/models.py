@@ -190,17 +190,3 @@ class CartItem(models.Model):
     @property
     def subtotal(self):
         return self.unit_price * self.quantity
-
-
-class ProductView(models.Model):
-    product     = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='views')
-    session_key = models.CharField(max_length=40)
-    viewed_at   = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        indexes = [
-            models.Index(fields=['product', 'viewed_at']),
-        ]
-
-    def __str__(self):
-        return f'{self.product.name} view'

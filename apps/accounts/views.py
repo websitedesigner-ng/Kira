@@ -117,7 +117,7 @@ def order_detail(request, reference):
     order = get_object_or_404(Order, reference=reference, user=request.user)
     return render(request, 'accounts/order_detail.html', {
         'order': order,
-        'items': order.items.select_related('product', 'variant').all(),
+        'items': order.items.select_related('product', 'variant_size', 'variant_size__variant').all(),
     })
 
 

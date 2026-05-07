@@ -235,10 +235,11 @@
 
 {% endblock %}
 
+
 {% block extra_js %}
 <script>
-  // ═══════════════════════════════════════════
-// GALLERY + VARIANT + SIZE
+// ═══════════════════════════════════════════
+// GALLERY + VARIANT + SIZE — FIXED
 // ═══════════════════════════════════════════
 
 const originalProductImg = '{{ product.image.url }}';
@@ -254,19 +255,18 @@ function setActiveThumb(imgUrl) {
 }
 
 function switchMainImage(url) {
+    if (!url || url.trim() === '') return;
     mainImg.src = url;
     setActiveThumb(url);
 }
 
 if (thumbsContainer) {
     thumbsContainer.querySelectorAll('.pd-thumb').forEach(thumb => {
-        thumb.addEventListener('click', () => {
-            switchMainImage(thumb.dataset.img);
-        });
+        thumb.addEventListener('click', () => switchMainImage(thumb.dataset.img));
     });
 }
 
-// ─── VARIANT DATA ───
+// ─── VARIANT DATA (injected from Django) ───
 const variantData = {
     {% for variant in product.variants.all %}
     {% if variant.is_active %}
@@ -288,6 +288,7 @@ const variantData = {
 // ─── ELEMENT REFS ───
 const variantBtns           = document.querySelectorAll('.pd-variant-btn');
 const selectedVariantEl     = document.getElementById('selectedVariant');
+const sizeGroupEl           = document.getElementById('sizeGroup');
 const sizeGrid              = document.getElementById('sizeGrid');
 const selectedSizeEl        = document.getElementById('selectedSize');
 const pdAddBtn              = document.getElementById('pdAddBtn');
@@ -296,14 +297,19 @@ const pdStock               = document.getElementById('pdStock');
 const cartVariantSizeId     = document.getElementById('cartVariantSizeId');
 const orderNowVariantSizeId = document.getElementById('orderNowVariantSizeId');
 
-// ─── RESET SIZE STATE ───
-function resetSizeState() {
-    if (selectedSizeEl)      selectedSizeEl.textContent  = '— Select —';
-    if (pdAddBtn)            { pdAddBtn.disabled = true; pdAddBtn.textContent = 'Add to Bag'; }
-    if (pdOrderNowBtn)       pdOrderNowBtn.disabled      = true;
-    if (pdStock)             { pdStock.textContent = ''; pdStock.className = 'pd-stock'; }
-    if (cartVariantSizeId)   cartVariantSizeId.value     = '';
-    if (orderNowVariantSizeId) orderNowVariantSizeId.value = '';
+// ─── UPDATE STOCK INDICATOR ───
+function setStockUI(stock) {
+    if (!pdStock) return;
+    if (stock > 3) {
+        pdStock.textContent = 'In Stock';
+        pdStock.className   = 'pd-stock in';
+    } else if (stock > 0) {
+        pdStock.textContent = `Only ${stock} left`;
+        pdStock.className   = 'pd-stock low';
+    } else {
+        pdStock.textContent = 'Out of Stock';
+        pdStock.className   = 'pd-stock out';
+    }
 }
 
 // ─── SELECT SIZE ───
@@ -311,81 +317,114 @@ function selectSize(sizeObj, btn) {
     document.querySelectorAll('.pd-size-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
 
-    selectedSizeEl.textContent        = sizeObj.size;
-    cartVariantSizeId.value           = sizeObj.id;
-    orderNowVariantSizeId.value       = sizeObj.id;
+    if (selectedSizeEl) selectedSizeEl.textContent = sizeObj.size;
+    if (cartVariantSizeId) cartVariantSizeId.value = sizeObj.id;
+    if (orderNowVariantSizeId) orderNowVariantSizeId.value = sizeObj.id;
 
-    if (sizeObj.stock > 0) {
-        pdAddBtn.disabled      = false;
-        pdOrderNowBtn.disabled = false;
-        pdAddBtn.textContent   = 'Add to Bag';
-        pdStock.textContent    = sizeObj.stock <= 3 ? `Only ${sizeObj.stock} left` : 'In Stock';
-        pdStock.className      = sizeObj.stock <= 3 ? 'pd-stock low' : 'pd-stock in';
-    } else {
-        pdAddBtn.disabled      = true;
-        pdOrderNowBtn.disabled = true;
-        pdAddBtn.textContent   = 'Out of Stock';
-        pdStock.textContent    = 'Out of Stock';
-        pdStock.className      = 'pd-stock out';
+    const inStock = sizeObj.stock > 0;
+
+    if (pdAddBtn) {
+        pdAddBtn.disabled    = !inStock;
+        pdAddBtn.textContent = inStock ? 'Add to Bag' : 'Out of Stock';
     }
+    if (pdOrderNowBtn) pdOrderNowBtn.disabled = !inStock;
+
+    setStockUI(sizeObj.stock);
 }
 
 // ─── RENDER SIZES ───
-function renderSizes(sizes) {
-    resetSizeState();
+function renderSizes(sizes, autoSelectFirst) {
+    if (!sizeGrid) return;
     sizeGrid.innerHTML = '';
+
+    // Reset size-dependent state first
+    if (selectedSizeEl) selectedSizeEl.textContent = '— Select —';
+    if (cartVariantSizeId) cartVariantSizeId.value = '';
+    if (orderNowVariantSizeId) orderNowVariantSizeId.value = '';
+    if (pdAddBtn) { pdAddBtn.disabled = true; pdAddBtn.textContent = 'Add to Bag'; }
+    if (pdOrderNowBtn) pdOrderNowBtn.disabled = true;
+    if (pdStock) { pdStock.textContent = ''; pdStock.className = 'pd-stock'; }
 
     if (!sizes || sizes.length === 0) {
         sizeGrid.innerHTML = '<span class="pd-no-sizes">No sizes available</span>';
         return;
     }
 
-    sizes.forEach(s => {
+    sizes.forEach((s, index) => {
         const btn       = document.createElement('button');
         btn.type        = 'button';
         btn.className   = 'pd-size-btn' + (s.stock === 0 ? ' out-of-stock' : '');
         btn.textContent = s.size;
-        if (s.stock === 0) btn.disabled = true;
+        btn.disabled    = s.stock === 0;
         btn.addEventListener('click', () => selectSize(s, btn));
         sizeGrid.appendChild(btn);
+
+        // Auto-select first available size if requested
+        if (autoSelectFirst && index === 0) {
+            // Use setTimeout so the button is in the DOM before we call selectSize
+            setTimeout(() => selectSize(s, btn), 0);
+        }
     });
 }
 
 // ─── SELECT VARIANT ───
-function selectVariant(btn) {
+function selectVariant(btn, autoSelectFirstSize) {
     variantBtns.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    const sizeGroupEl = document.getElementById('sizeGroup');
-    if (sizeGroupEl) sizeGroupEl.style.display = 'block';
 
     const data = variantData[btn.dataset.variantId];
     if (!data) return;
 
-    selectedVariantEl.textContent = data.name;
+    if (selectedVariantEl) selectedVariantEl.textContent = data.name;
 
-    // Swap image only if variant has its own image
+    // Show size group
+    if (sizeGroupEl) sizeGroupEl.style.display = 'block';
+
+    // Swap image if variant has its own
     if (data.image && data.image.trim() !== '') {
         switchMainImage(data.image);
     } else {
-        // Revert to product main image
         switchMainImage(originalProductImg);
     }
 
-    renderSizes(data.sizes);
+    renderSizes(data.sizes, autoSelectFirstSize);
 }
 
-// ─── BIND VARIANT CLICKS ───
+// ─── BIND VARIANT CLICKS (manual selection always auto-selects first size) ───
 variantBtns.forEach(btn => {
-    btn.addEventListener('click', () => selectVariant(btn));
+    btn.addEventListener('click', () => selectVariant(btn, true));
 });
 
-// ─── ON LOAD: show product images, no variant pre-selected ───
-// Ensure main image thumb is active
-setActiveThumb(originalProductImg);
-// Reset variant labels
-if (selectedVariantEl) selectedVariantEl.textContent = '— Select —';
-// Render empty size grid until a variant is picked
-resetSizeState();
-if (sizeGrid) sizeGrid.innerHTML = '';
+// ─── ON LOAD: auto-select first variant + first size ───
+(function init() {
+    setActiveThumb(originalProductImg);
+
+    const firstVariantBtn = variantBtns[0];
+    if (firstVariantBtn) {
+        // Pass true so renderSizes auto-selects the first size
+        selectVariant(firstVariantBtn, true);
+    }
+})();
+
+
+// ═══════════════════════════════════════════
+// ACCORDION
+// ═══════════════════════════════════════════
+
+document.querySelectorAll('.pd-acc-toggle').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+        const targetId = toggle.dataset.target;
+        const body     = document.getElementById(targetId);
+        const arrow    = toggle.querySelector('.pd-acc-arrow');
+
+        if (!body) return;
+
+        const isOpen = body.classList.contains('open');
+
+        body.classList.toggle('open', !isOpen);
+        toggle.classList.toggle('active', !isOpen);
+        if (arrow) arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+    });
+});
 </script>
 {% endblock %}

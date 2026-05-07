@@ -30,6 +30,7 @@
         <span>／</span>
         <span>{{ order.reference }}</span>
       </nav>
+
       <!-- STATUS TRACK -->
       {% with status=order.status %}
       <div class="ac-track"
@@ -69,7 +70,6 @@
       
       </div>
       {% endwith %}
-      
 
       <div class="ac-od-layout">
 
@@ -87,12 +87,23 @@
             <div class="ac-od-info">
               <div class="ac-od-collection">{{ item.product.collection.name|default:"" }}</div>
               <a href="{{ item.product.get_absolute_url }}" class="ac-od-name">{{ item.product.name }}</a>
-              {% if item.variant %}
+
+              {% if item.variant_size %}
               <div class="ac-od-variant">
-                {% if item.variant.size %}Size: {{ item.variant.size }}{% endif %}
-                {% if item.variant.color %} · {{ item.variant.color }}{% endif %}
+                {# Prefer live data from the FK; fall back to purchase-time snapshots #}
+                {% with vs=item.variant_size %}
+                  {{ vs.variant.name }}
+                  {% if vs.size %} · Size: {{ vs.size }}{% endif %}
+                {% endwith %}
+              </div>
+              {% elif item.snapshot_variant_name or item.snapshot_size %}
+              {# FK was deleted — render the frozen snapshot instead #}
+              <div class="ac-od-variant">
+                {% if item.snapshot_variant_name %}{{ item.snapshot_variant_name }}{% endif %}
+                {% if item.snapshot_size %} · Size: {{ item.snapshot_size }}{% endif %}
               </div>
               {% endif %}
+
               <div class="ac-od-qty">Qty: {{ item.quantity }}</div>
             </div>
             <div class="ac-od-price">£{{ item.price }}</div>

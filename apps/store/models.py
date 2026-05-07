@@ -151,10 +151,11 @@ class ProductVariant(models.Model):
         help_text="Optional — overrides main product image when selected"
     )
     is_active = models.BooleanField(default=True)
+    position = models.PositiveIntegerField(default=0)
 
     class Meta:
         unique_together = ('product', 'name')
-        ordering = ['name']
+        ordering = ['position', 'name']
 
     def __str__(self):
         return f"{self.product.name} — {self.name}"

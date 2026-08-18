@@ -1,30 +1,41 @@
 from django.shortcuts import render, get_object_or_404
+from django.core.cache import cache
 from .models import Product, Category, Collection, LookBook
 from django_filters.views import FilterView
 from .filters import ProductFilter
 from django.core.paginator import Paginator
 from django.db import models
 
+HOME_CACHE_KEY = 'home_page_context'
 
-def home(request):
-    featured_products = Product.objects.filter(is_featured=True, is_active=True)[:4]
-    new_arrivals = Product.objects.filter(is_new_arrival=True, is_active=True)[:8]
-    trending_products = Product.objects.filter(is_trending=True, is_active=True)[:4]
-    collections = Collection.objects.filter(is_active=True).order_by('order')[:3]
-    lookbooks = LookBook.objects.filter(is_published=True)[:3]
 
-    context = {
+def _build_home_context():
+    featured_products = list(Product.objects.filter(is_featured=True, is_active=True)[:4])
+    new_arrivals = list(Product.objects.filter(is_new_arrival=True, is_active=True)[:8])
+    trending_products = list(Product.objects.filter(is_trending=True, is_active=True)[:4])
+    collections = list(Collection.objects.filter(is_active=True).order_by('order')[:3])
+    lookbooks = list(LookBook.objects.filter(is_published=True)[:3])
+
+    return {
         'featured_products': featured_products,
         'new_arrivals': new_arrivals,
         'trending_products': trending_products,
         'collections': collections,
         'lookbooks': lookbooks,
-        'show_featured': featured_products.exists(),
-        'show_new_arrivals': new_arrivals.exists(),
-        'show_trending': trending_products.exists(),
-        'show_collections': collections.exists(),
-        'show_lookbook': lookbooks.exists(),
+        'show_featured': bool(featured_products),
+        'show_new_arrivals': bool(new_arrivals),
+        'show_trending': bool(trending_products),
+        'show_collections': bool(collections),
+        'show_lookbook': bool(lookbooks),
     }
+
+
+def home(request):
+    context = cache.get(HOME_CACHE_KEY)
+    if context is None:
+        context = _build_home_context()
+        cache.set(HOME_CACHE_KEY, context, timeout=None)  # forever, until signal deletes it
+
     return render(request, 'home.html', context)
 
 
